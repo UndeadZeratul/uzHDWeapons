@@ -12,7 +12,7 @@ class HDPipeBombs : HDGrenadethrower {
         hdgrenadethrower.throwtype "HDPipeBomb";
         hdgrenadethrower.spoontype "HDPipeBombSpoon";
         hdgrenadethrower.wiretype "PipeBombTripwireFrag";
-		hdgrenadethrower.pinsound "weapons/pipebomb/arm";
+        hdgrenadethrower.pinsound "weapons/pipebomb/arm";
         inventory.icon "PIPPA0";
     }
 
@@ -20,12 +20,16 @@ class HDPipeBombs : HDGrenadethrower {
         LocalizeHelp();
         return
         LWPHELP_FIRE.."  Activate & wind up (release to throw)\n"
-        ..LWPHELP_ALTFIRE.."  Detonate activated pipe bombs\n"
-        ..LWPHELP_RELOAD.."  Deactivate"
+        ..LWPHELP_ALTFIRE.."  Detonate all activated pipe bombs\n"
+        ..LWPHELP_RELOAD.."  Deactivate & cancel throw"
         ;
     }
 
-	action bool NoPipeBombs() {
+    /**
+     * Checks if the current owner has any activated pipe bombs already thrown.
+     * Returns true if there are any active Pipe Bombs, otherwise false.
+     */
+    action bool NoPipeBombs() {
         let it = ThinkerIterator.create("HDPipeBombRoller");
         HDPipeBombRoller roller;
         while (roller = HDPipeBombRoller(it.Next())) if (roller.master == invoker.owner) return false;
@@ -35,7 +39,7 @@ class HDPipeBombs : HDGrenadethrower {
         while (bomb = HDPipeBomb(it.Next())) if (bomb.master == invoker.owner) return false;
 
         return true;
-	}
+    }
 
     override void DoEffect() {
         if(weaponstatus[0]&FRAGF_SPOONOFF) {
@@ -44,8 +48,8 @@ class HDPipeBombs : HDGrenadethrower {
             if (owner.health < 1) TossPipeBomb(true);
         } else if (
             weaponstatus[0]&FRAGF_INHAND
-            &&weaponstatus[0]&FRAGF_PINOUT
-            &&owner.player.cmd.buttons&BT_ATTACK
+            && weaponstatus[0]&FRAGF_PINOUT
+            && owner.player.cmd.buttons&BT_ATTACK
         ) {
             return;
         }
@@ -60,7 +64,7 @@ class HDPipeBombs : HDGrenadethrower {
     override void DrawHUDStuff(HDStatusBar sb,HDWeapon hdw,HDPlayerPawn hpl) {
         if (sb.hudlevel == 1) {
             sb.drawimage(
-                (weaponstatus[0]&FRAGF_PINOUT) ? "FRGGF0" : "FRGGA0",
+                "PIPPA0",
                 (-52, -4), sb.DI_SCREEN_CENTER_BOTTOM, scale: (0.6, 0.6)
             );
             sb.drawnum(hpl.countinv("HDPipeBombAmmo"), -45, -8, sb.DI_SCREEN_CENTER_BOTTOM);
@@ -164,7 +168,7 @@ class HDPipeBombs : HDGrenadethrower {
             stop;
 
         zoom:
-            goto selectinstance;
+            goto ready;
 
         startpull:
             FRGG B 0 A_JumpIf(invoker.weaponstatus[FRAGS_REALLYPULL] >= 26, 'endpull');
@@ -226,7 +230,7 @@ class HDPipeBombs : HDGrenadethrower {
             goto ready;
 
         altfire:
-            #### A 0 A_JumpIf(NoPipeBombs(), "ready");
+            // #### A 0 A_JumpIf(NoPipeBombs(), "ready");
         begindetonate:
             PIPD A 1 offset(0, 96);
             #### A 1 offset(0, 64);
@@ -283,7 +287,12 @@ class PipeBombTripwireFrag : Tripwire {
 
     override void DrawHUDStuff(HDStatusBar sb, HDWeapon hdw, HDPlayerPawn hpl) {
         if (sb.hudlevel == 1) {
-            sb.drawimage("PIPPA0",(-52, -4), sb.DI_SCREEN_CENTER_BOTTOM, scale: (0.6, 0.6));
+            sb.drawimage(
+                "PIPPA0",
+                (-52, -4),
+                sb.DI_SCREEN_CENTER_BOTTOM,
+                scale: (0.6, 0.6)
+            );
             sb.drawnum(hpl.countinv("HDPipeBombAmmo"), -45, -8, sb.DI_SCREEN_CENTER_BOTTOM);
         }
 
@@ -336,7 +345,7 @@ class HDPipeBombRoller : HDFragGrenadeRoller {
     Actor owner;
 
     default {
-        scale 0.3;
+        scale 0.2;
         radiusdamagefactor 0.04;
         pushfactor 1.4;
         maxstepheight 2;
@@ -345,7 +354,7 @@ class HDPipeBombRoller : HDFragGrenadeRoller {
         obituary "$OB_PIPEBOMB";
     }
     
-    override void tick(){
+    override void tick() {
         if (isfrozen()) return;
         
         if (bnointeraction) {
@@ -353,17 +362,23 @@ class HDPipeBombRoller : HDFragGrenadeRoller {
             return;
         }
 
-        fuze++;
-        if(fuze >= 140 && !bnointeraction){
-            setstatelabel("destroy");
-            NextTic();
-            return;
-        }
-
-        super.tick();
-
         // Reset the "Fuze"
         fuze = 0;
+
+        super.tick();
+    }
+
+    override bool used(actor user) {
+        let hdp = HDPlayerPawn(user);
+        if (hdp && hdp.player && hdp.player.crouchfactor < 0.6) {
+            user.giveInventory('HDPipeBombAmmo', 1);
+            hdp.A_Log(StringTable.localize("$PICKUP_PIPEBOMB_DEACTIVATE"), true);
+            destroy();
+
+            return true;
+        }
+
+        return super.used(user);
     }
 
     states {
@@ -449,8 +464,8 @@ class HDPipeBomb : HDFragGrenade {
     Actor owner;
 
     default {
-		+rollsprite;+rollcenter;
-        scale 0.3;
+        +rollsprite;+rollcenter;
+        scale 0.2;
         obituary "$OB_PIPEBOMB";
         hdfraggrenade.rollertype "HDPipeBombRoller";
         Mass 1500;
@@ -558,7 +573,7 @@ class HDPipeBombSpoon : HDFragSpoon {
     }
 }
 
-class PipeBombFragP : HDUPK {
+class HDPipeBombP : HDUPK {
     default {
         //+forcexybillboard
         scale 0.4;
@@ -575,18 +590,18 @@ class PipeBombFragP : HDUPK {
 
     states {
         spawn:
-            PIPB A -1;
+            PIPP A -1;
     }
 }
 
-class HDPipeBombPickup : PipeBombFragP {
+class HDPipeBombPickup : HDPipeBombP {
     override void postbeginplay() {
         super.postbeginplay();
 
-        A_SpawnItemEx("PipeBombFragP",  5, 5, flags: SXF_NOCHECKPOSITION);
-        A_SpawnItemEx("PipeBombFragP",  5, 0, flags: SXF_NOCHECKPOSITION);
-        A_SpawnItemEx("PipeBombFragP",  0, 5, flags: SXF_NOCHECKPOSITION);
-        A_SpawnItemEx("PipeBombFragP", -5, 5, flags: SXF_NOCHECKPOSITION);
-        A_SpawnItemEx("PipeBombFragP", -5, 0, flags: SXF_NOCHECKPOSITION);
+        A_SpawnItemEx("HDPipeBombP",  5, 5, flags: SXF_NOCHECKPOSITION);
+        A_SpawnItemEx("HDPipeBombP",  5, 0, flags: SXF_NOCHECKPOSITION);
+        A_SpawnItemEx("HDPipeBombP",  0, 5, flags: SXF_NOCHECKPOSITION);
+        A_SpawnItemEx("HDPipeBombP", -5, 5, flags: SXF_NOCHECKPOSITION);
+        A_SpawnItemEx("HDPipeBombP", -5, 0, flags: SXF_NOCHECKPOSITION);
     }
 }

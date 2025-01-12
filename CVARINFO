@@ -1,0 +1,5 @@
+
+// Pipe Bombs
+server bool pipebomb_allowBackpacks      = true;
+server int  pipebomb_spawn_bias          = 9;
+server bool pipebomb_persistent_spawning = false;
