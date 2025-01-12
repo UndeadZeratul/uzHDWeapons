@@ -123,9 +123,6 @@ class HDPipeBombs : HDGrenadethrower {
         let bomb = HDPipeBomb(ggg);
         if (!bomb) return;
         
-        // bomb.master = owner;
-        // bomb.fuze=weaponstatus[FRAGS_TIMER];
-
         if (owner.player) bomb.vel += SwingThrow() * gforce;
         bomb.a_changevelocity(
             cpp * gforce * 0.6,
@@ -134,14 +131,14 @@ class HDPipeBombs : HDGrenadethrower {
             CVF_RELATIVE
         );
 
-        weaponstatus[FRAGS_TIMER] = 0;
-        weaponstatus[FRAGS_FORCE] = 0;
+        // Reset Weapon Status
         weaponstatus[0] &= ~FRAGF_PINOUT;
         weaponstatus[0] &= ~FRAGF_SPOONOFF;
-        weaponstatus[FRAGS_REALLYPULL] = 0;
-
         weaponstatus[0] &= ~FRAGF_INHAND;
         weaponstatus[0] |= FRAGF_JUSTTHREW;
+        weaponstatus[FRAGS_TIMER] = 0;
+        weaponstatus[FRAGS_FORCE] = 0;
+        weaponstatus[FRAGS_REALLYPULL] = 0;
     }
 
     action void A_DetonatePipeBombs() {
