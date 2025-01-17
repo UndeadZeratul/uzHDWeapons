@@ -1,9 +1,11 @@
 [en default]
 
 TAG_PIPEBOMB               = "Pipe Bomb";
+TAG_PIPEBOMB_DETONATOR     = "Detonator";
 
-PICKUP_PIPEBOMB            = "Picked up a pipe bomb!";
+PICKUP_PIPEBOMB            = "Picked up a pipe bomb!  So cool!";
 PICKUP_PIPEBOMB_DEACTIVATE = "Picked up (and deactivated) a pipe bomb!";
+PICKUP_PIPEBOMB_DETONATOR  = "Picked up a detonator.";
 
 OB_PIPEBOMB                = "%o should have read the warning label.";
 

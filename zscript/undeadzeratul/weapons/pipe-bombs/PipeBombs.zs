@@ -1,6 +1,8 @@
 
-const HDLD_PIPEBOMBS = "pbg";
-const ENC_PIPEBOMBS   = 19;
+const HDLD_PIPEBOMBS          = "pbg";
+const HDLD_PIPEBOMB_DETONATOR = "pbd";
+const ENC_PIPEBOMBS           = 19;
+const ENC_PIPEBOMB_DETONATOR  = 10;
 
 class HDPipeBombs : HDGrenadethrower {
     default {
@@ -18,11 +20,15 @@ class HDPipeBombs : HDGrenadethrower {
 
     override string gethelptext() {
         LocalizeHelp();
-        return
-        LWPHELP_FIRE.."  Activate & wind up (release to throw)\n"
-        ..LWPHELP_ALTFIRE.."  Detonate all activated pipe bombs\n"
-        ..LWPHELP_RELOAD.."  Deactivate & cancel throw"
-        ;
+        return 
+            LWPHELP_FIRE.."  Activate & wind up (release to throw)\n"
+            ..(
+                owner.countinv("HDPipeBombDetonator")
+                    ? LWPHELP_ALTFIRE.."  Detonate all activated pipe bombs\n"
+                    : "\c[DarkGray]"..StringTable.Localize("$WPHALTFIRE")..WEPHELP_RGCOL.."  DETONATOR REQUIRED\n"
+            )
+            ..LWPHELP_RELOAD.."  Deactivate & cancel throw"
+            ;
     }
 
     /**
@@ -156,6 +162,8 @@ class HDPipeBombs : HDGrenadethrower {
             FRGG B 0 {
                 invoker.weaponstatus[FRAGS_FORCE] = 0;
                 invoker.weaponstatus[FRAGS_REALLYPULL] = 0;
+
+                A_SetHelpText();
             }
             FRGG B 1 A_WeaponReady(WRF_ALLOWRELOAD|WRF_ALLOWUSER1|WRF_ALLOWUSER2|WRF_ALLOWUSER3|WRF_ALLOWUSER4);
             goto ready3;
@@ -227,7 +235,7 @@ class HDPipeBombs : HDGrenadethrower {
             goto ready;
 
         altfire:
-            // #### A 0 A_JumpIf(NoPipeBombs(), "ready");
+            #### A 0 A_JumpIf(!invoker.owner.countinv("HDPipeBombDetonator"), "ready");
         begindetonate:
             PIPD A 1 offset(0, 96);
             #### A 1 offset(0, 64);
@@ -237,6 +245,7 @@ class HDPipeBombs : HDGrenadethrower {
             #### A 2 offset(0, 34);
             #### B 4 offset(0, 34);
         althold:
+            #### C 0 A_JumpIf(!invoker.owner.countinv("HDPipeBombDetonator"), "ready");
             #### C 0 A_JumpIf(!PressingAltfire(), "enddetonate");
             #### C 8 offset(0, 34) A_DetonatePipeBombs();
             loop;
@@ -513,6 +522,26 @@ class HDPipeBomb : HDFragGrenade {
     }
 }
 
+class HDPipeBombDetonator : HDPickup {
+    default {
+        inventory.icon "PBDPA0";
+        inventory.amount 1;
+        scale 0.25;
+        inventory.maxamount 1;
+        inventory.pickupmessage "$PICKUP_PIPEBOMB_DETONATOR";
+        inventory.pickupsound "weapons/pocket";
+        tag "$TAG_PIPEBOMB_DETONATOR";
+        hdpickup.refid HDLD_PIPEBOMB_DETONATOR;
+        hdpickup.bulk ENC_PIPEBOMB_DETONATOR;
+    }
+
+    states {
+        spawn:
+            PBDP A -1;
+            stop;
+    }
+}
+
 class HDPipeBombAmmo : HDAmmo {
     default {
         //+forcexybillboard
@@ -600,5 +629,7 @@ class HDPipeBombPickup : HDPipeBombP {
         A_SpawnItemEx("HDPipeBombP",  0, 5, flags: SXF_NOCHECKPOSITION);
         A_SpawnItemEx("HDPipeBombP", -5, 5, flags: SXF_NOCHECKPOSITION);
         A_SpawnItemEx("HDPipeBombP", -5, 0, flags: SXF_NOCHECKPOSITION);
+
+        if (random[randpb]()) A_SpawnItemEx("HDPipeBombDetonator", 0, -5, flags: SXF_NOCHECKPOSITION);
     }
 }
