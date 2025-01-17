@@ -348,9 +348,12 @@ class PipeBombTrippingFrag : TrippingGrenade {
 }
 
 class HDPipeBombRoller : HDFragGrenadeRoller {
-    Actor owner;
-
     default {
+        health 20;
+
+        height 8;
+        radius 8;
+
         scale 0.2;
         radiusdamagefactor 0.04;
         pushfactor 1.4;
@@ -362,7 +365,13 @@ class HDPipeBombRoller : HDFragGrenadeRoller {
     
     override void tick() {
         if (isfrozen()) return;
-        
+
+        if (health < 1) {
+            HDPipeBomb.detonate(self);
+            destroy();
+            return;
+        }
+
         if (bnointeraction) {
             NextTic();
             return;
@@ -385,6 +394,10 @@ class HDPipeBombRoller : HDFragGrenadeRoller {
         }
 
         return super.used(user);
+    }
+
+    action void A_Detonate() {
+        HDPipeBomb.detonate(invoker);
     }
 
     states {
@@ -428,96 +441,86 @@ class HDPipeBombRoller : HDFragGrenadeRoller {
             }
             wait;
         destroy:
-            TNT1 A 1 {
-                bsolid = false;
-                bpushable = false;
-                bmissile = false;
-                bnointeraction = true;
-                bshootable = false;
-
-                A_HDBlast(
-                    pushradius: 256,
-                    pushamount: 118,
-                    fullpushradius: 96,
-                    fragradius: 300
-                );
-
-                DistantQuaker.Quake(self,4,35,512,10);
-
-                A_StartSound("world/explode", CHAN_AUTO);
-                A_AlertMonsters();
-
-                actor xpl = spawn("WallChunker", self.pos - (0, 0, 1), ALLOW_REPLACE);
-                xpl.target = target;
-                xpl.master = master;
-                xpl.stamina = stamina;
-
-                xpl = spawn("HDExplosion", self.pos - (0, 0, 1), ALLOW_REPLACE);
-                xpl.target = target;
-                xpl.master = master;
-                xpl.stamina = stamina;
-
-                A_SpawnChunks("BigWallChunk", 14, 4, 12);
-                A_SpawnChunks("HDB_frag", 42, 300, 700);
-
-                distantnoise.make(self, "world/rocketfar");
-            }
+            TNT1 A 1 A_Detonate();
             stop;
     }
 }
 
 class HDPipeBomb : HDFragGrenade {
-    Actor owner;
-
     default {
-        +rollsprite;+rollcenter;
+        +ROLLSPRITE;
+        +ROLLCENTER;
+
+        health 20;
+
+        height 8;
+        radius 8;
+
         scale 0.2;
         obituary "$OB_PIPEBOMB";
         hdfraggrenade.rollertype "HDPipeBombRoller";
         Mass 1500;
     }
 
+    override void tick() {
+        if (health < 1) {
+            HDPipeBomb.detonate(self);
+            destroy();
+            return;
+        }
+
+        super.tick();
+    }
+
+    action void A_Detonate() {
+        HDPipeBomb.detonate(invoker);
+    }
+
+    static void detonate(HDActor caller) {
+        caller.bSOLID         = false;
+        caller.bPUSHABLE      = false;
+        caller.bMISSILE       = false;
+        caller.bNOINTERACTION = true;
+        caller.bSHOOTABLE     = false;
+
+        caller.A_HDBlast(
+            pushradius: 256,
+            pushamount: 118,
+            fullpushradius: 96,
+            fragradius: 300
+        );
+
+        DistantQuaker.Quake(caller, 4, 35, 512, 10);
+
+        caller.A_StartSound("world/explode", CHAN_AUTO);
+        caller.A_AlertMonsters();
+
+        actor xpl = spawn("WallChunker", caller.pos - (0, 0, 1), ALLOW_REPLACE);
+        xpl.target = caller.target;
+        xpl.master = caller.master;
+        xpl.stamina = caller.stamina;
+
+        xpl = spawn("HDExplosion", caller.pos - (0, 0, 1), ALLOW_REPLACE);
+        xpl.target = caller.target;
+        xpl.master = caller.master;
+        xpl.stamina = caller.stamina;
+
+        caller.A_SpawnChunks("BigWallChunk", 14, 4, 12);
+        caller.A_SpawnChunks("HDB_frag", 42, 300, 700);
+
+        DistantNoise.make(caller, "world/rocketfar");
+    }
+
     states {
         spawn:
             PIPB A 2 {
                 roll += 33;
+
+                HDMobAI.Frighten(self, 512);
             }
             loop;
         destroy:
-            TNT1 A 1 {
-                bsolid = false;
-                bpushable = false;
-                bmissile = false;
-                bnointeraction = true;
-                bshootable = false;
-
-                A_HDBlast(
-                    pushradius: 256,
-                    pushamount: 118,
-                    fullpushradius: 96,
-                    fragradius: 300
-                );
-
-                DistantQuaker.Quake(self,4,35,512,10);
-
-                A_StartSound("world/explode", CHAN_AUTO);
-                A_AlertMonsters();
-
-                actor xpl = spawn("WallChunker", self.pos - (0, 0, 1), ALLOW_REPLACE);
-                xpl.target = target;
-                xpl.master = master;
-                xpl.stamina = stamina;
-
-                xpl = spawn("HDExplosion", self.pos - (0, 0, 1), ALLOW_REPLACE);
-                xpl.target = target;
-                xpl.master = master;
-                xpl.stamina = stamina;
-
-                A_SpawnChunks("BigWallChunk", 14, 4, 12);
-                A_SpawnChunks("HDB_frag", 42, 300, 700);
-
-                distantnoise.make(self, "world/rocketfar");
-            }
+            TNT1 A 1 A_Detonate();
             stop;
     }
 }
@@ -603,8 +606,8 @@ class HDPipeBombP : HDUPK {
     default {
         //+forcexybillboard
         scale 0.4;
-        height 3;
-        radius 3;
+        height 6;
+        radius 6;
 
         hdupk.amount 1;
         hdupk.pickuptype "HDPipeBombAmmo";
@@ -624,12 +627,12 @@ class HDPipeBombPickup : HDPipeBombP {
     override void postbeginplay() {
         super.postbeginplay();
 
-        A_SpawnItemEx("HDPipeBombP",  5, 5, flags: SXF_NOCHECKPOSITION);
-        A_SpawnItemEx("HDPipeBombP",  5, 0, flags: SXF_NOCHECKPOSITION);
-        A_SpawnItemEx("HDPipeBombP",  0, 5, flags: SXF_NOCHECKPOSITION);
-        A_SpawnItemEx("HDPipeBombP", -5, 5, flags: SXF_NOCHECKPOSITION);
-        A_SpawnItemEx("HDPipeBombP", -5, 0, flags: SXF_NOCHECKPOSITION);
+        A_SpawnItemEx("HDPipeBombP",  8, 8, flags: SXF_NOCHECKPOSITION);
+        A_SpawnItemEx("HDPipeBombP",  8, 0, flags: SXF_NOCHECKPOSITION);
+        A_SpawnItemEx("HDPipeBombP",  0, 8, flags: SXF_NOCHECKPOSITION);
+        A_SpawnItemEx("HDPipeBombP", -8, 8, flags: SXF_NOCHECKPOSITION);
+        A_SpawnItemEx("HDPipeBombP", -8, 0, flags: SXF_NOCHECKPOSITION);
 
-        if (random[randpb]()) A_SpawnItemEx("HDPipeBombDetonator", 0, -5, flags: SXF_NOCHECKPOSITION);
+        if (random[randpb]()) A_SpawnItemEx("HDPipeBombDetonator", 0, -8, flags: SXF_NOCHECKPOSITION);
     }
 }

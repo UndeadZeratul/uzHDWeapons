@@ -11,6 +11,7 @@ _Creative, I know_
 - Press `[ALTFIRE]` to detonate all active pipe bombs. **Requires Detonator** ![detonator](./sprites/pipe-bombs/PBDPA0.png)
 - Press `[USE]` near active pipe bomb to kick away.
 - Press `[USE]` while crouching to pick up & deactivate pipe bomb.
+- Can be shot in a pinch.  Careful, may get caught in the cross-fire!
 
 ## Credits
 
