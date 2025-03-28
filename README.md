@@ -1,6 +1,15 @@
 # UZ's Weapons Pack
 _Creative, I know_
 
+## Black Hole Generator
+![bhg](./sprites/black-hole-generator/BHGPA0.png)
+
+- Loadout Code: `bhg`
+- Hold `[FIRE]` to charge up & fire.
+- Press `[RELOAD]` to reload batteries.
+- Press `[UNLOAD]` to unload batteries.
+- **!CAUTION!** Black Holes fired known to be unstable!
+
 ## Pipe Bombs
 ![pipebomb](./sprites/pipe-bombs/PIPBA0.png)
 
@@ -14,6 +23,12 @@ _Creative, I know_
 - Can be shot in a pinch.  Careful, may get caught in the cross-fire!
 
 ## Credits
+
+### Black Hole Generator
+
+- Sounds: Raven Software (Quake 4), Epic Games (UT 2004)
+- Sprites: NMN, Zero Prophet, Reactor, Kronos, Midway
+- Sprite Edit: Gothic
 
 ### Pipe Bombs
 - Sounds: 3D Realms, Eurocom (Duke Nukem 64), Sunstorm Interactive (DN Manhattan Project)

@@ -1,12 +1,15 @@
 [en default]
 
+TAG_BHG                    = "Black Hole Generator";
 TAG_PIPEBOMB               = "Pipe Bomb";
 TAG_PIPEBOMB_DETONATOR     = "Detonator";
 
+PICKUP_BHG                 = "You got the Black Hole Generator!";
 PICKUP_PIPEBOMB            = "Picked up a pipe bomb!  So cool!";
 PICKUP_PIPEBOMB_DEACTIVATE = "Picked up (and deactivated) a pipe bomb!";
 PICKUP_PIPEBOMB_DETONATOR  = "Picked up a detonator.";
 
+OB_BHG                     = "%o divided by 0.";
 OB_PIPEBOMB                = "%o should have read the warning label.";
 
 // Options Menu Titles

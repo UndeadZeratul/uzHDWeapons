@@ -1,0 +1,112 @@
+// BHG SPARKS
+PointLight BHSPARK {
+    Color 1.0 1.0 1.0
+    Size 16
+    Subtractive 1
+}
+
+// BLACK HOLE
+PulseLight BHOLE_1 {
+    Color 1.0 1.0 1.0
+    Size 140
+    SecondarySize 136
+    Interval 0.2
+    Subtractive 1
+}
+
+PointLight BHOLE_2 {
+    Color 1.0 1.0 1.0
+    Size 126
+    Subtractive 1
+}
+
+PointLight BHOLE_3 {
+    Color 1.0 1.0 1.0
+    Size 110
+    Subtractive 1
+}
+
+PointLight BHOLE_4 {
+    Color 1.0 1.0 1.0
+    Size 96
+    Subtractive 1
+}
+
+PointLight BHOLE_5 {
+    Color 1.0 1.0 1.0
+    Size 88
+    Subtractive 1
+}
+
+PointLight BHOLE_6 {
+    Color 1.0 1.0 1.0
+    Size 80
+    Subtractive 1
+}
+
+PointLight BHOLE_7 {
+    Color 1.0 1.0 1.0
+    Size 72
+    Subtractive 1
+}
+
+PointLight BHOLE_8 {
+    Color 1.0 1.0 1.0
+    Size 64
+    Subtractive 1
+}
+
+PointLight BHOLE_9 {
+    Color 1.0 1.0 1.0
+    Size 56
+    Subtractive 1
+}
+
+PointLight BHOLE_10 {
+    Color 1.0 1.0 1.0
+    Size 48
+    Subtractive 1
+}
+
+// BLACK HOLE SHOCKWAVES
+PointLight BHEXP_1 {
+    Color 1.0 1.0 1.0
+    Size 50
+    Subtractive 1
+}
+
+PointLight BHEXP_2 {
+    Color 1.0 1.0 1.0
+    Size 65
+    Subtractive 1
+}
+
+PointLight BHEXP_3 {
+    Color 1.0 1.0 1.0
+    Size 80
+    Subtractive 1
+}
+
+PointLight BHEXP_4 {
+    Color 1.0 1.0 1.0
+    Size 95
+    Subtractive 1
+}
+
+PointLight BHEXP_5 {
+    Color 1.0 1.0 1.0
+    Size 110
+    Subtractive 1
+}
+
+PointLight BHEXP_6 {
+    Color 1.0 1.0 1.0
+    Size 125
+    Subtractive 1
+}
+
+PointLight BHEXP_7 {
+    Color 1.0 1.0 1.0
+    Size 140
+    Subtractive 1
+}

@@ -1,9 +1,3 @@
-
-const HDLD_PIPEBOMBS          = "pbg";
-const HDLD_PIPEBOMB_DETONATOR = "pbd";
-const ENC_PIPEBOMBS           = 19;
-const ENC_PIPEBOMB_DETONATOR  = 10;
-
 class HDPipeBombs : HDGrenadethrower {
     default {
         weapon.selectionorder 1050;
@@ -534,7 +528,7 @@ class HDPipeBombDetonator : HDPickup {
         inventory.pickupmessage "$PICKUP_PIPEBOMB_DETONATOR";
         inventory.pickupsound "weapons/pocket";
         tag "$TAG_PIPEBOMB_DETONATOR";
-        hdpickup.refid HDLD_PIPEBOMB_DETONATOR;
+        hdpickup.refid UZLD_PIPEBOMB_DETONATOR;
         hdpickup.bulk ENC_PIPEBOMB_DETONATOR;
     }
 
@@ -555,7 +549,7 @@ class HDPipeBombAmmo : HDAmmo {
         inventory.pickupmessage "$PICKUP_PIPEBOMB";
         inventory.pickupsound "weapons/pocket";
         tag "$TAG_PIPEBOMB";
-        hdpickup.refid HDLD_PIPEBOMBS;
+        hdpickup.refid UZLD_PIPEBOMBS;
         hdpickup.bulk ENC_PIPEBOMBS;
         +INVENTORY.KEEPDEPLETED
     }
