@@ -11,7 +11,7 @@ _Creative, I know_
 - **!CAUTION!** Black Holes fired known to be unstable!
 
 ## Pipe Bombs
-![pipebomb](./sprites/pipe-bombs/PIPBA0.png)
+![pipebomb](./sprites/pipe-bombs/PIPPA0.png)
 
 - Pipe Bomb Loadout Code: `pbg`
 - Detonator Loadout Code: `pbd`
