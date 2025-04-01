@@ -7,6 +7,11 @@ OptionMenu "UZWeaponsMenu" {
     Submenu "$TAG_PIPEBOMB", "pipebombSpawning", 0, 1
     StaticText ""
 
+	StaticText "$MENU_ENERGYWEAPONS_TITLE", "Cyan"
+    StaticText ""
+    Submenu "$TAG_BHG", "bhgSpawning", 0, 1
+    StaticText ""
+
 	StaticText "$MENU_RESETOPTIONS_TITLE", "Red"
 	StaticText ""
 	SafeCommand "$UZWEAPONS_RESETALLOPTIONS", "UZWeapons_Reset_Cvars"
@@ -50,4 +55,36 @@ OptionMenu "pipebombSpawning" {
 
 	StaticText "$MENU_RESETOPTIONS", "Brown"
 	SafeCommand "$MENU_RESETALLOPTIONS", "pipebomb_reset_cvars"
+}
+
+
+// Energy Weapons
+
+OptionMenu "bhgSpawning" {
+    Title "$TAG_BHG"
+
+   	StaticText "$MENU_NOTICE", "Brown"
+    StaticText "$MENU_SPAWNRATE_TEXT1", "White"
+    StaticText "$MENU_SPAWNRATE_TEXT2", "White"
+    StaticText ""
+
+	StaticText "$MENU_SPAWNOPTIONS", "Brown"
+    StaticText "$MENU_BHG_SPAWNTEXT", "White"
+	ScaleSlider "$MENU_WEPSPAWNRATE", "bhg_spawn_bias", -1, 999, 1, "$MENU_REPLACEALL", "$MENU_DISABLED"
+	SafeCommand "$MENU_RESETWEP", "resetcvar bhg_spawn_bias"
+ 	StaticText ""
+
+	StaticText "$MENU_BHG_BACKPACKS", "White"
+	Option "$MENU_BACKPACKSALLOWED", "bhg_allowBackpacks", "OnOff"
+ 	StaticText ""
+
+	StaticText "$MENU_PERSISTENCYOPTIONS", "Brown"
+    StaticText "$MENU_PERSISTENCY_TEXT", "White"
+	Option "$MENU_PERSISTENCY", "bhg_persistent_spawning", "OnOff"
+	SafeCommand "$MENU_RESETPERSISTENCY", "resetcvar bhg_persistent_spawning"
+ 	StaticText ""
+   	StaticText ""
+
+	StaticText "$MENU_RESETOPTIONS", "Brown"
+	SafeCommand "$MENU_RESETALLOPTIONS", "bhg_reset_cvars"
 }

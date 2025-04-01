@@ -156,51 +156,22 @@ class UZWeaponsHandler : EventHandler {
         // Backpack Spawns
         //-----------------
 
-        if (!pipebomb_allowBackpacks)     backpackBlacklist.push((Class<Inventory>)('HDPipeBombAmmo'));
+        if (!bhg_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)('UZBHGen'));
+        if (!pipebomb_allowBackpacks) backpackBlacklist.push((Class<Inventory>)('HDPipeBombAmmo'));
 
         //------------
         // Ammunition
         //------------
 
-        // // 12 gauge Buckshot Ammo.
-        // Array<string> wep_12gaShell;
-        // wep_12gaShell.push('RIReaper');
-        // addAmmo('HDShellAmmo', wep_12gaShell);
-
-        // // 4mm
-        // Array<string> wep_4mm;
-        // wep_4mm.push('RIReaper');
-        // addAmmo('FourMilAmmo', wep_4mm);
-
-        // // 4mm Magazines
-        // Array<string> wep_4mmMag;
-        // wep_4mmMag.push('RIReaper');
-        // addAmmo('HD4mMag', wep_4mmMag);
-
-        // // Rocket (Gyro) Grenades.
-        // Array<string> wep_rocket;
-        // wep_rocket.push('RIReaper');
-        // addAmmo('HDRocketAmmo', wep_rocket);
-
-        // // Brontornis Rounds
-        // Array<string> wep_bornto;
-        // wep_bornto.push('RIBrontoBuddy');
-        // addAmmo('BrontornisRound', wep_bornto);
-
-        // // 9mm
-        // Array<string> wep_9mm;
-        // wep_9mm.push('RIThompson');
-        // addAmmo('HDPistolAmmo', wep_9mm);
-
-        // // 9mm SMG Magazines
-        // Array<string> wep_9mmMag;
-        // wep_9mmMag.push('RIThompson');
-        // addAmmo('HD9mMag30', wep_9mmMag);
-
 
         //------------
         // Weaponry
         //------------
+
+        // Black Hole Generators
+        Array<UZSpawnItemEntry> spawns_bhg;
+        spawns_bhg.push(addItemEntry('BFG9000', bhg_spawn_bias));
+        addItem('UZBHGen', spawns_bhg, bhg_persistent_spawning);
 
         // Pipe Bombs
         Array<UZSpawnItemEntry> spawns_pipebomb;
@@ -215,21 +186,6 @@ class UZWeaponsHandler : EventHandler {
         //------------
         // Ammunition
         //------------
-
-        // // Reaper 8-round Magazine
-        // Array<UZSpawnItemEntry> spawns_reapermag;
-        // spawns_reapermag.push(addItemEntry('ShellBoxPickup', reapermag_shellbox_spawn_bias));
-        // addItem('RIReapM8', spawns_reapermag, reapermag_persistent_spawning);
-
-        // // Reaper 20-round Drum
-        // Array<UZSpawnItemEntry> spawns_reaperdummag;
-        // spawns_reaperdummag.push(addItemEntry('ShellBoxPickup', reaperdrummag_shellbox_spawn_bias));
-        // addItem('RIReapD20', spawns_reaperdummag, reaperdrummag_persistent_spawning);
-
-        // // Thompson 70-round Drum
-        // Array<UZSpawnItemEntry> spawns_thompsondrummag;
-        // spawns_thompsondrummag.push(addItemEntry('ClipMagPickup', thompsondrummag_clipmag_spawn_bias));
-        // addItem('RITmpsD70', spawns_thompsondrummag, thompsondrummag_persistent_spawning);
     }
 
     // Random stuff, stores it and forces negative values just to be 0.
