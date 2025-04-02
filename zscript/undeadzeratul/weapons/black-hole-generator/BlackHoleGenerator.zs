@@ -1,5 +1,7 @@
 class UZBHGen : HDWeapon {
 
+    bool actualBlackHole;
+
     Default {
         //$Category "Weapons/Hideous Destructor"
         //$Title "Black Hold Generator"
@@ -150,6 +152,10 @@ class UZBHGen : HDWeapon {
 	}
 
     override void DrawHUDStuff(HDStatusBar sb,HDWeapon hdw,HDPlayerPawn hpl) {
+
+        // Only fire an actual black hole on April 1st, because, well, reasons.
+        EventHandler.SendNetworkEvent("IsActualBlackHole", SystemTime.Format("%m-%d", SystemTime.Now()) == "04-01");
+
         if (sb.hudlevel == 1) {
             sb.drawbattery(
                 -54, -4,
@@ -336,10 +342,16 @@ class UZBHGen : HDWeapon {
                 A_ZoomRecoil(0.2);
 
                 // invoker.ShootBall(self, self);
-                // A_FireCustomMissile("DMBall", 0, 1, 0, 0);
-                console.printF("Happy April Fools!  The BHG is still WIP");
-                let x = 1;
-                let y = x / (x - x);
+
+                // If firing an actual Black Hole,
+                // c o n s u m e  a l l  r e a l i t y .
+                if (invoker.actualBlackHole) {
+                    let x = 1;
+                    let y = x / (x - x);
+                }
+
+                // Otherwise, actually fire the singularity
+                A_FireCustomMissile("DMBall", 0, 1, 0, 0);
             }
             #### A 6 A_ChangeVelocity(-2, 0, 3, CVF_RELATIVE);
             #### A 6 {

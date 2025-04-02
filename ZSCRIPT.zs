@@ -13,5 +13,6 @@ const ENC_PIPEBOMB_DETONATOR  = 10;
 #include "zscript/undeadzeratul/weapons/black-hole-generator/BlackHoleGenerator.zs"
 #include "zscript/undeadzeratul/weapons/pipe-bombs/PipeBombs.zs"
 
-// Event Handleres
+// Event Handlers
+#include "zscript/undeadzeratul/weapons/handlers/EasterEggHandler.zs"
 #include "zscript/undeadzeratul/weapons/handlers/SpawnHandler.zs"
