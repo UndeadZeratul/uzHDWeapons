@@ -41,6 +41,40 @@ class UZBHGen : HDWeapon {
             a.vel += caller.vel * 0.9 - spot * 0.03;
         }
     }
+    
+    Actor ShootBall(Actor inflictor, Actor source) {
+        inflictor.A_StartSound("weapons/bhgfwoosh", CHAN_WEAPON, CHANF_OVERLAP);
+
+        weaponStatus[BHGS_CHARGE]  = 0;
+        weaponStatus[BHGS_BATTERY] = 0;
+
+        // if (random(0,7)) weaponStatus[0] &= ~BHGF_DEMON;
+
+        vector3 ballVel = (cos(inflictor.pitch) * (cos(inflictor.angle), sin(inflictor.angle)), -sin(inflictor.pitch));
+
+        vector3 spawnPos = (inflictor.pos.xy, inflictor.pos.z + inflictor.height * 0.8) + ballVel * 6;
+
+        if (inflictor.viewPos) spawnPos += inflictor.viewPos.offset;
+
+        let bbb = Spawn("DMBTrail", spawnPos);
+        if (bbb) {
+            bbb.target = source;
+            bbb.pitch  = inflictor.pitch;
+            bbb.angle  = inflictor.angle;
+            bbb.vel    = inflictor.vel + ballVel * 4.0;
+        }
+
+        bbb = Spawn("DMBall", spawnPos);
+        if (bbb) {
+            bbb.target = source;
+            bbb.master = source;
+            bbb.pitch  = inflictor.pitch;
+            bbb.angle  = inflictor.angle;
+            bbb.vel    = inflictor.vel + ballVel * bbb.speed;
+        }
+
+        return bbb;
+    }
 
     override bool AddSpareWeapon(Actor newOwner) {
         return AddSpareWeaponRegular(newOwner);
@@ -73,7 +107,7 @@ class UZBHGen : HDWeapon {
             }
             
             // Wobble the more charged up we are
-            let max = weaponstatus[BHGS_TIMER] * (0.0625 / max(1, hdp.strength));
+            let max = weaponStatus[BHGS_TIMER] * (0.0625 / max(1, hdp.strength));
             if (PressingFire() && max > 0) {
                 hdp.A_MuzzleClimb(
                     (frandom(-max, max), frandom(-max, max)) * 0.5,
@@ -87,15 +121,15 @@ class UZBHGen : HDWeapon {
 
     override double gunmass() {
         return 15
-            + (weaponstatus[BHGS_CHARGE] >= 0 ? 1 : 0)
-            + (weaponstatus[BHGS_BATTERY] >= 0 ? 1 : 0)
+            + (weaponStatus[BHGS_CHARGE] >= 0 ? 1 : 0)
+            + (weaponStatus[BHGS_BATTERY] >= 0 ? 1 : 0)
         ;
     }
 
     override double weaponbulk() {
         return 240
-            + (weaponstatus[BHGS_CHARGE] >= 0 ? ENC_BATTERY_LOADED : 0)
-            + (weaponstatus[BHGS_BATTERY] >= 0 ? ENC_BATTERY_LOADED : 0)
+            + (weaponStatus[BHGS_CHARGE] >= 0 ? ENC_BATTERY_LOADED : 0)
+            + (weaponStatus[BHGS_BATTERY] >= 0 ? ENC_BATTERY_LOADED : 0)
         ;
     }
 
@@ -103,53 +137,53 @@ class UZBHGen : HDWeapon {
         return "BHGPA0", 1.0;
     }
 
-	override void DrawSightPicture(
-		HDStatusBar sb, HDWeapon hdw, HDPlayerPawn hpl,
-		bool sightBob, Vector2 bob, double fov, bool scopeView, actor hpc
-	) {
-		// sb.drawimage(
-		// 	"brfrntsit",(0,0)+bob*1.14,sb.DI_SCREEN_CENTER|sb.DI_ITEM_TOP
-		// );
+    override void DrawSightPicture(
+        HDStatusBar sb, HDWeapon hdw, HDPlayerPawn hpl,
+        bool sightBob, Vector2 bob, double fov, bool scopeView, actor hpc
+    ) {
+        // sb.drawimage(
+        // 	"brfrntsit",(0,0)+bob*1.14,sb.DI_SCREEN_CENTER|sb.DI_ITEM_TOP
+        // );
 
-		if(scopeView) {
-			double degree = 6.0;
-			int scaledwidth = 50;
-			int scaledyoffset = (scaledwidth >> 1) + 12;
+        if(scopeView) {
+            double degree = 6.0;
+            int scaledwidth = 50;
+            int scaledyoffset = (scaledwidth >> 1) + 12;
 
             // Define Clip Rect
-			int cx, cy, cw, ch;
-			[cx,cy,cw,ch]=screen.GetClipRect();
-			sb.SetClipRect(
-				bob.x - (scaledwidth >> 1), bob.y + scaledyoffset - (scaledwidth >> 1),
-				scaledwidth, scaledwidth,
-				sb.DI_SCREEN_CENTER
-			);
+            int cx, cy, cw, ch;
+            [cx,cy,cw,ch]=screen.GetClipRect();
+            sb.SetClipRect(
+                bob.x - (scaledwidth >> 1), bob.y + scaledyoffset - (scaledwidth >> 1),
+                scaledwidth, scaledwidth,
+                sb.DI_SCREEN_CENTER
+            );
 
-			sb.fill(color(255, 0, 0, 0),
-				bob.x - 27, scaledyoffset + bob.y - 27,
-				54, 54, sb.DI_SCREEN_CENTER|sb.DI_ITEM_CENTER
-			);
+            sb.fill(color(255, 0, 0, 0),
+                bob.x - 27, scaledyoffset + bob.y - 27,
+                54, 54, sb.DI_SCREEN_CENTER|sb.DI_ITEM_CENTER
+            );
 
-			 TexMan.SetCameraToTexture(hpc, "HDXCAM_BRON", degree);
-			let cam = TexMan.CheckForTexture("HDXCAM_BRON", TexMan.Type_Any);
-			double camSize = TexMan.GetSize(cam);
-			sb.DrawCircle(cam, (0, scaledyoffset) + bob * 5, 0.085, usePixelRatio: true);
+            TexMan.SetCameraToTexture(hpc, "HDXCAM_BRON", degree);
+            let cam = TexMan.CheckForTexture("HDXCAM_BRON", TexMan.Type_Any);
+            double camSize = TexMan.GetSize(cam);
+            sb.DrawCircle(cam, (0, scaledyoffset) + bob * 5, 0.085, usePixelRatio: true);
 
 
-			screen.SetClipRect(cx,cy,cw,ch);
+            screen.SetClipRect(cx,cy,cw,ch);
 
-			sb.drawimage(
-				"brret",
+            sb.drawimage(
+                "brret",
                 (0, scaledyoffset) + bob,
                 sb.DI_SCREEN_CENTER|sb.DI_ITEM_CENTER
-			);
-			sb.drawimage(
-				"brontoscope",
+            );
+            sb.drawimage(
+                "brontoscope",
                 (0, scaledyoffset) + bob,
                 sb.DI_SCREEN_CENTER|sb.DI_ITEM_CENTER
-			);
-		}
-	}
+            );
+        }
+    }
 
     override void DrawHUDStuff(HDStatusBar sb,HDWeapon hdw,HDPlayerPawn hpl) {
 
@@ -169,7 +203,7 @@ class UZBHGen : HDWeapon {
             );
         }
 
-        int bffb = hdw.weaponstatus[BHGS_BATTERY];
+        int bffb = hdw.weaponStatus[BHGS_BATTERY];
         if (bffb > 0) {
             sb.drawwepnum(bffb, 20, posy: -10);
         } else if (!bffb) {
@@ -182,7 +216,7 @@ class UZBHGen : HDWeapon {
             );
         }
 
-        bffb = hdw.weaponstatus[BHGS_CHARGE];
+        bffb = hdw.weaponStatus[BHGS_CHARGE];
         if (bffb > 0) {
             sb.drawwepnum(bffb, 20);
         } else if (!bffb) {
@@ -209,9 +243,9 @@ class UZBHGen : HDWeapon {
     }
 
     override void InitializeWepStats(bool idfa) {
-        weaponstatus[BHGS_CHARGE] = 20;
-        weaponstatus[BHGS_BATTERY] = 20;
-        weaponstatus[BHGS_TIMER] = 0;
+        weaponStatus[BHGS_CHARGE] = 20;
+        weaponStatus[BHGS_BATTERY] = 20;
+        weaponStatus[BHGS_TIMER] = 0;
     }
 
     States {
@@ -245,13 +279,13 @@ class UZBHGen : HDWeapon {
 
         Fire:
             #### A 0 {
-                invoker.weaponstatus[BHGS_TIMER] = 0;
+                invoker.weaponStatus[BHGS_TIMER] = 0;
             }
         Hold:
             #### # 0 {
                 if (
-                    invoker.weaponstatus[BHGS_CHARGE] >= 20
-                    && invoker.weaponstatus[BHGS_BATTERY] >= 20
+                    invoker.weaponStatus[BHGS_CHARGE] >= 20
+                    && invoker.weaponStatus[BHGS_BATTERY] >= 20
                 ) {
                     setweaponstate('ChargeEnd');
                 } else {
@@ -262,23 +296,23 @@ class UZBHGen : HDWeapon {
             #### # 0 {
                 if (
                     PressingReload()
-                    || invoker.weaponstatus[BHGS_BATTERY] < 0
+                    || invoker.weaponStatus[BHGS_BATTERY] < 0
                     || (
-                        invoker.weaponstatus[BHGS_CHARGE] >= 20
-                        && invoker.weaponstatus[BHGS_BATTERY] >= 20
+                        invoker.weaponStatus[BHGS_CHARGE] >= 20
+                        && invoker.weaponStatus[BHGS_BATTERY] >= 20
                     )
                 ) {
                     setweaponstate('Nope');
                 }
             }
             #### # 6 {
-                invoker.weaponstatus[BHGS_TIMER]++;
+                invoker.weaponStatus[BHGS_TIMER]++;
 
                 if (health < 40) {
                     A_SetTics(2);
 
                     if (health > 16) damagemobj(invoker, self, 1, "internal");
-                } else if (invoker.weaponstatus[BHGS_BATTERY] == 20) {
+                } else if (invoker.weaponStatus[BHGS_BATTERY] == 20) {
                     A_SetTics(2);
                 }
 
@@ -289,7 +323,7 @@ class UZBHGen : HDWeapon {
                 A_WeaponReady(WRF_NOFIRE);
             }
             #### # 0 {
-                if (invoker.weaponstatus[BHGS_CHARGE] == 20 && invoker.weaponstatus[BHGS_BATTERY] == 20) {
+                if (invoker.weaponStatus[BHGS_CHARGE] == 20 && invoker.weaponStatus[BHGS_BATTERY] == 20) {
                     A_Refire("Shoot");
                 } else {
                     A_Refire();
@@ -301,16 +335,16 @@ class UZBHGen : HDWeapon {
             #### # 1 {
                 UZBHGen.Spark(self, 1, gunheight() - 2);
 
-                A_StartSound("weapons/bfgcharge", (invoker.weaponstatus[BHGS_TIMER] > 6) ? CHAN_AUTO : CHAN_WEAPON);
+                A_StartSound("weapons/bfgcharge", (invoker.weaponStatus[BHGS_TIMER] > 6) ? CHAN_AUTO : CHAN_WEAPON);
                 A_WeaponReady(WRF_ALLOWRELOAD|WRF_NOFIRE|WRF_DISABLESWITCH);
-                A_SetTics(max(1, 12 - int(invoker.weaponstatus[BHGS_TIMER] * 0.3)));
+                A_SetTics(max(1, 12 - int(invoker.weaponStatus[BHGS_TIMER] * 0.3)));
 
-                invoker.weaponstatus[BHGS_TIMER]++;
+                invoker.weaponStatus[BHGS_TIMER]++;
                 
-                player.getpsprite(PSP_WEAPON).frame = clamp((invoker.weaponstatus[BHGS_TIMER] / 10) + 1, 1, 4);
+                player.getpsprite(PSP_WEAPON).frame = clamp((invoker.weaponStatus[BHGS_TIMER] / 10) + 1, 1, 4);
             }
             #### # 0 {
-                if (invoker.weaponstatus[BHGS_TIMER] > 40) {
+                if (invoker.weaponStatus[BHGS_TIMER] > 40) {
                     A_Refire("Shoot");
                 } else {
                     A_Refire("ChargeEnd");
@@ -320,7 +354,7 @@ class UZBHGen : HDWeapon {
 
         Shoot:
             #### F 0 {
-                invoker.weaponstatus[BHGS_TIMER] = 0;
+                invoker.weaponStatus[BHGS_TIMER] = 0;
 
                 A_StartSound("weapons/bfgf", CHAN_WEAPON);
                 
@@ -351,7 +385,7 @@ class UZBHGen : HDWeapon {
                 }
 
                 // Otherwise, actually fire the singularity
-                A_FireCustomMissile("DMBall", 0, 1, 0, 0);
+                invoker.ShootBall(self, self);
             }
             #### A 6 A_ChangeVelocity(-2, 0, 3, CVF_RELATIVE);
             #### A 6 {
@@ -370,19 +404,19 @@ class UZBHGen : HDWeapon {
         Reload:
             #### A 0 {
                 if (
-                    invoker.weaponstatus[BHGS_BATTERY] >= 20
+                    invoker.weaponStatus[BHGS_BATTERY] >= 20
                     || !countinv("HDBattery")
                 ) {
                     setweaponstate('Nope');
                 } else {
-                    invoker.weaponstatus[BHGS_LOADTYPE] = BHGC_RELOADMAX;
+                    invoker.weaponStatus[BHGS_LOADTYPE] = BHGC_RELOADMAX;
                 }
             }
             goto Reload1;
 
         Unload:
             #### A 0 {
-                invoker.weaponstatus[BHGS_LOADTYPE] = BHGC_UNLOADALL;
+                invoker.weaponStatus[BHGS_LOADTYPE] = BHGC_UNLOADALL;
             }
             goto Reload1;
 
@@ -402,23 +436,23 @@ class UZBHGen : HDWeapon {
                 A_StartSound("weapons/bfgopen", 8);
 
                 A_MuzzleClimb(-0.1, 0.8, -0.05, 0.5, wepdot: false);
-                if (invoker.weaponstatus[BHGS_BATTERY] >= 0) {
-                    HDMagAmmo.SpawnMag(self,"HDBattery", invoker.weaponstatus[BHGS_BATTERY]);
-                    invoker.weaponstatus[BHGS_BATTERY] = -1;
+                if (invoker.weaponStatus[BHGS_BATTERY] >= 0) {
+                    HDMagAmmo.SpawnMag(self,"HDBattery", invoker.weaponStatus[BHGS_BATTERY]);
+                    invoker.weaponStatus[BHGS_BATTERY] = -1;
                     A_SetTics(3);
                 }
             }
             #### A 2 offset(0, 42) {
-                if (invoker.weaponstatus[BHGS_CHARGE] >= 0) {
-                    HDMagAmmo.SpawnMag(self, "HDBattery", invoker.weaponstatus[BHGS_CHARGE]);
-                    invoker.weaponstatus[BHGS_CHARGE] = -1;
+                if (invoker.weaponStatus[BHGS_CHARGE] >= 0) {
+                    HDMagAmmo.SpawnMag(self, "HDBattery", invoker.weaponStatus[BHGS_CHARGE]);
+                    invoker.weaponStatus[BHGS_CHARGE] = -1;
                     A_SetTics(4);
                 }
 
                 A_MuzzleClimb(-0.05, 0.4, -0.05, 0.2, wepdot: false);
             }
             #### A 4 offset(0,42) {
-                if (invoker.weaponstatus[BHGS_LOADTYPE] == BHGC_UNLOADALL) {
+                if (invoker.weaponStatus[BHGS_LOADTYPE] == BHGC_UNLOADALL) {
                     setweaponstate('Reload3');
                 } else {
                     A_StartSound("weapons/pocket",9);
@@ -434,27 +468,27 @@ class UZBHGen : HDWeapon {
                     !mmm
                     ||mmm.amount < 1
                     ||(
-                        invoker.weaponstatus[BHGS_BATTERY] >= 0
-                        && invoker.weaponstatus[BHGS_CHARGE] >= 0
+                        invoker.weaponStatus[BHGS_BATTERY] >= 0
+                        && invoker.weaponStatus[BHGS_CHARGE] >= 0
                     )
                 ) {
                     setweaponstate('Reload3');
                     return;
                 }
 
-                int batslot = (invoker.weaponstatus[BHGS_BATTERY] < 0 && invoker.weaponstatus[BHGS_CHARGE] < 0)
+                int batslot = (invoker.weaponStatus[BHGS_BATTERY] < 0 && invoker.weaponStatus[BHGS_CHARGE] < 0)
                     ? BHGS_CHARGE
                     : BHGS_BATTERY;
 
-                if (invoker.weaponstatus[BHGS_LOADTYPE] == BHGC_ONEEMPTY) {
-                    invoker.weaponstatus[BHGS_LOADTYPE] = BHGC_RELOADMAX;
+                if (invoker.weaponStatus[BHGS_LOADTYPE] == BHGC_ONEEMPTY) {
+                    invoker.weaponStatus[BHGS_LOADTYPE] = BHGC_RELOADMAX;
                     mmm.LowestToLast();
-                    invoker.weaponstatus[batslot] = mmm.TakeMag(false);
+                    invoker.weaponStatus[batslot] = mmm.TakeMag(false);
                 } else {
-                    invoker.weaponstatus[batslot] = mmm.TakeMag(true);
+                    invoker.weaponStatus[batslot] = mmm.TakeMag(true);
                 }
             }
-            #### A 0 A_JumpIf (!countinv("HDBattery") || invoker.weaponstatus[BHGS_BATTERY]>=0, 'Reload3');
+            #### A 0 A_JumpIf (!countinv("HDBattery") || invoker.weaponStatus[BHGS_BATTERY]>=0, 'Reload3');
             loop;
 
         Reload3:
@@ -522,49 +556,89 @@ class BHGSpark : HDActor {
 
 class DMBall : HDActor {
 
+    string bhLight;
+
     Default {
         +RIPPER;
         +FORCEXYBILLBOARD;
         +NODAMAGETHRUST;
         +FORCERADIUSDMG;
+        +EXTREMEDEATH;
 
         Projectile;
-        Radius 13;
-        Height 8;
-        Speed 22;
+        Radius 10;
+        Height 10;
+        Speed 6.9;
         Damage 10;
-        Renderstyle "Translucent";
-        Alpha 0.75;
+        Scale 0.01;
         DeathSound "DMBall/Impact";
-        // Decal BHoleDecal;
         Obituary "$OB_BHG";
+    }
+
+    override void Tick() {
+        super.Tick();
+
+        // Consume all matter
+        let it = BlockThingsIterator.Create(self);
+        while (it.next()) {
+            let thing = it.thing;
+
+            // Skip things that aren't actually actors,
+            // or are not meant to be interacted with at all.
+            if (
+                !(
+                    thing is 'Actor'
+                    || thing is 'Inventory'
+                    || thing is 'Weapon'
+                )
+                || thing is 'BlackHole'
+                || thing is 'HDPlayerPawn'
+                || thing.bNOINTERACTION
+                || Distance3D(thing) > HDCONST_ONEMETRE
+            ) continue;
+
+            let newMass = thing.mass * 0.01;
+
+            if (hd_debug) Console.PrintF("[BlackHole] Thing: "..thing.GetTag()..", Mass: "..thing.mass..", Scale: "..scale.." -> "..((reactionTime + newMass) * 0.01)..", Duration: "..reactionTime.." -> "..(reactionTime + newMass));
+
+            reactionTime += newMass;
+
+            thing.destroy();
+        }
+
+        // Update Scale
+        let newScale = clamp(reactionTime * 0.01, 0.01, 1.0);
+        scale = (newScale, newScale);
+        
+        // Update Dynamic Light
+        let oldLight = bhLight;
+        bhLight = "BHOLE_"..int(clamp((10 - (newScale * 10)), 1, 10));
+        if (hd_debug) Console.PrintF("Old Light: "..oldLight..", New Light: "..bhLight);
+        if (oldLight != bhLight) {
+            A_RemoveLight(oldLight);
+            A_AttachLightDef(bhLight, bhLight);
+        }
+
+        // Pull things in
+        // it = BlockThingsIterator.Create(self, radius * HDCONST_ONEMETRE);
+        // while (it.next()) {
+        //   TODO: Use Damped Spring?
+        // }
+        A_RadiusThrust(-4096 * newScale, flags: RTF_NOIMPACTDAMAGE|RTF_THRUSTZ);
     }
 
     States {
         Spawn:
-            VOIP AA 1 Bright A_RadiusThrust(-240,200,0);
-            TNT1 A 0 A_Explode(10,90,0);
-            TNT1 A 0 A_SpawnItemEx("DMBTrail",0,0,0);
-            VOIP BB 1 Bright A_RadiusThrust(-240,200,0);
-            TNT1 A 0 A_Explode(10,90,0);
-            TNT1 A 0 A_SpawnItemEx("DMBTrail",0,0,0);
-            VOIP CC 1 Bright A_RadiusThrust(-240,200,0);
-            TNT1 A 0 A_Explode(10,90,0);
-            TNT1 A 0 A_SpawnItemEx("DMBTrail",0,0,0);
-            VOIP DD 1 Bright A_RadiusThrust(-240,200,0);
-            TNT1 A 0 A_Explode(10,90,0);
-            TNT1 A 0 A_SpawnItemEx("DMBTrail",0,0,0);
-            VOIP EE 1 Bright A_RadiusThrust(-240,200,0);
-            TNT1 A 0 A_Explode(10,90,0);
-            TNT1 A 0 A_SpawnItemEx("DMBTrail",0,0,0);
-            VOIP FF 1 Bright A_RadiusThrust(-240,200,0);
-            TNT1 A 0 A_Explode(10,90,0);
-            TNT1 A 0 A_SpawnItem("DMBTrail",0,0,0);
+            NMAN ABCDEFGHIJKLMNOPQRSTUVWXYZ 2 Bright;
+            NMAO ABCD                       2 Bright;
             Loop;
         Death:
-            TNT1 A 0 A_SpawnItemEx("BlackHole",0,0,0);
-            TNT1 A 0 A_SetScale(1.2);
-            VORX ABCDEFGH 2 Bright;
+            TNT1 A 0 {
+                A_RemoveLight(bhLight);
+                let a = BlackHole(Spawn("BlackHole", pos));
+                a.reactionTime = reactionTime;
+                a.scale = scale;
+            }
             Stop;
     }
 }
@@ -588,51 +662,80 @@ class DMBTrail : HDActor {
 
 class BlackHole : HDActor {
 
+    string bhLight;
+
     Default {
         +NOCLIP;
-        +NODAMAGETHRUST;
         +FORCEXYBILLBOARD;
+        +NODAMAGETHRUST;
         +FORCERADIUSDMG;
         +EXTREMEDEATH;
 
         Projectile;
-        Radius 6;
-        Height 40;
+        Radius 10;
+        Height 10;
         Speed 0;
-        // RenderStyle "Translucent";
-        // Alpha 0.85;
-        Scale 0.1;
-        ReactionTime 20;
+        Scale 0.01;
+        ReactionTime 1;
         Obituary "$OB_BHG";
+    }
+
+    override void Tick() {
+        super.Tick();
+
+        let it = BlockThingsIterator.Create(self);
+        while (it.next()) {
+            let thing = it.thing;
+
+            // Skip things that aren't actually actors,
+            // or are not meant to be interacted with at all.
+            if (
+                !(
+                    thing is 'Actor'
+                    || thing is 'Inventory'
+                    || thing is 'Weapon'
+                )
+                || thing is 'BlackHole'
+                || thing.bNOINTERACTION
+                || Distance3D(thing) > HDCONST_ONEMETRE
+            ) continue;
+
+            let newMass = thing.mass * 0.01;
+
+            if (hd_debug) Console.PrintF("[BlackHole] Thing: "..thing.GetTag()..", Mass: "..thing.mass..", Scale: "..scale.." -> "..((reactionTime + newMass) * 0.01)..", Duration: "..reactionTime.." -> "..(reactionTime + newMass));
+
+            reactionTime += newMass;
+
+            thing.destroy();
+        }
+
+        // Update Scale
+        let newScale = clamp(reactionTime * 0.01, 0.01, 1.0);
+        scale = (newScale, newScale);
+        
+        // Update Dynamic Light
+        let oldLight = bhLight;
+        bhLight = "BHOLE_"..int(clamp((10 - (newScale * 10)), 1, 10));
+        if (hd_debug) Console.PrintF("Old Light: "..oldLight..", New Light: "..bhLight);
+        if (oldLight != bhLight) {
+            A_RemoveLight(oldLight);
+            A_AttachLightDef(bhLight, bhLight);
+        }
+
+        // Pull things in
+        A_RadiusThrust(-4096 * newScale, flags: RTF_AFFECTSOURCE|RTF_NOIMPACTDAMAGE|RTF_THRUSTZ);
     }
 
     States {
         Spawn:
             NMAN A 0 A_CountDown();
-            #### # 0 A_PlaySoundEx("BHole/Suck", "Voice", 1);
-            #### ABCDFGHIJKLMNOPQRSTUVWXYZ 2 Bright Light("BHOLE_1") {
-                A_RadiusThrust(-1000, flags: RTF_AFFECTSOURCE|RTF_NOIMPACTDAMAGE|RTF_THRUSTZ);
-                A_Explode(8, 180, XF_HURTSOURCE, false, 10);
-            }
-            NMAO ABCD 2 Bright Light("BHOLE_1") {
-                A_RadiusThrust(-1000, flags: RTF_AFFECTSOURCE|RTF_NOIMPACTDAMAGE|RTF_THRUSTZ);
-                A_Explode(8, 180, XF_HURTSOURCE, false, 10);
-            }
+            #### # 0 A_StartSound("BHole/Suck", CHAN_VOICE);
+            #### ABCDFGHIJKLMNOPQRSTUVWXYZ 2 Bright;
+            NMAO ABCD                      2 Bright;
             Loop;
         Death:
-            #### # 0 A_StopSoundEx("Voice");
-            #### # 0 A_SpawnItemEx("BHSmoke", 0, 0, 0);
-            #### # 0 A_SpawnItemEx("BHExplosion", 0, 0, 0);
-            #### # 0 A_PlaySound("BHole/Explosion");
-            NMAN ABCD 1 Bright Light("BHOLE_2") A_FadeOut(0.03);
-            NMAN EFGH 1 Bright Light("BHOLE_3") A_FadeOut(0.03);
-            NMAN IJKL 1 Bright Light("BHOLE_4") A_FadeOut(0.03);
-            NMAN MNOP 1 Bright Light("BHOLE_5") A_FadeOut(0.03);
-            NMAN QRST 1 Bright Light("BHOLE_6") A_FadeOut(0.03);
-            NMAN UVWX 1 Bright Light("BHOLE_7") A_FadeOut(0.03);
-            NMAN YZ   1 Bright Light("BHOLE_8") A_FadeOut(0.03);
-            NMAO AB   1 Bright Light("BHOLE_8") A_FadeOut(0.03);
-            NMAO CD   1 Bright Light("BHOLE_9") A_FadeOut(0.03);
+            #### # 0 A_StopSound(CHAN_VOICE);
+            #### # 0 A_RemoveLight(bhLight);
             Stop;
     }
 }
