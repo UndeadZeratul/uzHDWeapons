@@ -1,9 +1,9 @@
-DMC/Charge "sounds/DMC_CHRG"
-DMC/Fire DMC_FIRE
-DMBall/Impact DMC_IMPX
-BHole/Suck DMC_VOID
-BHole/Explosion DMC_XPLD
+BHG/Charge      "sounds/undeadzeratul/weapons/black-hole-generator/DMC_CHRG.ogg"
+BHG/Fire        "sounds/undeadzeratul/weapons/black-hole-generator/DMC_FIRE.ogg"
+BHBall/Impact   "sounds/undeadzeratul/weapons/black-hole-generator/DMC_IMPX.ogg"
+BHole/Suck      "sounds/undeadzeratul/weapons/black-hole-generator/DMC_VOID.ogg"
+BHole/Explosion "sounds/undeadzeratul/weapons/black-hole-generator/DMC_XPLD.ogg"
 
-$limit DMBall/Impact 0
+$limit BHBall/Impact 0
 $limit BHole/Suck 0
 $limit BHole/Explosion 0

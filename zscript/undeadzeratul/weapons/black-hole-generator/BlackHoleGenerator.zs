@@ -43,7 +43,7 @@ class UZBHGen : HDWeapon {
     }
     
     Actor ShootBall(Actor inflictor, Actor source) {
-        inflictor.A_StartSound("weapons/bhgfwoosh", CHAN_WEAPON, CHANF_OVERLAP);
+        inflictor.A_StartSound("bhg/fire", CHAN_WEAPON, CHANF_OVERLAP);
 
         weaponStatus[BHGS_CHARGE]  = 0;
         weaponStatus[BHGS_BATTERY] = 0;
@@ -56,15 +56,7 @@ class UZBHGen : HDWeapon {
 
         if (inflictor.viewPos) spawnPos += inflictor.viewPos.offset;
 
-        let bbb = Spawn("DMBTrail", spawnPos);
-        if (bbb) {
-            bbb.target = source;
-            bbb.pitch  = inflictor.pitch;
-            bbb.angle  = inflictor.angle;
-            bbb.vel    = inflictor.vel + ballVel * 4.0;
-        }
-
-        bbb = Spawn("DMBall", spawnPos);
+        let bbb = Spawn("BlackHole", spawnPos);
         if (bbb) {
             bbb.target = source;
             bbb.master = source;
@@ -356,7 +348,7 @@ class UZBHGen : HDWeapon {
             #### F 0 {
                 invoker.weaponStatus[BHGS_TIMER] = 0;
 
-                A_StartSound("weapons/bfgf", CHAN_WEAPON);
+                A_StartSound("BHG/Charge", CHAN_WEAPON);
                 
                 HDMobAI.frighten(self, 512);
             }
@@ -545,118 +537,13 @@ class BHGSpark : HDActor {
 
     States {
         spawn:
-            BHXP ABCDEFGHIJKLMNO 1 Bright Light("BHSPARK") NoDelay {
+            BHXP ONMLKJIHGFEDCBA 1 Bright Light("BHSPARK") NoDelay {
                 A_FadeIn(0.1);
                 A_SetRoll(roll + (getAge() * rollDir * frandom(0.1, 1.0)), SPF_INTERPOLATE);
+                scale -= (0.01, 0.01);
             }
-            BHXP O 1 A_FadeOut(0.3);
+            BHXP A 1 A_FadeOut(0.3);
             wait;
-    }
-}
-
-class DMBall : HDActor {
-
-    string bhLight;
-
-    Default {
-        +RIPPER;
-        +FORCEXYBILLBOARD;
-        +NODAMAGETHRUST;
-        +FORCERADIUSDMG;
-        +EXTREMEDEATH;
-
-        Projectile;
-        Radius 10;
-        Height 10;
-        Speed 6.9;
-        Damage 10;
-        Scale 0.01;
-        DeathSound "DMBall/Impact";
-        Obituary "$OB_BHG";
-    }
-
-    override void Tick() {
-        super.Tick();
-
-        // Consume all matter
-        let it = BlockThingsIterator.Create(self);
-        while (it.next()) {
-            let thing = it.thing;
-
-            // Skip things that aren't actually actors,
-            // or are not meant to be interacted with at all.
-            if (
-                !(
-                    thing is 'Actor'
-                    || thing is 'Inventory'
-                    || thing is 'Weapon'
-                )
-                || thing is 'BlackHole'
-                || thing is 'HDPlayerPawn'
-                || thing.bNOINTERACTION
-                || Distance3D(thing) > HDCONST_ONEMETRE
-            ) continue;
-
-            let newMass = thing.mass * 0.01;
-
-            if (hd_debug) Console.PrintF("[BlackHole] Thing: "..thing.GetTag()..", Mass: "..thing.mass..", Scale: "..scale.." -> "..((reactionTime + newMass) * 0.01)..", Duration: "..reactionTime.." -> "..(reactionTime + newMass));
-
-            reactionTime += newMass;
-
-            thing.destroy();
-        }
-
-        // Update Scale
-        let newScale = clamp(reactionTime * 0.01, 0.01, 1.0);
-        scale = (newScale, newScale);
-        
-        // Update Dynamic Light
-        let oldLight = bhLight;
-        bhLight = "BHOLE_"..int(clamp((10 - (newScale * 10)), 1, 10));
-        if (hd_debug) Console.PrintF("Old Light: "..oldLight..", New Light: "..bhLight);
-        if (oldLight != bhLight) {
-            A_RemoveLight(oldLight);
-            A_AttachLightDef(bhLight, bhLight);
-        }
-
-        // Pull things in
-        // it = BlockThingsIterator.Create(self, radius * HDCONST_ONEMETRE);
-        // while (it.next()) {
-        //   TODO: Use Damped Spring?
-        // }
-        A_RadiusThrust(-4096 * newScale, flags: RTF_NOIMPACTDAMAGE|RTF_THRUSTZ);
-    }
-
-    States {
-        Spawn:
-            NMAN ABCDEFGHIJKLMNOPQRSTUVWXYZ 2 Bright;
-            NMAO ABCD                       2 Bright;
-            Loop;
-        Death:
-            TNT1 A 0 {
-                A_RemoveLight(bhLight);
-                let a = BlackHole(Spawn("BlackHole", pos));
-                a.reactionTime = reactionTime;
-                a.scale = scale;
-            }
-            Stop;
-    }
-}
-
-class DMBTrail : HDActor {
-
-    Default {
-        +NOINTERACTION;
-        +FORCEXYBILLBOARD;
-        RenderStyle "Translucent";
-        Alpha 0.70;
-        Scale 0.7;
-    }
-
-    States {
-        Spawn:
-            VORX ABCDEFGH 2 Bright A_FadeOut(0.1);
-            Stop;
     }
 }
 
@@ -665,133 +552,163 @@ class BlackHole : HDActor {
     string bhLight;
 
     Default {
-        +NOCLIP;
         +FORCEXYBILLBOARD;
         +NODAMAGETHRUST;
         +FORCERADIUSDMG;
         +EXTREMEDEATH;
 
         Projectile;
-        Radius 10;
-        Height 10;
-        Speed 0;
-        Scale 0.01;
-        ReactionTime 1;
+        Radius 16;
+        Height 16;
+        Damage 10;
+        Scale 0.1;
+        Mass 1024;
+        Speed HDCONST_PI;
+
         Obituary "$OB_BHG";
+        
+        DeathSound "BHBall/Impact";
     }
 
     override void Tick() {
+
+        // If time is frozen, quit.
+        if (bDESTROYED || IsFrozen()) return;
+
         super.Tick();
 
-        let it = BlockThingsIterator.Create(self);
-        while (it.next()) {
-            let thing = it.thing;
+        Vector3 oldPos = pos;
+        Vector2 oldSize = (radius, height);
 
-            // Skip things that aren't actually actors,
-            // or are not meant to be interacted with at all.
+        if (vel.length() > double.epsilon) vel *= 0.99;
+
+        // Pull things in
+        let tit = ThinkerIterator.Create('Actor');
+        Actor thing;
+        while (thing = Actor(tit.next())) {
+
+            // If the thing isn't valid, quit.
             if (
-                !(
-                    thing is 'Actor'
-                    || thing is 'Inventory'
-                    || thing is 'Weapon'
-                )
-                || thing is 'BlackHole'
+                thing == self
+                || (master && thing == master)
                 || thing.bNOINTERACTION
-                || Distance3D(thing) > HDCONST_ONEMETRE
+                || thing.bDESTROYED
+                || !CheckSight(thing)
             ) continue;
 
-            let newMass = thing.mass * 0.01;
+            let dist = Distance3D(thing);
 
-            if (hd_debug) Console.PrintF("[BlackHole] Thing: "..thing.GetTag()..", Mass: "..thing.mass..", Scale: "..scale.." -> "..((reactionTime + newMass) * 0.01)..", Duration: "..reactionTime.." -> "..(reactionTime + newMass));
+            // If distance is NaN, quit.
+            if (dist != dist) continue;
+            
+            let gravity = ((dist * dist) > double.epsilon)
+                ? ((HDCONST_GRAVITY * mass * HDCONST_ONEMETRE) / (dist * dist))
+                : double.max;
 
-            reactionTime += newMass;
+            // If the thing is too far away, quit.
+            if (gravity < double.epsilon) continue;
+
+            // Apply gravitational pull
+            thing.vel += (pos - thing.pos).unit() * gravity;
+        }
+
+        // Consume all things that dare approach
+        let bit = BlockThingsIterator.Create(self);
+        while (bit.next()) {
+            let thing = bit.thing;
+            let dist = max(Distance3D(thing) - thing.radius, double.epsilon);
+            let otherMass = GetOtherMass(thing);
+
+            // Skip things that aren't actually actors,
+            // or are not meant to be interacted with at all,
+            // or are other Singularities with more mass.
+            if (
+                !(thing is 'Actor')
+                || (thing is 'BlackHole' && mass < otherMass)
+                || thing is 'HDPlayerPawn'
+                || thing.bNOINTERACTION
+                || thing.bDESTROYED
+                || (dist > radius && abs(dist + thing.vel.Length()) > 2 * radius)
+                // Schwarzschild Radius? (2GM / c^2)
+                // || Distance3D(thing) > max(2 * HDCONST_GRAVITY * mass / (HDCONST_SPEEDOFLIGHT * HDCONST_SPEEDOFLIGHT), 1.0)
+            ) continue;
+
+            vel *= clamp(abs(mass - otherMass) / mass, 0.0, 1.0);
+
+            UpdateMass(mass + otherMass);
 
             thing.destroy();
         }
 
+        // Emit a bit of Hawking Radiation
+        UpdateMass(mass * FRandom(0.999, 1 - double.epsilon));
+
+        // If our new size overlaps, stop moving/growing
+        if (!TestMobjLocation()) {
+            SetOrigin(oldPos, false);
+            A_SetSize(min(radius, oldSize.x), min(height, oldSize.y));
+            vel = (0, 0, 0);
+        }
+
+        // Once we've burned out, self-destruct
+        if (radius < 1 || height < 1) {
+            A_RemoveLight(bhLight);
+            A_StopSound(CHAN_VOICE);
+            Destroy();
+        }
+    }
+
+    private double GetOtherMass(Actor thing) {
+        if (thing is 'HDMagAmmo') {
+            return HDMagAmmo(thing).GetBulk();
+        } else if (thing is 'HDUPK') {
+            let upk = HDUPK(thing);
+            return upk.PickupType != "none" ? GetDefaultByType(upk.PickupType).bulk : (thing.mass * 0.01);
+        } else if (thing is 'HDWeapon') {
+            return HDWeapon(thing).WeaponBulk();
+        } else if (thing is 'HDPickup') {
+            return HDPickup(thing).bulk;
+        } else if (thing is 'HDPlayerPawn') {
+            return HDPlayerPawn(thing).enc + thing.mass;
+        } else if (thing is 'HDMobBase') {
+            return thing.mass * ((thing.scale.x + thing.scale.y) / 2);
+        } else if (thing is 'Inventory') {
+            return thing.mass * 0.01;
+        } else {
+            return thing.mass;
+        }
+    }
+
+    private void UpdateMass(double newMass) {
+
+        // Consume thing and add mass to current duration/mass, capping at 8x initial mass
+        mass = clamp(newMass, 0, 8192);
+
         // Update Scale
-        let newScale = clamp(reactionTime * 0.01, 0.01, 1.0);
+        let newScale = clamp(mass * 0.0001, 0.01, 1.0);
         scale = (newScale, newScale);
-        
+
+        let newSize = clamp(mass * 0.01, 1, 100);
+        A_SetSize(newSize, newSize * 2);
+
         // Update Dynamic Light
         let oldLight = bhLight;
-        bhLight = "BHOLE_"..int(clamp((10 - (newScale * 10)), 1, 10));
-        if (hd_debug) Console.PrintF("Old Light: "..oldLight..", New Light: "..bhLight);
+        bhLight = "BHOLE_"..int(clamp((10 - newSize), 1, 10));
         if (oldLight != bhLight) {
             A_RemoveLight(oldLight);
             A_AttachLightDef(bhLight, bhLight);
         }
-
-        // Pull things in
-        A_RadiusThrust(-4096 * newScale, flags: RTF_AFFECTSOURCE|RTF_NOIMPACTDAMAGE|RTF_THRUSTZ);
     }
 
     States {
         Spawn:
-            NMAN A 0 A_CountDown();
+            TNT1 A 0 Light("BHOLE_10");
             #### # 0 A_StartSound("BHole/Suck", CHAN_VOICE);
-            #### ABCDFGHIJKLMNOPQRSTUVWXYZ 2 Bright;
-            NMAO ABCD                      2 Bright;
+        Idle:
+            NMAN ABCDEFGHIJKLMNOPQRSTUVWXYZ 2 Bright;
+            NMAO ABCD                       2 Bright;
             Loop;
         Death:
-            #### # 0 A_StopSound(CHAN_VOICE);
-            #### # 0 A_RemoveLight(bhLight);
-            Stop;
-    }
-}
-
-class BHSmoke : HDActor {
-
-    Default {
-        +NOINTERACTION;
-        +FORCEXYBILLBOARD;
-        RenderStyle "Translucent";
-        Alpha 0.70;
-        Scale 2.2;
-    }
-
-    States {
-        Spawn:
-            BHXP ABCDEFGHIJKLMNO 2 A_FadeOut(0.03);
-            Stop;
-    }
-}
-
-class BHExplosion : HDActor {
-
-    Default {
-        +NOINTERACTION;
-        +FORCEXYBILLBOARD;
-    }
-
-    States {
-        Spawn:
-            DBX3 A 1 Light("BHEXP_1") Bright A_SetScale(1.25);
-            TNT1 A 0 A_FadeOut(0.09);
-            DBX3 A 1 Light("BHEXP_2") Bright A_SetScale(1.50);
-            TNT1 A 0 A_FadeOut(0.09);
-            DBX3 A 1 Light("BHEXP_3") Bright A_SetScale(1.75);
-            TNT1 A 0 A_FadeOut(0.09);
-            DBX3 A 1 Light("BHEXP_4") Bright A_SetScale(2.0);
-            TNT1 A 0 A_FadeOut(0.09);
-            DBX3 A 1 Light("BHEXP_5") Bright A_SetScale(2.25);
-            TNT1 A 0 A_FadeOut(0.09);
-            DBX3 A 1 Light("BHEXP_6") Bright A_SetScale(2.50);
-            TNT1 A 0 A_FadeOut(0.09);
-            DBX3 A 1 Light("BHEXP_7") Bright A_SetScale(2.75);
-            TNT1 A 0 A_FadeOut(0.09);
-            DBX3 A 1 Bright A_SetScale(3.0);
-            TNT1 A 0 A_FadeOut(0.09);
-            DBX3 A 1 Bright A_SetScale(3.25);
-            TNT1 A 0 A_FadeOut(0.09);
-            DBX3 A 1 Bright A_SetScale(3.50);
-            TNT1 A 0 A_FadeOut(0.09);
-            DBX3 A 1 Bright A_SetScale(3.75);
-            TNT1 A 0 A_FadeOut(0.09);
-            DBX3 A 1 Bright A_SetScale(4.0);
-            TNT1 A 0 A_FadeOut(0.09);
-            DBX3 A 1 Bright A_SetScale(4.25);
-            TNT1 A 0 A_FadeOut(0.09);
-            Stop;
+            goto Idle;
     }
 }
