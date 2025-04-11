@@ -47,25 +47,62 @@ class UZBHGen : HDWeapon {
 
         weaponStatus[BHGS_CHARGE]  = 0;
         weaponStatus[BHGS_BATTERY] = 0;
+        
+		double shootAngle = inflictor.angle;
+		double shootPitch = inflictor.pitch;
+		vector3 shootPos  = (0, 0, 32);
 
-        // if (random(0,7)) weaponStatus[0] &= ~BHGF_DEMON;
+		let hdp = HDPlayerPawn(inflictor);
+		if (hdp) {
+			shootAngle = hdp.gunAngle;
+			shootPitch = hdp.gunPitch;
+			shootPos   = hdp.gunPos;
+		}
 
-        vector3 ballVel = (cos(inflictor.pitch) * (cos(inflictor.angle), sin(inflictor.angle)), -sin(inflictor.pitch));
+        FLineTraceData tlt;
+        inflictor.LineTrace(
+            shootAngle,
+            8192,
+            shootPitch,
+            flags:         TRF_NOSKY|TRF_ABSOFFSET,
+            offsetZ:       shootPos.z,
+            offsetForward: shootPos.x,
+            offsetSide:    shootPos.y,
+            data:          tlt
+        );
 
-        vector3 spawnPos = (inflictor.pos.xy, inflictor.pos.z + inflictor.height * 0.8) + ballVel * 6;
-
-        if (inflictor.viewPos) spawnPos += inflictor.viewPos.offset;
-
-        let bbb = Spawn("BlackHole", spawnPos);
+        let bbb = Spawn("BlackHole", GetBHSpawnPos(shootPos, tlt.hitLocation, shootAngle, shootPitch, tlt));
         if (bbb) {
             bbb.target = source;
             bbb.master = source;
-            bbb.pitch  = inflictor.pitch;
-            bbb.angle  = inflictor.angle;
-            bbb.vel    = inflictor.vel + ballVel * bbb.speed;
+            bbb.pitch  = shootPitch;
+            bbb.angle  = shootAngle;
+            bbb.vel    = (0, 0, 0);
         }
 
         return bbb;
+    }
+
+    private Vector3 GetBHSpawnPos(Vector3 shootPos, Vector3 targetPos, double angle, double pitch, FLineTraceData tData, int offset = 64) {
+        let spawnPos = targetPos;
+
+        switch (tData.hitType) {
+            case TRACE_HitCeiling:
+                spawnPos += (0, 0, -offset);
+                break;
+            case TRACE_HitFloor:
+                spawnPos += (0, 0, offset);
+                break;
+            case TRACE_HitWall:
+                spawnPos += ((-cos(angle) * offset, -sin(angle) * offset, 0));
+                break;
+            case TRACE_HitActor:
+            case TRACE_HitNone:
+            default:
+                break;
+        }
+
+        return spawnPos;
     }
 
     override bool AddSpareWeapon(Actor newOwner) {
@@ -550,6 +587,7 @@ class BHGSpark : HDActor {
 class BlackHole : HDActor {
 
     string bhLight;
+    double schwarzschild;
 
     Default {
         +FORCEXYBILLBOARD;
@@ -558,12 +596,11 @@ class BlackHole : HDActor {
         +EXTREMEDEATH;
 
         Projectile;
-        Radius 16;
-        Height 16;
-        Damage 10;
+        Radius 1;
+        Height 1;
         Scale 0.1;
         Mass 1024;
-        Speed HDCONST_PI;
+        Speed 0;
 
         Obituary "$OB_BHG";
         
@@ -587,13 +624,20 @@ class BlackHole : HDActor {
         Actor thing;
         while (thing = Actor(tit.next())) {
 
+            //Account for Voodoo Dolls
+            if (
+                PlayerPawn(thing)
+                && !!thing.player
+                && !!thing.player.mo
+            ) {
+                thing = thing.player.mo;
+            }
+
             // If the thing isn't valid, quit.
             if (
                 thing == self
-                || (master && thing == master)
                 || thing.bNOINTERACTION
                 || thing.bDESTROYED
-                || !CheckSight(thing)
             ) continue;
 
             let dist = Distance3D(thing);
@@ -617,27 +661,36 @@ class BlackHole : HDActor {
         while (bit.next()) {
             let thing = bit.thing;
             let dist = max(Distance3D(thing) - thing.radius, double.epsilon);
-            let otherMass = GetOtherMass(thing);
+
+            //Account for Voodoo Dolls
+            if (
+                PlayerPawn(thing)
+                && !!thing.player
+                && !!thing.player.mo
+            ) {
+                thing = thing.player.mo;
+            }
 
             // Skip things that aren't actually actors,
             // or are not meant to be interacted with at all,
             // or are other Singularities with more mass.
             if (
                 !(thing is 'Actor')
-                || (thing is 'BlackHole' && mass < otherMass)
-                || thing is 'HDPlayerPawn'
+                || (thing is 'BlackHole' && mass < thing.mass)
                 || thing.bNOINTERACTION
                 || thing.bDESTROYED
-                || (dist > radius && abs(dist + thing.vel.Length()) > 2 * radius)
+                || (dist > schwarzschild && abs(dist + thing.vel.Length()) > HDCONST_PI * schwarzschild)
                 // Schwarzschild Radius? (2GM / c^2)
                 // || Distance3D(thing) > max(2 * HDCONST_GRAVITY * mass / (HDCONST_SPEEDOFLIGHT * HDCONST_SPEEDOFLIGHT), 1.0)
             ) continue;
 
-            vel *= clamp(abs(mass - otherMass) / mass, 0.0, 1.0);
+            UpdateMass(mass + GetOtherMass(thing));
 
-            UpdateMass(mass + otherMass);
-
-            thing.destroy();
+            if (thing is 'PlayerPawn') {
+                DamageMobj(thing, master, double.MAX, 'falling');
+            } else {
+                thing.Destroy();
+            }
         }
 
         // Emit a bit of Hawking Radiation
@@ -688,8 +741,12 @@ class BlackHole : HDActor {
         let newScale = clamp(mass * 0.0001, 0.01, 1.0);
         scale = (newScale, newScale);
 
+        // Update Schwarzchild Radius
         let newSize = clamp(mass * 0.01, 1, 100);
-        A_SetSize(newSize, newSize * 2);
+        schwarzschild = newSize;
+
+        // Adjust volume of idle sound based on how hard the atmosphere is being succ'd
+        A_SoundVolume(CHAN_VOICE, newScale);
 
         // Update Dynamic Light
         let oldLight = bhLight;
@@ -703,7 +760,7 @@ class BlackHole : HDActor {
     States {
         Spawn:
             TNT1 A 0 Light("BHOLE_10");
-            #### # 0 A_StartSound("BHole/Suck", CHAN_VOICE);
+            #### # 0 A_StartSound("BHole/Suck", CHAN_VOICE, CHANF_LOOPING);
         Idle:
             NMAN ABCDEFGHIJKLMNOPQRSTUVWXYZ 2 Bright;
             NMAO ABCD                       2 Bright;
