@@ -1,3 +1,5 @@
+// const HDCONST_SPEEDOFLIGHT = double.MAX / (HDCONST_ONEMETRE * HDCONST_TICFRAC);
+
 class UZBHGen : HDWeapon {
 
     bool actualBlackHole;
