@@ -27,6 +27,7 @@ _Creative, I know_
 ### Black Hole Generator
 
 - Sounds: Raven Software (Quake 4), Epic Games (UT 2004)
+  - BH_LOOP: NASA
 - Sprites: NMN, Zero Prophet, Reactor, Kronos, Midway
 - Sprite Edit: Gothic
 

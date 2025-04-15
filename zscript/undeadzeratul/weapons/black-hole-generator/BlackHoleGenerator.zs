@@ -36,8 +36,8 @@ class UZBHGen : HDWeapon {
         double spp;
         double spa;
         for(int i = 0; i < sparks; i++) {
-            spp = caller.pitch + frandom(-20, 20);
-            spa = caller.angle + frandom(-20, 20);
+            spp = caller.pitch + FRandom(-20, 20);
+            spa = caller.angle + FRandom(-20, 20);
             spot = random(24, 32) * (cos(spp) * cos(spa), cos(spp) * sin(spa), -sin(spp));
             a = caller.spawn("BHGSpark", origin + spot, ALLOW_REPLACE);
             a.vel += caller.vel * 0.9 - spot * 0.03;
@@ -50,16 +50,16 @@ class UZBHGen : HDWeapon {
         weaponStatus[BHGS_CHARGE]  = 0;
         weaponStatus[BHGS_BATTERY] = 0;
         
-		double shootAngle = inflictor.angle;
-		double shootPitch = inflictor.pitch;
-		vector3 shootPos  = (0, 0, 32);
+        double shootAngle = inflictor.angle;
+        double shootPitch = inflictor.pitch;
+        vector3 shootPos  = (0, 0, 32);
 
-		let hdp = HDPlayerPawn(inflictor);
-		if (hdp) {
-			shootAngle = hdp.gunAngle;
-			shootPitch = hdp.gunPitch;
-			shootPos   = hdp.gunPos;
-		}
+        let hdp = HDPlayerPawn(inflictor);
+        if (hdp) {
+            shootAngle = hdp.gunAngle;
+            shootPitch = hdp.gunPitch;
+            shootPos   = hdp.gunPos;
+        }
 
         FLineTraceData tlt;
         inflictor.LineTrace(
@@ -130,7 +130,7 @@ class UZBHGen : HDWeapon {
             // droop downwards
             if (hdp.pitch < 10) {
                 hdp.A_MuzzleClimb(
-                    (frandom(-0.06, 0.06), frandom(0.1, clamp(1 - pitch, 0.08 / hdp.strength, 0.12))),
+                    (FRandom(-0.06, 0.06), FRandom(0.1, clamp(1 - pitch, 0.08 / hdp.strength, 0.12))),
                     (0, 0),
                     (0, 0),
                     (0, 0)
@@ -141,10 +141,10 @@ class UZBHGen : HDWeapon {
             let max = weaponStatus[BHGS_TIMER] * (0.0625 / max(1, hdp.strength));
             if (PressingFire() && max > 0) {
                 hdp.A_MuzzleClimb(
-                    (frandom(-max, max), frandom(-max, max)) * 0.5,
-                    (frandom(-max, max), frandom(-max, max)) * 0.1,
-                    (frandom(-max, max), frandom(-max, max)) * 0.05,
-                    (frandom(-max, max), frandom(-max, max)) * 0.01
+                    (FRandom(-max, max), FRandom(-max, max)) * 0.4,
+                    (FRandom(-max, max), FRandom(-max, max)) * 0.3,
+                    (FRandom(-max, max), FRandom(-max, max)) * 0.2,
+                    (FRandom(-max, max), FRandom(-max, max)) * 0.1
                 );
             }
         }
@@ -385,8 +385,6 @@ class UZBHGen : HDWeapon {
 
         Shoot:
             #### F 0 {
-                invoker.weaponStatus[BHGS_TIMER] = 0;
-
                 A_StartSound("BHG/Charge", CHAN_WEAPON);
                 
                 HDMobAI.frighten(self, 512);
@@ -417,13 +415,15 @@ class UZBHGen : HDWeapon {
 
                 // Otherwise, actually fire the singularity
                 invoker.ShootBall(self, self);
+
+                invoker.weaponStatus[BHGS_TIMER] = 0;
             }
             #### A 6 A_ChangeVelocity(-2, 0, 3, CVF_RELATIVE);
             #### A 6 {
                 A_MuzzleClimb(
                     1, 3,
-                    -frandom(0.8, 1.2), -frandom(2.4, 4.6),
-                    -frandom(1.8, 2.8), -frandom(6.4, 9.6),
+                    -FRandom(0.8, 1.2), -FRandom(2.4, 4.6),
+                    -FRandom(1.8, 2.8), -FRandom(6.4, 9.6),
                     1, 2
                 );
 
@@ -578,7 +578,7 @@ class BHGSpark : HDActor {
         spawn:
             BHXP ONMLKJIHGFEDCBA 1 Bright Light("BHSPARK") NoDelay {
                 A_FadeIn(0.1);
-                A_SetRoll(roll + (getAge() * rollDir * frandom(0.1, 1.0)), SPF_INTERPOLATE);
+                A_SetRoll(roll + (getAge() * rollDir * FRandom(0.1, 1.0)), SPF_INTERPOLATE);
                 scale -= (0.01, 0.01);
             }
             BHXP A 1 A_FadeOut(0.3);
@@ -616,6 +616,10 @@ class BlackHole : HDActor {
 
         super.Tick();
 
+        // Spawn visuals
+        SpawnDust();
+        SpawnAccretionDisk();
+
         Vector3 oldPos = pos;
         Vector2 oldSize = (radius, height);
 
@@ -626,13 +630,33 @@ class BlackHole : HDActor {
         Actor thing;
         while (thing = Actor(tit.next())) {
 
-            //Account for Voodoo Dolls
+            // Account for Voodoo Dolls
             if (
                 PlayerPawn(thing)
                 && !!thing.player
                 && !!thing.player.mo
             ) {
                 thing = thing.player.mo;
+            }
+
+            // Special Handling for other Singularities
+            if (
+                thing is 'BlackHole'
+                && Distance3D(thing) < ((pos + vel) - (thing.pos + thing.vel)).length()
+            ) {
+                let newBH = BlackHole(Spawn('BlackHole', (pos + thing.pos) * 0.5));
+                newBH.mass = mass + thing.mass;
+
+                let newSource = mass > thing.mass ? target : thing.target;
+                newBH.target = newSource;
+                newBH.master = newSource;
+
+                newBH.vel = (((vel * mass) + (thing.vel * thing.mass)) * (1 / newBh.mass));
+
+                Destroy();
+                thing.Destroy();
+
+                return;
             }
 
             // If the thing isn't valid, quit.
@@ -664,7 +688,7 @@ class BlackHole : HDActor {
             let thing = bit.thing;
             let dist = max(Distance3D(thing) - thing.radius, double.epsilon);
 
-            //Account for Voodoo Dolls
+            // Account for Voodoo Dolls
             if (
                 PlayerPawn(thing)
                 && !!thing.player
@@ -678,10 +702,9 @@ class BlackHole : HDActor {
             // or are other Singularities with more mass.
             if (
                 !(thing is 'Actor')
-                || (thing is 'BlackHole' && mass < thing.mass)
                 || thing.bNOINTERACTION
                 || thing.bDESTROYED
-                || (dist > schwarzschild && abs(dist + thing.vel.Length()) > HDCONST_PI * schwarzschild)
+                || (dist > schwarzschild && abs(dist + (thing.radius * 2)) > HDCONST_PI * schwarzschild)
                 // Schwarzschild Radius? (2GM / c^2)
                 // || Distance3D(thing) > max(2 * HDCONST_GRAVITY * mass / (HDCONST_SPEEDOFLIGHT * HDCONST_SPEEDOFLIGHT), 1.0)
             ) continue;
@@ -706,7 +729,7 @@ class BlackHole : HDActor {
         }
 
         // Once we've burned out, self-destruct
-        if (radius < 1 || height < 1) {
+        if (schwarzschild <= 1) {
             A_RemoveLight(bhLight);
             A_StopSound(CHAN_VOICE);
             Destroy();
@@ -740,7 +763,8 @@ class BlackHole : HDActor {
         mass = clamp(newMass, 0, 8192);
 
         // Update Scale
-        let newScale = clamp(mass * 0.0001, 0.01, 1.0);
+        let newScale = 10 / ((mass * 0.001) + 10);
+        newScale = (1 - (newScale * newScale));
         scale = (newScale, newScale);
 
         // Update Schwarzchild Radius
@@ -759,10 +783,74 @@ class BlackHole : HDActor {
         }
     }
 
+    private void SpawnDust() {
+        if (Level.time % TICRATE) return;
+
+        let size = (scale.x + scale.y) * 0.5;
+
+        for (int i = 0; i < 360; i++) {
+
+            if (random() > schwarzschild) continue;
+
+            let dist = schwarzschild * FRandom(10, 20);
+            let spawnPos = (cos(i) * dist, sin(i) * dist, RandomPick(curSector.LowestFloorAt(curSector.centerspot), curSector.HighestCeilingAt(curSector.centerspot)));
+
+            if (Level.IsPointInLevel(spawnPos)) {
+                A_SpawnParticleEx(
+                    "#808080",
+                    TexMan.CheckForTexture("RSMKA0"),
+                    STYLE_SHADED,
+                    SPF_RELVEL|SPF_RELACCEL|SPF_ROLL|SPF_REPLACE,
+                    size: size * FRandom(100, 200),
+                    angle: i,
+                    xOff: spawnPos.x,
+                    yOff: spawnPos.y,
+                    zOff: spawnPos.z - pos.z,
+                    velX: FRandom(-10, 0),
+                    accelX: FRandom(-0.9, -0.1),
+                    accelY: FRandom(-0.1, 0.1),
+                    startRoll: FRandom(0, 360),
+                    rollVel: FRandom(-1, 1),
+                    rollAcc: FRandom(-0.1, 0.1)
+                );
+            }
+        }
+    }
+
+    private void SpawnAccretionDisk() {
+        if (Level.time % 2) return;
+
+        let size = (scale.x + scale.y) * 0.5;
+
+        for (int i = 0; i < 360; i++) {
+
+            if (random() > schwarzschild) continue;
+
+            let dist = schwarzschild * 2;
+            let spawnPos = (cos(i) * dist, sin(i) * dist, pos.z);
+
+            if (Level.IsPointInLevel(spawnPos)) {
+                A_SpawnParticle(
+                    "white",
+                    SPF_FULLBRIGHT|SPF_RELATIVE|SPF_REPLACE,
+                    size: size * 10,
+                    angle: i,
+                    yOff: dist,
+                    zOff: FRandom(-size, size),
+                    velX: FRandom(0, 2),
+                    velY: FRandom(0, 1),
+                    accelX: FRandom(-0.1, 0.9),
+                    accelY: FRandom(-0.1, 0.1)
+                );
+            }
+        }
+    }
+
     States {
         Spawn:
             TNT1 A 0 Light("BHOLE_10");
             #### # 0 A_StartSound("BHole/Suck", CHAN_VOICE, CHANF_LOOPING);
+            #### # 0 A_StartSound("BHOLE/Idle", CHAN_AUTO, CHANF_LOOPING);
         Idle:
             NMAN ABCDEFGHIJKLMNOPQRSTUVWXYZ 2 Bright;
             NMAO ABCD                       2 Bright;

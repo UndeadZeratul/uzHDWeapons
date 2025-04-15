@@ -1,6 +1,7 @@
 BHG/Charge      "sounds/undeadzeratul/weapons/black-hole-generator/DMC_CHRG.ogg"
 BHG/Fire        "sounds/undeadzeratul/weapons/black-hole-generator/DMC_FIRE.ogg"
 BHBall/Impact   "sounds/undeadzeratul/weapons/black-hole-generator/DMC_IMPX.ogg"
+BHole/Idle      "sounds/undeadzeratul/weapons/black-hole-generator/BH_LOOP.ogg"
 BHole/Suck      "sounds/undeadzeratul/weapons/black-hole-generator/DMC_VOID.ogg"
 BHole/Explosion "sounds/undeadzeratul/weapons/black-hole-generator/DMC_XPLD.ogg"
 
