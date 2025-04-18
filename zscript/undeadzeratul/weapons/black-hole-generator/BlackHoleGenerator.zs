@@ -676,7 +676,7 @@ class BlackHole : HDActor {
                 !(thing is 'Actor')
                 || thing.bNOINTERACTION
                 || thing.bDESTROYED
-                || (dist > schwarzschild && abs(dist + (thing.radius * 2)) > HDCONST_PI * schwarzschild)
+                || (dist > schwarzschild && (dist + (thing.radius * 2)) > (HDCONST_PI * schwarzschild))
                 // Schwarzschild Radius? (2GM / c^2)
                 // || Distance3D(thing) > max(2 * HDCONST_GRAVITY * mass / (HDCONST_SPEEDOFLIGHT * HDCONST_SPEEDOFLIGHT), 1.0)
             ) continue;
@@ -764,10 +764,15 @@ class BlackHole : HDActor {
 
             if (random() > schwarzschild) continue;
 
-            let dist = schwarzschild * FRandom(10, 20);
-            let spawnPos = (cos(i) * dist, sin(i) * dist, RandomPick(curSector.LowestFloorAt(curSector.centerspot), curSector.HighestCeilingAt(curSector.centerspot)));
+            let dist = schwarzschild * FRandom(0 HDCONST_ONEMETRE);
 
-            if (Level.IsPointInLevel(spawnPos)) {
+            let floor = curSector.LowestFloorAt(curSector.centerspot);
+            let ceil = curSector.HighestCeilingAt(curSector.centerspot);
+            let zOff = FRandom(floor, ceil);
+
+            let spawnOff = (cos(i) * dist, sin(i) * dist, (abs(floor - zOff) > abs(ceil - zOff) ? ceil : floor) - pos.z);
+
+            if (spawnOff.length() < (schwarzschild * 20) && Level.IsPointInLevel(pos + spawnOff)) {
                 A_SpawnParticleEx(
                     "#808080",
                     TexMan.CheckForTexture("RSMKA0"),
@@ -775,9 +780,9 @@ class BlackHole : HDActor {
                     SPF_RELVEL|SPF_RELACCEL|SPF_ROLL|SPF_REPLACE,
                     size: size * FRandom(100, 200),
                     angle: i,
-                    xOff: spawnPos.x,
-                    yOff: spawnPos.y,
-                    zOff: spawnPos.z - pos.z,
+                    xOff: spawnOff.x,
+                    yOff: spawnOff.y,
+                    zOff: spawnOff.z,
                     velX: FRandom(-10, 0),
                     accelX: FRandom(-0.9, -0.1),
                     accelY: FRandom(-0.1, 0.1),
@@ -790,29 +795,29 @@ class BlackHole : HDActor {
     }
 
     private void SpawnAccretionDisk() {
-        if (Level.time % 2) return;
-
-        let size = (scale.x + scale.y) * 0.5;
 
         for (int i = 0; i < 360; i++) {
 
             if (random() > schwarzschild) continue;
 
             let dist = schwarzschild * 2;
-            let spawnPos = (cos(i) * dist, sin(i) * dist, pos.z);
+            let spawnOff = (cos(i) * dist, sin(i) * dist, FRandom(-10, 10) * size);
 
-            if (Level.IsPointInLevel(spawnPos)) {
+            if (Level.IsPointInLevel(pos + spawnOff)) {
                 A_SpawnParticle(
                     "white",
-                    SPF_FULLBRIGHT|SPF_RELATIVE|SPF_REPLACE,
-                    size: size * 10,
+                    SPF_RELVEL|SPF_RELACCEL|SPF_FULLBRIGHT|SPF_REPLACE,
+                    size: size * FRandom(16, 32),
                     angle: i,
-                    yOff: dist,
-                    zOff: FRandom(-size, size),
+                    xOff: spawnOff.x,
+                    yOff: spawnOff.y,
+                    zOff: spawnOff.z,
                     velX: FRandom(0, 2),
                     velY: FRandom(0, 1),
-                    accelX: FRandom(-0.1, 0.9),
-                    accelY: FRandom(-0.1, 0.1)
+                    accelX: FRandom(-0.1, 0.5),
+                    accelY: FRandom(-0.1, 0.1),
+                    accelZ: FRandom(-0.01, 0.01),
+                    sizeStep: -1
                 );
             }
         }
