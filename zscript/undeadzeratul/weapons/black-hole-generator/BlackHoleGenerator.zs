@@ -141,9 +141,9 @@ class UZBHGen : HDWeapon {
             let max = weaponStatus[BHGS_TIMER] * (0.0625 / max(1, hdp.strength));
             if (PressingFire() && max > 0) {
                 hdp.A_MuzzleClimb(
-                    (FRandom(-max, max), FRandom(-max, max)) * 0.4,
-                    (FRandom(-max, max), FRandom(-max, max)) * 0.3,
+                    (FRandom(-max, max), FRandom(-max, max)) * 0.25,
                     (FRandom(-max, max), FRandom(-max, max)) * 0.2,
+                    (FRandom(-max, max), FRandom(-max, max)) * 0.15,
                     (FRandom(-max, max), FRandom(-max, max)) * 0.1
                 );
             }
@@ -165,7 +165,7 @@ class UZBHGen : HDWeapon {
     }
 
     override string, double getpickupsprite() {
-        return "BHGPA0", 1.0;
+        return weaponStatus[BHGS_TIMER] > 0 ? "BHGPA0" : "BHGPB0", 1.0;
     }
 
     override void DrawSightPicture(
@@ -282,6 +282,9 @@ class UZBHGen : HDWeapon {
     States {
         Ready:
             BHGG A 1 A_WeaponReady(WRF_ALL);
+            #### # 0 {
+                if (!PressingFire()) invoker.weaponStatus[BHGS_TIMER] = 0;
+            }
             goto ReadyEnd;
 
         Select0:
@@ -292,93 +295,66 @@ class UZBHGen : HDWeapon {
             goto deselect0BFG;
 
         Spawn:
-            BHGP A -1;
+            BHGP B -1;
             Stop;
 
         Flash:
-            BHGF A 3 Bright {
-                A_Light2();
-                HDFlashAlpha(0, true);
+            BHGF ABCDEFG 0 Bright;
+            #### # 1 Bright {
+
+                A_SetTics(max(1, 12 - int(invoker.weaponStatus[BHGS_TIMER] * 0.3)));
+                
+                player.FindPSprite(OverlayID()).frame = clamp((invoker.weaponStatus[BHGS_TIMER] / 6), 0, 6);
             }
-            #### B 3 Bright {
-                A_Light1();
-                HDFlashAlpha(200);
-            }
-            #### C 3 Bright HDFlashAlpha(128);
-            #### D 3 Bright;
-            goto LightDone;
+            #### # 0 A_JumpIf(
+                invoker.weaponStatus[BHGS_TIMER] < 1
+                || invoker.weaponStatus[BHGS_TIMER] > 40
+                || invoker.weaponStatus[BHGS_CHARGE] < 20
+                || invoker.weaponStatus[BHGS_BATTERY] < 20,
+                'LightDone'
+            );
+            loop;
 
         Fire:
-            #### A 0 {
-                invoker.weaponStatus[BHGS_TIMER] = 0;
-            }
-        Hold:
             #### # 0 {
                 if (
                     invoker.weaponStatus[BHGS_CHARGE] >= 20
                     && invoker.weaponStatus[BHGS_BATTERY] >= 20
                 ) {
-                    setweaponstate('ChargeEnd');
+                    invoker.weaponStatus[BHGS_TIMER] = 0;
+                } else {
+                    setweaponstate('Nope');
+                }
+            }
+        Hold:
+            #### # 0 {
+                A_Overlay(PSP_FLASH, 'Flash');
+
+                if (
+                    invoker.weaponStatus[BHGS_CHARGE] >= 20
+                    && invoker.weaponStatus[BHGS_BATTERY] >= 20
+                ) {
+
+                    setweaponstate('Charge');
                 } else {
                     setweaponstate('Nope');
                 }
             }
         Charge:
-            #### # 0 {
-                if (
-                    PressingReload()
-                    || invoker.weaponStatus[BHGS_BATTERY] < 0
-                    || (
-                        invoker.weaponStatus[BHGS_CHARGE] >= 20
-                        && invoker.weaponStatus[BHGS_BATTERY] >= 20
-                    )
-                ) {
-                    setweaponstate('Nope');
-                }
-            }
-            #### # 6 {
-                invoker.weaponStatus[BHGS_TIMER]++;
-
-                if (health < 40) {
-                    A_SetTics(2);
-
-                    if (health > 16) damagemobj(invoker, self, 1, "internal");
-                } else if (invoker.weaponStatus[BHGS_BATTERY] == 20) {
-                    A_SetTics(2);
-                }
-
-                UZBHGen.Spark(self, 1, gunheight() - 2);
-
-                A_WeaponBusy(false);
-                A_StartSound("weapons/bfgcharge", CHAN_WEAPON);
-                A_WeaponReady(WRF_NOFIRE);
-            }
-            #### # 0 {
-                if (invoker.weaponStatus[BHGS_CHARGE] == 20 && invoker.weaponStatus[BHGS_BATTERY] == 20) {
-                    A_Refire("Shoot");
-                } else {
-                    A_Refire();
-                }
-            }
-            loop;
-
-        ChargeEnd:
             #### # 1 {
-                UZBHGen.Spark(self, 1, gunheight() - 2);
+                UZBHGen.Spark(self, clamp((invoker.weaponStatus[BHGS_TIMER] / 10) + 1, 1, 4), gunheight() - 2);
 
                 A_StartSound("weapons/bfgcharge", (invoker.weaponStatus[BHGS_TIMER] > 6) ? CHAN_AUTO : CHAN_WEAPON);
                 A_WeaponReady(WRF_ALLOWRELOAD|WRF_NOFIRE|WRF_DISABLESWITCH);
                 A_SetTics(max(1, 12 - int(invoker.weaponStatus[BHGS_TIMER] * 0.3)));
 
                 invoker.weaponStatus[BHGS_TIMER]++;
-                
-                player.getpsprite(PSP_WEAPON).frame = clamp((invoker.weaponStatus[BHGS_TIMER] / 10) + 1, 1, 4);
             }
             #### # 0 {
                 if (invoker.weaponStatus[BHGS_TIMER] > 40) {
                     A_Refire("Shoot");
                 } else {
-                    A_Refire("ChargeEnd");
+                    A_Refire("Charge");
                 }
             }
             goto Ready;
@@ -392,12 +368,10 @@ class UZBHGen : HDWeapon {
             #### # 3 {
                 A_StartSound("weapons/bfgcharge", random(9005, 9007));
 
-                UZBHGen.Spark(self, 1, gunheight() - 2);
-
-                A_GunFlash();
+                UZBHGen.Spark(self, clamp((invoker.weaponStatus[BHGS_TIMER] / 10) + 1, 1, 4), gunheight() - 2);
             }
         ReallyShoot:
-            #### G 8 {
+            #### # 8 {
                 A_AlertMonsters();
                 HDMobAI.frighten(self, 1024);
             }
@@ -418,22 +392,20 @@ class UZBHGen : HDWeapon {
 
                 invoker.weaponStatus[BHGS_TIMER] = 0;
             }
-            #### A 6 A_ChangeVelocity(-2, 0, 3, CVF_RELATIVE);
-            #### A 6 {
+            #### # 6 A_ChangeVelocity(-2, 0, 3, CVF_RELATIVE);
+            #### # 6 {
                 A_MuzzleClimb(
                     1, 3,
                     -FRandom(0.8, 1.2), -FRandom(2.4, 4.6),
                     -FRandom(1.8, 2.8), -FRandom(6.4, 9.6),
                     1, 2
                 );
-
-                if (!random(0, 5)) DropInventory(invoker);
             }
             goto nope;
 
 
         Reload:
-            #### A 0 {
+            #### # 0 {
                 if (
                     invoker.weaponStatus[BHGS_BATTERY] >= 20
                     || !countinv("HDBattery")
@@ -446,7 +418,7 @@ class UZBHGen : HDWeapon {
             goto Reload1;
 
         Unload:
-            #### A 0 {
+            #### # 0 {
                 invoker.weaponStatus[BHGS_LOADTYPE] = BHGC_UNLOADALL;
             }
             goto Reload1;
@@ -456,14 +428,14 @@ class UZBHGen : HDWeapon {
             goto Nope;
 
         Reload1:
-            #### A 4;
-            #### A 2 offset(0, 36) A_MuzzleClimb(0, 0.4, 0, 0.8, wepdot: false);
-            #### A 2 offset(0, 38) A_MuzzleClimb(0, 0.8, 0, 1.0, wepdot: false);
-            #### A 4 offset(0, 40) {
+            #### # 4;
+            #### # 2 offset(0, 36) A_MuzzleClimb(0, 0.4, 0, 0.8, wepdot: false);
+            #### # 2 offset(0, 38) A_MuzzleClimb(0, 0.8, 0, 1.0, wepdot: false);
+            #### # 4 offset(0, 40) {
                 A_MuzzleClimb(0, 1, 0, 1, 0, 1, 0, 0.8, wepdot: false);
                 A_StartSound("weapons/bfgclick2", 8);
             }
-            #### A 2 offset(0, 41) {
+            #### # 2 offset(0, 41) {
                 A_StartSound("weapons/bfgopen", 8);
 
                 A_MuzzleClimb(-0.1, 0.8, -0.05, 0.5, wepdot: false);
@@ -473,7 +445,7 @@ class UZBHGen : HDWeapon {
                     A_SetTics(3);
                 }
             }
-            #### A 2 offset(0, 42) {
+            #### # 2 offset(0, 42) {
                 if (invoker.weaponStatus[BHGS_CHARGE] >= 0) {
                     HDMagAmmo.SpawnMag(self, "HDBattery", invoker.weaponStatus[BHGS_CHARGE]);
                     invoker.weaponStatus[BHGS_CHARGE] = -1;
@@ -482,18 +454,18 @@ class UZBHGen : HDWeapon {
 
                 A_MuzzleClimb(-0.05, 0.4, -0.05, 0.2, wepdot: false);
             }
-            #### A 4 offset(0,42) {
+            #### # 4 offset(0,42) {
                 if (invoker.weaponStatus[BHGS_LOADTYPE] == BHGC_UNLOADALL) {
                     setweaponstate('Reload3');
                 } else {
                     A_StartSound("weapons/pocket",9);
                 }
             }
-            #### A 12 offset(0, 43);
+            #### # 12 offset(0, 43);
         InsertBatteries:
-            #### A 12 offset(0, 42) A_StartSound("weapons/bfgbattout", 8);
-            #### A 10 offset(0, 36) A_StartSound("weapons/bfgbattpop", 8);
-            #### A 0 {
+            #### # 12 offset(0, 42) A_StartSound("weapons/bfgbattout", 8);
+            #### # 10 offset(0, 36) A_StartSound("weapons/bfgbattpop", 8);
+            #### # 0 {
                 let mmm = HDMagAmmo(findinventory("HDBattery"));
                 if (
                     !mmm
@@ -519,20 +491,20 @@ class UZBHGen : HDWeapon {
                     invoker.weaponStatus[batslot] = mmm.TakeMag(true);
                 }
             }
-            #### A 0 A_JumpIf (!countinv("HDBattery") || invoker.weaponStatus[BHGS_BATTERY]>=0, 'Reload3');
+            #### # 0 A_JumpIf (!countinv("HDBattery") || invoker.weaponStatus[BHGS_BATTERY]>=0, 'Reload3');
             loop;
 
         Reload3:
-            #### A 12 offset(0, 38) A_StartSound("weapons/bfgopen", 8);
-            #### A 16 offset(0, 37) A_StartSound("weapons/bfgclick2", 8);
-            #### A 2 offset(0, 38);
-            #### A 2 offset(0, 36);
-            #### A 2 offset(0, 34);
-            #### A 12;
+            #### # 12 offset(0, 38) A_StartSound("weapons/bfgopen", 8);
+            #### # 16 offset(0, 37) A_StartSound("weapons/bfgclick2", 8);
+            #### # 2 offset(0, 38);
+            #### # 2 offset(0, 36);
+            #### # 2 offset(0, 34);
+            #### # 12;
             goto ready;
 
         User3:
-            #### A 0 A_MagManager("HDBattery");
+            #### # 0 A_MagManager("HDBattery");
             goto ready;
     }
 }

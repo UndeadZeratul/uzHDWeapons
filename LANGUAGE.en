@@ -59,3 +59,7 @@ MENU_BHG_BACKPACKS         = "Control whether Black Hole Generators spawn in Bac
 // Pipe Bombs Options Text
 MENU_PIPEBOMB_SPAWNTEXT    = "Control the spawn rate of Pipe Bombs on Frag Grenades:";
 MENU_PIPEBOMB_BACKPACKS    = "Control whether Pipe Bombs spawn in Backpacks:";
+
+// Help Text
+BHGWH_FIRE                 = "Charge Singularity";
+BHGWH_RELOAD               = "Reload Batteries";

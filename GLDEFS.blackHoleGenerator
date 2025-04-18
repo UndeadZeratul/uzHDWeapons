@@ -1,8 +1,8 @@
 // BHG SPARKS
 PulseLight BHSPARK {
     Color 1.0 1.0 1.0
-    Size 32
-    SecondarySize 16
+    Size 16
+    SecondarySize 8
     Interval 0.2
     Subtractive 1
 }
