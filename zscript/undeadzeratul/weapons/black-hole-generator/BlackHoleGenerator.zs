@@ -691,7 +691,7 @@ class BlackHole : HDActor {
         }
 
         // Emit a bit of Hawking Radiation
-        UpdateMass(mass * FRandom(0.999, 1 - double.epsilon));
+        UpdateMass(mass * FRandom(0.995, 1 - double.epsilon));
 
         // If our new size overlaps, stop moving/growing
         if (!TestMobjLocation()) {
