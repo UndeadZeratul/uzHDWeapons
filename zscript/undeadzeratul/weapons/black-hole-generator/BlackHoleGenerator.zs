@@ -764,7 +764,7 @@ class BlackHole : HDActor {
 
             if (random() > schwarzschild) continue;
 
-            let dist = schwarzschild * FRandom(0 HDCONST_ONEMETRE);
+            let dist = schwarzschild * FRandom(0, HDCONST_ONEMETRE);
 
             let floor = curSector.LowestFloorAt(curSector.centerspot);
             let ceil = curSector.HighestCeilingAt(curSector.centerspot);
