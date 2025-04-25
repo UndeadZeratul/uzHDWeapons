@@ -25,20 +25,8 @@ class HDPipeBombs : HDGrenadethrower {
             ;
     }
 
-    /**
-     * Checks if the current owner has any activated pipe bombs already thrown.
-     * Returns true if there are any active Pipe Bombs, otherwise false.
-     */
     action bool NoPipeBombs() {
-        let it = ThinkerIterator.create("HDPipeBombRoller");
-        HDPipeBombRoller roller;
-        while (roller = HDPipeBombRoller(it.Next())) if (roller.master == invoker.owner) return false;
-        
-        it = ThinkerIterator.create("HDPipeBomb");
-        HDPipeBomb bomb;
-        while (bomb = HDPipeBomb(it.Next())) if (bomb.master == invoker.owner) return false;
-
-        return true;
+        return NoFrags() && !invoker.owner.countInv("HDPipeBombDetonator");
     }
 
     override void DoEffect() {
@@ -63,9 +51,20 @@ class HDPipeBombs : HDGrenadethrower {
 
     override void DrawHUDStuff(HDStatusBar sb,HDWeapon hdw,HDPlayerPawn hpl) {
         if (sb.hudlevel == 1) {
+            if (hpl.countInv('HDPipeBombDetonator')) {
+                sb.drawimage(
+                    "PBDPA0",
+                    (-72, -4),
+                    sb.DI_SCREEN_CENTER_BOTTOM|sb.DI_ITEM_CENTER_BOTTOM,
+                    scale: (0.6, 0.6)
+                );
+            }
+
             sb.drawimage(
                 "PIPPA0",
-                (-52, -4), sb.DI_SCREEN_CENTER_BOTTOM, scale: (0.6, 0.6)
+                (-52, -4),
+                sb.DI_SCREEN_CENTER_BOTTOM,
+                scale: (0.6, 0.6)
             );
             sb.drawnum(hpl.countinv("HDPipeBombAmmo"), -45, -8, sb.DI_SCREEN_CENTER_BOTTOM);
         }
@@ -185,8 +184,9 @@ class HDPipeBombs : HDGrenadethrower {
             goto ready;
 
         fire:
+            TNT1 A 0 A_JumpIf(NoPipeBombs(), "selectinstant");
+            TNT1 A 0 A_JumpIf(NoFrags(), "nope");
             TNT1 A 0 A_JumpIf(invoker.weaponstatus[0]&FRAGF_JUSTTHREW, "nope");
-            TNT1 A 0 A_JumpIf(NoFrags(), "selectinstant");
             TNT1 A 0 A_JumpIfInventory("PowerStrength", 1, 3);
             FRGG B 1 offset(0, 34);
             FRGG B 1 offset(0, 36);
@@ -195,14 +195,16 @@ class HDPipeBombs : HDGrenadethrower {
             goto ready;
 
         hold:
+            TNT1 A 0 A_JumpIf(NoPipeBombs(), "selectinstant");
+            TNT1 A 0 A_JumpIf(NoFrags(), "nope");
             TNT1 A 0 A_JumpIf(invoker.weaponstatus[0]&FRAGF_JUSTTHREW, "nope");
             //TNT1 A 0 A_JumpIf(invoker.weaponstatus[0]&FRAGF_PINOUT,"hold2");
             TNT1 A 0 A_JumpIf(invoker.weaponstatus[FRAGS_FORCE] >= 1, "hold2");
             TNT1 A 0 A_JumpIfInventory("PowerStrength", 1, 1);
-            TNT1 A 0 A_JumpIf(NoFrags(), "selectinstant");
             TNT1 A 3 A_PullPin();
         hold2:
-            TNT1 A 0 A_JumpIf(NoFrags(),"selectinstant");
+            TNT1 A 0 A_JumpIf(NoPipeBombs(),"selectinstant");
+            TNT1 A 0 A_JumpIf(NoFrags(), "nope");
             FRGG E 0 A_JumpIf(invoker.weaponstatus[FRAGS_FORCE] >= 40, "hold3a");
             FRGG D 0 A_JumpIf(invoker.weaponstatus[FRAGS_FORCE] >= 30, "hold3a");
             FRGG C 0 A_JumpIf(invoker.weaponstatus[FRAGS_FORCE] >= 20, "hold3");
@@ -220,7 +222,8 @@ class HDPipeBombs : HDGrenadethrower {
             }
             TNT1 A 0 A_Refire();
         throw:
-            TNT1 A 0 A_JumpIf(NoFrags(), "selectinstant");
+            TNT1 A 0 A_JumpIf(NoPipeBombs(), "selectinstant");
+            TNT1 A 0 A_JumpIf(NoFrags(), "nope");
             FRGG A 1 offset(0, 34) A_TossPipeBomb();
             FRGG A 1 offset(0, 38);
             FRGG A 1 offset(0, 48);
@@ -255,7 +258,8 @@ class HDPipeBombs : HDGrenadethrower {
 
 
         reload:
-            TNT1 A 0 A_JumpIf(NoFrags(), "selectinstant");
+            TNT1 A 0 A_JumpIf(NoPipeBombs(), "selectinstant");
+            TNT1 A 0 A_JumpIf(NoFrags(), "nope");
             TNT1 A 0 A_JumpIf(invoker.weaponstatus[FRAGS_FORCE] >= 1, "pinbackin");
             TNT1 A 0 A_JumpIf(invoker.weaponstatus[0]&FRAGF_PINOUT, "altpinbackin");
             goto ready;
