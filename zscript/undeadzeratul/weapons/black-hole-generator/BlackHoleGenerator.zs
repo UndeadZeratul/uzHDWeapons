@@ -796,6 +796,8 @@ class BlackHole : HDActor {
 
     private void SpawnAccretionDisk() {
 
+        let size = (scale.x + scale.y) * 0.5;
+
         for (int i = 0; i < 360; i++) {
 
             if (random() > schwarzschild) continue;
