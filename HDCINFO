@@ -1,0 +1,13 @@
+// Backpack Spawn Pool Filters
+addBPSpawnPoolFilter => { "name": "UZBHGen", "allowed": "#bhg_allowBackpacks" }
+addBPSpawnPoolFilter => { "name": "HDPipeBombAmmo", "allowed": "#pipebomb_allowBackpacks" }
+
+// Black Hole Generator Spawn Entries
+addSpawnTableSingleEntry => { "tableName": "BFG9000Replaces", "name": "UZBHGen", "chance": "#bhg_spawn_bias", "persists": "#bhg_persistent_spawning" }
+
+// Pipe Bomb Spawn Entries
+newSpawnTable => { "spawnName": "FragP", "addOriginalThing": "true", "persists": "true" }
+addSpawnTableSingleEntry => { "tableName": "FragP", "name": "HDPipeBombP", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
+
+newSpawnTable => { "spawnName": "HDFragGrenadePickup", "addOriginalThing": "true", "persists": "true" }
+addSpawnTableSingleEntry => { "tableName": "HDFragGrenadePickup", "name": "HDPipeBombPickup", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }

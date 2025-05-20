@@ -1,16 +1,16 @@
 OptionMenu "UZWeaponsMenu" {
 
-    Title "$UZWEAPONS_MENU"
+	Title "$UZWEAPONS_MENU"
 
 	StaticText "$MENU_EXPLOSIVES_TITLE", "Brown"
-    StaticText ""
-    Submenu "$TAG_PIPEBOMB", "pipebombSpawning", 0, 1
-    StaticText ""
+	StaticText ""
+	Submenu "$TAG_PIPEBOMB", "pipebombSpawning", 0, 1
+	StaticText ""
 
 	StaticText "$MENU_ENERGYWEAPONS_TITLE", "Cyan"
-    StaticText ""
-    Submenu "$TAG_BHG", "bhgSpawning", 0, 1
-    StaticText ""
+	StaticText ""
+	Submenu "$TAG_BHG", "bhgSpawning", 0, 1
+	StaticText ""
 
 	StaticText "$MENU_RESETOPTIONS_TITLE", "Red"
 	StaticText ""
@@ -29,29 +29,29 @@ AddOptionMenu "HDAddonMenu" {
 // Explosives
 
 OptionMenu "pipebombSpawning" {
-    Title "$TAG_PIPEBOMB"
+	Title "$TAG_PIPEBOMB"
 
-   	StaticText "$MENU_NOTICE", "Brown"
-    StaticText "$MENU_SPAWNRATE_TEXT1", "White"
-    StaticText "$MENU_SPAWNRATE_TEXT2", "White"
-    StaticText ""
+	StaticText "$MENU_NOTICE", "Brown"
+	StaticText "$MENU_SPAWNRATE_TEXT1", "White"
+	StaticText "$MENU_SPAWNRATE_TEXT2", "White"
+	StaticText ""
 
 	StaticText "$MENU_SPAWNOPTIONS", "Brown"
-    StaticText "$MENU_PIPEBOMB_SPAWNTEXT", "White"
-	ScaleSlider "$MENU_WEPSPAWNRATE", "pipebomb_spawn_bias", -1, 999, 1, "$MENU_REPLACEALL", "$MENU_DISABLED"
+	StaticText "$MENU_PIPEBOMB_SPAWNTEXT", "White"
+	Slider "$MENU_WEPSPAWNRATE", "pipebomb_spawn_bias",  0.0, 1000, .01, 3
 	SafeCommand "$MENU_RESETWEP", "resetcvar pipebomb_spawn_bias"
- 	StaticText ""
+	StaticText ""
 
 	StaticText "$MENU_PIPEBOMB_BACKPACKS", "White"
 	Option "$MENU_BACKPACKSALLOWED", "pipebomb_allowBackpacks", "OnOff"
- 	StaticText ""
+	StaticText ""
 
 	StaticText "$MENU_PERSISTENCYOPTIONS", "Brown"
-    StaticText "$MENU_PERSISTENCY_TEXT", "White"
+	StaticText "$MENU_PERSISTENCY_TEXT", "White"
 	Option "$MENU_PERSISTENCY", "pipebomb_persistent_spawning", "OnOff"
 	SafeCommand "$MENU_RESETPERSISTENCY", "resetcvar pipebomb_persistent_spawning"
- 	StaticText ""
-   	StaticText ""
+	StaticText ""
+	StaticText ""
 
 	StaticText "$MENU_RESETOPTIONS", "Brown"
 	SafeCommand "$MENU_RESETALLOPTIONS", "pipebomb_reset_cvars"
@@ -61,29 +61,29 @@ OptionMenu "pipebombSpawning" {
 // Energy Weapons
 
 OptionMenu "bhgSpawning" {
-    Title "$TAG_BHG"
+	Title "$TAG_BHG"
 
-   	StaticText "$MENU_NOTICE", "Brown"
-    StaticText "$MENU_SPAWNRATE_TEXT1", "White"
-    StaticText "$MENU_SPAWNRATE_TEXT2", "White"
-    StaticText ""
+	StaticText "$MENU_NOTICE", "Brown"
+	StaticText "$MENU_SPAWNRATE_TEXT1", "White"
+	StaticText "$MENU_SPAWNRATE_TEXT2", "White"
+	StaticText ""
 
 	StaticText "$MENU_SPAWNOPTIONS", "Brown"
-    StaticText "$MENU_BHG_SPAWNTEXT", "White"
-	ScaleSlider "$MENU_WEPSPAWNRATE", "bhg_spawn_bias", -1, 999, 1, "$MENU_REPLACEALL", "$MENU_DISABLED"
+	StaticText "$MENU_BHG_SPAWNTEXT", "White"
+	Slider "$MENU_WEPSPAWNRATE", "bhg_spawn_bias",  0.0, 1000, .01, 3
 	SafeCommand "$MENU_RESETWEP", "resetcvar bhg_spawn_bias"
- 	StaticText ""
+	StaticText ""
 
 	StaticText "$MENU_BHG_BACKPACKS", "White"
 	Option "$MENU_BACKPACKSALLOWED", "bhg_allowBackpacks", "OnOff"
- 	StaticText ""
+	StaticText ""
 
 	StaticText "$MENU_PERSISTENCYOPTIONS", "Brown"
-    StaticText "$MENU_PERSISTENCY_TEXT", "White"
+	StaticText "$MENU_PERSISTENCY_TEXT", "White"
 	Option "$MENU_PERSISTENCY", "bhg_persistent_spawning", "OnOff"
 	SafeCommand "$MENU_RESETPERSISTENCY", "resetcvar bhg_persistent_spawning"
- 	StaticText ""
-   	StaticText ""
+	StaticText ""
+	StaticText ""
 
 	StaticText "$MENU_RESETOPTIONS", "Brown"
 	SafeCommand "$MENU_RESETALLOPTIONS", "bhg_reset_cvars"
