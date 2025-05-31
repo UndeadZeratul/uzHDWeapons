@@ -7,7 +7,7 @@ addSpawnTableSingleEntry => { "tableName": "BFG9000Replaces", "name": "UZBHGen",
 
 // Pipe Bomb Spawn Entries
 newSpawnTable => { "spawnName": "FragP", "addOriginalThing": "true", "persists": "true" }
-addSpawnTableSingleEntry => { "tableName": "FragP", "name": "HDPipeBombP", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
-
 newSpawnTable => { "spawnName": "HDFragGrenadePickup", "addOriginalThing": "true", "persists": "true" }
+
+addSpawnTableSingleEntry => { "tableName": "FragP", "name": "HDPipeBombP", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
 addSpawnTableSingleEntry => { "tableName": "HDFragGrenadePickup", "name": "HDPipeBombPickup", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
