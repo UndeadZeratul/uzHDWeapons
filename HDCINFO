@@ -11,3 +11,7 @@ newSpawnTable => { "spawnName": "HDFragGrenadePickup", "addOriginalThing": "true
 
 addSpawnTableSingleEntry => { "tableName": "FragP", "name": "HDPipeBombP", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
 addSpawnTableSingleEntry => { "tableName": "HDFragGrenadePickup", "name": "HDPipeBombPickup", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
+
+// AceCorp Weapon Crate Filters
+addWeaponCrateFilter => { "name": "UZBHGen", "allowed": "#bhg_allowBackpacks" }
+addWeaponCrateFilter => { "name": "HDPipeBombAmmo", "allowed": "#pipebomb_allowBackpacks" }
