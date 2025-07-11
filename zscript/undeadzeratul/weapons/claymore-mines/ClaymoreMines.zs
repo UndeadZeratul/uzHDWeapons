@@ -16,7 +16,7 @@ class UZPlacedClaymore : HDUPK {
         +NOTAUTOAIMED;
         
         hdupk.pickupmessage "$PICKUP_CLAYMORE";
-        hdupk.pickuptype "UZClaymoreAmmo";
+        hdupk.pickuptype "UZClaymoreMine";
 
         Obituary "$OB_CLAYMORE";
     }
@@ -50,7 +50,7 @@ class UZPlacedClaymore : HDUPK {
     }
 }
 
-class UZEnemyClaymore : PlacedClaymore {
+class UZEnemyClaymore : UZPlacedClaymore {
     //$Title "Placed Claymore Mine (Enemy)"
 
     Default {
@@ -103,7 +103,7 @@ class UZClaymoreMine : HDPickup {
         }
 
         vector3 plantspot = dlt.hitlocation;
-        let ddd = PlacedClaymore(spawn("PlacedClaymore", plantspot, ALLOW_REPLACE));
+        let ddd = UZPlacedClaymore(spawn("UZPlacedClaymore", plantspot, ALLOW_REPLACE));
 
         if (!ddd) {
             A_Log(StringTable.Localize("$DORBUSTLOG2"), true);
@@ -147,7 +147,7 @@ class UZClaymoreMineBox : HDUPK {
 
         hdupk.amount 5;
         hdupk.pickupmessage "$PICKUP_CLAYMORE_BOX";
-        hdupk.pickuptype "UZClaymoreAmmo";
+        hdupk.pickuptype "UZClaymoreMine";
     }
 
     States {

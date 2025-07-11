@@ -157,7 +157,7 @@ class UZWeaponsHandler : EventHandler {
         //-----------------
 
         if (!bhg_allowBackpacks)      backpackBlacklist.push((Class<Inventory>)('UZBHGen'));
-        if (!pipebomb_allowBackpacks) backpackBlacklist.push((Class<Inventory>)('HDPipeBombAmmo'));
+        if (!pipebomb_allowBackpacks) backpackBlacklist.push((Class<Inventory>)('UZPipeBombAmmo'));
 
         //------------
         // Ammunition
@@ -176,12 +176,12 @@ class UZWeaponsHandler : EventHandler {
         // Pipe Bombs
         Array<UZSpawnItemEntry> spawns_pipebomb;
         spawns_pipebomb.push(addItemEntry('FragP', pipebomb_spawn_bias));
-        addItem('HDPipeBombP', spawns_pipebomb, pipebomb_persistent_spawning);
+        addItem('UZPipeBombP', spawns_pipebomb, pipebomb_persistent_spawning);
 
         // Pipe Bomb Packs
         Array<UZSpawnItemEntry> spawns_pipebombpack;
         spawns_pipebombpack.push(addItemEntry('HDFragGrenadePickup', pipebomb_spawn_bias));
-        addItem('HDPipeBombPickup', spawns_pipebombpack, pipebomb_persistent_spawning);
+        addItem('UZPipeBombPickup', spawns_pipebombpack, pipebomb_persistent_spawning);
 
         //------------
         // Ammunition

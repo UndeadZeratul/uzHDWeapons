@@ -1,4 +1,4 @@
-Model PlacedClaymore
+Model UZPlacedClaymore
 {
 	Path "models/undeadzeratul/weapons/claymore-mines"
 	Model 0 Claymore.obj
@@ -9,7 +9,7 @@ Model PlacedClaymore
 	Frame CLAP A 0 0
 }
 
-Model EnemyClaymore
+Model UZEnemyClaymore
 {
 	Path "models/undeadzeratul/weapons/claymore-mines"
 	Model 0 Claymore.obj

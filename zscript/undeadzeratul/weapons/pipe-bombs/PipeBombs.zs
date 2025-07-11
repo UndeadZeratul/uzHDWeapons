@@ -7,7 +7,7 @@ class UZPipeBombs : HDGrenadethrower {
         hdgrenadethrower.ammotype "UZPipeBombAmmo";
         hdgrenadethrower.throwtype "UZPipeBomb";
         hdgrenadethrower.spoontype "UZPipeBombSpoon";
-        hdgrenadethrower.wiretype "PipeBombTripwireFrag";
+        hdgrenadethrower.wiretype "UZPipeBombTripwireFrag";
         hdgrenadethrower.pinsound "weapons/pipebomb/arm";
         inventory.icon "PIPPA0";
     }
@@ -51,7 +51,7 @@ class UZPipeBombs : HDGrenadethrower {
 
     override void DrawHUDStuff(HDStatusBar sb,HDWeapon hdw,HDPlayerPawn hpl) {
         if (sb.hudlevel == 1) {
-            if (hpl.countInv('HDPipeBombDetonator')) {
+            if (hpl.countInv('UZPipeBombDetonator')) {
                 sb.drawimage(
                     "PBDPA0",
                     (-72, -4),
@@ -119,7 +119,7 @@ class UZPipeBombs : HDGrenadethrower {
         if (oshit) gforce = min(gforce, frandom(4, 20));
         if (hdplayerpawn(owner)) gforce *= hdplayerpawn(owner).strength;
 
-        let bomb = HDPipeBomb(ggg);
+        let bomb = UZPipeBomb(ggg);
         if (!bomb) return;
         
         if (owner.player) bomb.vel += SwingThrow() * gforce;
@@ -142,12 +142,12 @@ class UZPipeBombs : HDGrenadethrower {
 
     action void A_DetonatePipeBombs() {
         let it = ThinkerIterator.create("UZPipeBombRoller");
-        HDPipeBombRoller roller;
-        while (roller = HDPipeBombRoller(it.Next())) if (roller.master == invoker.owner) roller.SetStateLabel("Destroy");
+        UZPipeBombRoller roller;
+        while (roller = UZPipeBombRoller(it.Next())) if (roller.master == invoker.owner) roller.SetStateLabel("Destroy");
         
         it = ThinkerIterator.create("UZPipeBomb");
-        HDPipeBomb bomb;
-        while (bomb = HDPipeBomb(it.Next())) if (bomb.master == invoker.owner) bomb.SetStateLabel("Destroy");
+        UZPipeBomb bomb;
+        while (bomb = UZPipeBomb(it.Next())) if (bomb.master == invoker.owner) bomb.SetStateLabel("Destroy");
     }
 
     states {
@@ -284,7 +284,7 @@ class UZPipeBombTripwireFrag : Tripwire {
     default {
         weapon.selectionorder 1011;
         tripwire.ammotype "UZPipeBombAmmo";
-        tripwire.throwtype "PipeBombTrippingFrag";
+        tripwire.throwtype "UZPipeBombTrippingFrag";
         tripwire.spoontype "UZPipeBombSpoon";
         tripwire.weptype "UZPipeBombs";
     }
@@ -365,7 +365,7 @@ class UZPipeBombRoller : HDFragGrenadeRoller {
         if (isfrozen()) return;
 
         if (health < 1) {
-            HDPipeBomb.detonate(self);
+            UZPipeBomb.detonate(self);
             destroy();
             return;
         }
@@ -384,7 +384,7 @@ class UZPipeBombRoller : HDFragGrenadeRoller {
     override bool used(actor user) {
         let hdp = HDPlayerPawn(user);
         if (hdp && hdp.player && hdp.player.crouchfactor < 0.6) {
-            user.giveInventory('HDPipeBombAmmo', 1);
+            user.giveInventory('UZPipeBombAmmo', 1);
             hdp.A_Log(StringTable.localize("$PICKUP_PIPEBOMB_DEACTIVATE"), true);
             destroy();
 
@@ -395,7 +395,7 @@ class UZPipeBombRoller : HDFragGrenadeRoller {
     }
 
     action void A_Detonate() {
-        HDPipeBomb.detonate(invoker);
+        UZPipeBomb.detonate(invoker);
     }
 
     states {
@@ -462,7 +462,7 @@ class UZPipeBomb : HDFragGrenade {
 
     override void tick() {
         if (health < 1) {
-            HDPipeBomb.detonate(self);
+            UZPipeBomb.detonate(self);
             destroy();
             return;
         }
@@ -471,7 +471,7 @@ class UZPipeBomb : HDFragGrenade {
     }
 
     action void A_Detonate() {
-        HDPipeBomb.detonate(invoker);
+        UZPipeBomb.detonate(invoker);
     }
 
     static void detonate(HDActor caller) {
@@ -621,7 +621,7 @@ class UZPipeBombP : HDUPK {
     }
 }
 
-class UZPipeBombPickup : HDPipeBombP {
+class UZPipeBombPickup : UZPipeBombP {
     override void postbeginplay() {
         super.postbeginplay();
 
