@@ -1,2 +1,9 @@
-weapons/pipebomb/arm dspiparm
-weapons/pipebomb/bounce dspipbnc
+// Claymore Mines
+Claymore/Place		DSCLAYST
+Claymore/Trigger	DSCLAYBP
+Claymore/Armed		CLAYARMD
+
+
+// Pipe Bombs
+weapons/pipebomb/arm           DSPIPARM
+weapons/pipebomb/bounce        DSPIPBNC

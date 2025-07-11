@@ -1,0 +1,21 @@
+Model PlacedClaymore
+{
+	Path "models/undeadzeratul/weapons/claymore-mines"
+	Model 0 Claymore.obj
+
+	AngleOffset -90
+	Offset 0 0 1
+	
+	Frame CLAP A 0 0
+}
+
+Model EnemyClaymore
+{
+	Path "models/undeadzeratul/weapons/claymore-mines"
+	Model 0 Claymore.obj
+
+	AngleOffset -90
+	Offset 0 0 1
+	
+	Frame CLAP A 0 0
+}
