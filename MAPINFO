@@ -1,3 +1,13 @@
 GameInfo {
     AddEventHandlers = "UZWeaponsEasterEggsHandler", "UZWeaponsHandler"
 }
+
+DoomEdNums{
+	23240=UZBHG
+	23421=UZClaymoreMine
+	23422=UZClaymoreMineBox
+	23423=UZPlacedClaymore
+	23424=UZEnemyClaymore
+	23425=UZPipeBombP
+    26426=UZPipeBombPickup
+}
