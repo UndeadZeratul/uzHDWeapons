@@ -1,17 +1,22 @@
 // Backpack Spawn Pool Filters
 addBPSpawnPoolFilter => { "name": "UZBHGen", "allowed": "#bhg_allowBackpacks" }
-addBPSpawnPoolFilter => { "name": "HDPipeBombAmmo", "allowed": "#pipebomb_allowBackpacks" }
+addBPSpawnPoolFilter => { "name": "UZPipeBombAmmo", "allowed": "#pipebomb_allowBackpacks" }
+
+// Spawn Tables
+newSpawnTable => { "spawnName": "FragP", "addOriginalThing": "true", "persists": "true" }
+newSpawnTable => { "spawnName": "UZFragGrenadePickup", "addOriginalThing": "true", "persists": "true" }
 
 // Black Hole Generator Spawn Entries
 addSpawnTableSingleEntry => { "tableName": "BFG9000Replaces", "name": "UZBHGen", "chance": "#bhg_spawn_bias", "persists": "#bhg_persistent_spawning" }
 
-// Pipe Bomb Spawn Entries
-newSpawnTable => { "spawnName": "FragP", "addOriginalThing": "true", "persists": "true" }
-newSpawnTable => { "spawnName": "HDFragGrenadePickup", "addOriginalThing": "true", "persists": "true" }
+// Claymore Mines
+addSpawnTableSingleEntry => { "tableName": "FragP", "name": "UZClaymoreMine", "chance": "#claymore_spawn_bias", "persists": "#claymore_persistent_spawning" }
+addSpawnTableSingleEntry => { "tableName": "UZFragGrenadePickup", "name": "UZClaymoreMineBox", "chance": "#claymore_spawn_bias", "persists": "#claymore_persistent_spawning" }
 
-addSpawnTableSingleEntry => { "tableName": "FragP", "name": "HDPipeBombP", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
-addSpawnTableSingleEntry => { "tableName": "HDFragGrenadePickup", "name": "HDPipeBombPickup", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
+// Pipe Bomb Spawn Entries
+addSpawnTableSingleEntry => { "tableName": "FragP", "name": "UZPipeBombP", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
+addSpawnTableSingleEntry => { "tableName": "UZFragGrenadePickup", "name": "UZPipeBombPickup", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
 
 // AceCorp Weapon Crate Filters
 addWeaponCrateFilter => { "name": "UZBHGen", "allowed": "#bhg_allowBackpacks" }
-addWeaponCrateFilter => { "name": "HDPipeBombAmmo", "allowed": "#pipebomb_allowBackpacks" }
+addWeaponCrateFilter => { "name": "UZPipeBombAmmo", "allowed": "#pipebomb_allowBackpacks" }
