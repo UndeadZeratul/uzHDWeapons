@@ -31,8 +31,11 @@ class UZPlacedClaymore : HDUPK {
                 // red particles depict the visible arc
                 A_LookEx(LOF_NOSOUNDCHECK, 4, HDCONST_ONEMETRE * 8, 0, 90, "Trigger");
                 A_ClearTarget();
-                A_SpawnParticle("Red", SPF_FULLBRIGHT|SPF_RELATIVE|SPF_NOTIMEFREEZE, 18, 2, 45, 0, 0, 9, 2, 0, 0, 0, 0, 0, 1, -1, 0);
-                A_SpawnParticle("Red", SPF_FULLBRIGHT|SPF_RELATIVE|SPF_NOTIMEFREEZE, 18, 2, -45, 0, 0, 9, 2, 0, 0, 0, 0, 0, 1, -1, 0);
+
+                if (hd_debug) {
+                    A_SpawnParticle("Red", SPF_FULLBRIGHT|SPF_RELATIVE|SPF_NOTIMEFREEZE, 18, 2, 45, 0, 0, 9, 2, 0, 0, 0, 0, 0, 1, -1, 0);
+                    A_SpawnParticle("Red", SPF_FULLBRIGHT|SPF_RELATIVE|SPF_NOTIMEFREEZE, 18, 2, -45, 0, 0, 9, 2, 0, 0, 0, 0, 0, 1, -1, 0);
+                }
             }
             Loop;
         Trigger:
@@ -40,9 +43,9 @@ class UZPlacedClaymore : HDUPK {
             CLAP A 0 A_Die;
         Death:
             TNT1 A 0 {
-				let speed = getDefaultByType("HDB_Frag").speed;
-				A_SpawnChunks("HDB_frag", 90, speed * 0.8, speed * 1.2, 45, 45);
-			}
+                let speed = getDefaultByType("HDB_Frag").speed;
+                A_SpawnChunks("HDB_frag", 90, speed * 0.8, speed * 1.2, 45, 45);
+            }
             stop;
     }
 }
@@ -70,7 +73,7 @@ class UZClaymoreMine : HDPickup {
         hdpickup.bulk ENC_CLAYMORE;
         hdpickup.refid UZLD_CLAYMORE;
 
-		scale 0.25;
+        scale 0.25;
 
         tag "$TAG_CLAYMORE";
         Inventory.PickupMessage "$PICKUP_CLAYMORE";
