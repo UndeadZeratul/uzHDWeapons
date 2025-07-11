@@ -1,12 +1,12 @@
-class HDPipeBombs : HDGrenadethrower {
+class UZPipeBombs : HDGrenadethrower {
     default {
         weapon.selectionorder 1050;
         weapon.slotpriority 1.5;
         weapon.slotnumber 0;
         tag "$TAG_PIPEBOMB";
-        hdgrenadethrower.ammotype "HDPipeBombAmmo";
-        hdgrenadethrower.throwtype "HDPipeBomb";
-        hdgrenadethrower.spoontype "HDPipeBombSpoon";
+        hdgrenadethrower.ammotype "UZPipeBombAmmo";
+        hdgrenadethrower.throwtype "UZPipeBomb";
+        hdgrenadethrower.spoontype "UZPipeBombSpoon";
         hdgrenadethrower.wiretype "PipeBombTripwireFrag";
         hdgrenadethrower.pinsound "weapons/pipebomb/arm";
         inventory.icon "PIPPA0";
@@ -17,7 +17,7 @@ class HDPipeBombs : HDGrenadethrower {
         return 
             LWPHELP_FIRE.."  Activate & wind up (release to throw)\n"
             ..(
-                owner.countinv("HDPipeBombDetonator")
+                owner.countinv("UZPipeBombDetonator")
                     ? LWPHELP_ALTFIRE.."  Detonate all activated pipe bombs\n"
                     : "\c[DarkGray]"..StringTable.Localize("$WPHALTFIRE")..WEPHELP_RGCOL.."  DETONATOR REQUIRED\n"
             )
@@ -26,7 +26,7 @@ class HDPipeBombs : HDGrenadethrower {
     }
 
     action bool NoPipeBombs() {
-        return NoFrags() && !invoker.owner.countInv("HDPipeBombDetonator");
+        return NoFrags() && !invoker.owner.countInv("UZPipeBombDetonator");
     }
 
     override void DoEffect() {
@@ -66,11 +66,11 @@ class HDPipeBombs : HDGrenadethrower {
                 sb.DI_SCREEN_CENTER_BOTTOM,
                 scale: (0.6, 0.6)
             );
-            sb.drawnum(hpl.countinv("HDPipeBombAmmo"), -45, -8, sb.DI_SCREEN_CENTER_BOTTOM);
+            sb.drawnum(hpl.countinv("UZPipeBombAmmo"), -45, -8, sb.DI_SCREEN_CENTER_BOTTOM);
         }
 
         sb.drawwepnum(
-            hpl.countinv("HDPipeBombAmmo"),
+            hpl.countinv("UZPipeBombAmmo"),
             (HDCONST_MAXPOCKETSPACE / ENC_PIPEBOMBS)
         );
         
@@ -87,7 +87,7 @@ class HDPipeBombs : HDGrenadethrower {
     }
 
     override void ForceBasicAmmo() {
-        owner.A_SetInventory("HDPipeBombAmmo", 1);
+        owner.A_SetInventory("UZPipeBombAmmo", 1);
     }
 
     //we need to start from the inventory itself so it can go into DoEffect
@@ -141,11 +141,11 @@ class HDPipeBombs : HDGrenadethrower {
     }
 
     action void A_DetonatePipeBombs() {
-        let it = ThinkerIterator.create("HDPipeBombRoller");
+        let it = ThinkerIterator.create("UZPipeBombRoller");
         HDPipeBombRoller roller;
         while (roller = HDPipeBombRoller(it.Next())) if (roller.master == invoker.owner) roller.SetStateLabel("Destroy");
         
-        it = ThinkerIterator.create("HDPipeBomb");
+        it = ThinkerIterator.create("UZPipeBomb");
         HDPipeBomb bomb;
         while (bomb = HDPipeBomb(it.Next())) if (bomb.master == invoker.owner) bomb.SetStateLabel("Destroy");
     }
@@ -162,7 +162,7 @@ class HDPipeBombs : HDGrenadethrower {
             goto ready3;
 
         deselectinstant:
-            TNT1 A -1 A_TakeInventory("HDPipeBombs", 1);
+            TNT1 A -1 A_TakeInventory("UZPipeBombs", 1);
             stop;
 
         zoom:
@@ -232,7 +232,7 @@ class HDPipeBombs : HDGrenadethrower {
             goto ready;
 
         altfire:
-            #### A 0 A_JumpIf(!invoker.owner.countinv("HDPipeBombDetonator"), "ready");
+            #### A 0 A_JumpIf(!invoker.owner.countinv("UZPipeBombDetonator"), "ready");
         begindetonate:
             PIPD A 1 offset(0, 96);
             #### A 1 offset(0, 64);
@@ -242,7 +242,7 @@ class HDPipeBombs : HDGrenadethrower {
             #### A 2 offset(0, 34);
             #### B 4 offset(0, 34);
         althold:
-            #### C 0 A_JumpIf(!invoker.owner.countinv("HDPipeBombDetonator"), "ready");
+            #### C 0 A_JumpIf(!invoker.owner.countinv("UZPipeBombDetonator"), "ready");
             #### C 0 A_JumpIf(!PressingAltfire(), "enddetonate");
             #### C 8 offset(0, 34) A_DetonatePipeBombs();
             loop;
@@ -280,13 +280,13 @@ class HDPipeBombs : HDGrenadethrower {
 }
 
 // TODO: Remove?
-class PipeBombTripwireFrag : Tripwire {
+class UZPipeBombTripwireFrag : Tripwire {
     default {
         weapon.selectionorder 1011;
-        tripwire.ammotype "HDPipeBombAmmo";
+        tripwire.ammotype "UZPipeBombAmmo";
         tripwire.throwtype "PipeBombTrippingFrag";
-        tripwire.spoontype "HDPipeBombSpoon";
-        tripwire.weptype "HDPipeBombs";
+        tripwire.spoontype "UZPipeBombSpoon";
+        tripwire.weptype "UZPipeBombs";
     }
 
     override void DrawHUDStuff(HDStatusBar sb, HDWeapon hdw, HDPlayerPawn hpl) {
@@ -297,11 +297,11 @@ class PipeBombTripwireFrag : Tripwire {
                 sb.DI_SCREEN_CENTER_BOTTOM,
                 scale: (0.6, 0.6)
             );
-            sb.drawnum(hpl.countinv("HDPipeBombAmmo"), -45, -8, sb.DI_SCREEN_CENTER_BOTTOM);
+            sb.drawnum(hpl.countinv("UZPipeBombAmmo"), -45, -8, sb.DI_SCREEN_CENTER_BOTTOM);
         }
 
         sb.drawwepnum(
-            hpl.countinv("HDPipeBombAmmo"),
+            hpl.countinv("UZPipeBombAmmo"),
             (ENC_FRAG / HDCONST_MAXPOCKETSPACE)
         );
 
@@ -319,23 +319,23 @@ class PipeBombTripwireFrag : Tripwire {
 }
 
 // TODO: Remove?
-class PipeBombTrippingFrag : TrippingGrenade {
+class UZPipeBombTrippingFrag : TrippingGrenade {
     default {
         //$Category "Misc/Hideous Destructor/Traps"
         //$Title "Tripwire Grenade"
         //$Sprite "FRAGA0"
 
         scale 0.4;
-        trippinggrenade.rollertype "HDPipeBombRoller";
-        trippinggrenade.spoontype "HDPipeBombSpoon";
-        trippinggrenade.droptype "HDPipeBombAmmo";
-        hdupk.pickuptype "HDPipeBombAmmo";
+        trippinggrenade.rollertype "UZPipeBombRoller";
+        trippinggrenade.spoontype "UZPipeBombSpoon";
+        trippinggrenade.droptype "UZPipeBombAmmo";
+        hdupk.pickuptype "UZPipeBombAmmo";
     }
     
     override void postbeginplay() {
         super.postbeginplay();
 
-        pickupmessage = getdefaultbytype("HDPipeBombAmmo").pickupmessage();
+        pickupmessage = getdefaultbytype("UZPipeBombAmmo").pickupmessage();
     }
 
     states {
@@ -345,7 +345,7 @@ class PipeBombTrippingFrag : TrippingGrenade {
     }
 }
 
-class HDPipeBombRoller : HDFragGrenadeRoller {
+class UZPipeBombRoller : HDFragGrenadeRoller {
     default {
         health 20;
 
@@ -444,7 +444,7 @@ class HDPipeBombRoller : HDFragGrenadeRoller {
     }
 }
 
-class HDPipeBomb : HDFragGrenade {
+class UZPipeBomb : HDFragGrenade {
     default {
         +ROLLSPRITE;
         +ROLLCENTER;
@@ -456,7 +456,7 @@ class HDPipeBomb : HDFragGrenade {
 
         scale 0.2;
         obituary "$OB_PIPEBOMB";
-        hdfraggrenade.rollertype "HDPipeBombRoller";
+        hdfraggrenade.rollertype "UZPipeBombRoller";
         Mass 1500;
     }
 
@@ -523,7 +523,7 @@ class HDPipeBomb : HDFragGrenade {
     }
 }
 
-class HDPipeBombDetonator : HDPickup {
+class UZPipeBombDetonator : HDPickup {
     default {
         inventory.icon "PBDPA0";
         inventory.amount 1;
@@ -543,7 +543,7 @@ class HDPipeBombDetonator : HDPickup {
     }
 }
 
-class HDPipeBombAmmo : HDAmmo {
+class UZPipeBombAmmo : HDAmmo {
     default {
         //+forcexybillboard
         inventory.icon "PIPPA0";
@@ -563,14 +563,14 @@ class HDPipeBombAmmo : HDAmmo {
     }
 
     override void AttachToOwner(Actor user) {
-        user.GiveInventory("HDPipeBombs", 1);
+        user.GiveInventory("UZPipeBombs", 1);
 
         super.AttachToOwner(user);
     }
 
     override void DetachFromOwner() {
-        if(owner && owner.player && !(owner.player.ReadyWeapon is "HDPipeBombs")) {
-            owner.TakeInventory("HDPipeBombs", 1);
+        if(owner && owner.player && !(owner.player.ReadyWeapon is "UZPipeBombs")) {
+            owner.TakeInventory("UZPipeBombs", 1);
         }
 
         super.DetachFromOwner();
@@ -584,7 +584,7 @@ class HDPipeBombAmmo : HDAmmo {
 }
 
 // TODO: Remove?
-class HDPipeBombSpoon : HDFragSpoon {
+class UZPipeBombSpoon : HDFragSpoon {
     default {
         Scale 0.45;
     }
@@ -600,7 +600,7 @@ class HDPipeBombSpoon : HDFragSpoon {
     }
 }
 
-class HDPipeBombP : HDUPK {
+class UZPipeBombP : HDUPK {
     default {
         //+forcexybillboard
         scale 0.4;
@@ -608,7 +608,7 @@ class HDPipeBombP : HDUPK {
         radius 6;
 
         hdupk.amount 1;
-        hdupk.pickuptype "HDPipeBombAmmo";
+        hdupk.pickuptype "UZPipeBombAmmo";
         hdupk.pickupmessage "$PICKUP_PIPEBOMB";
         hdupk.pickupsound "weapons/rifleclick2";
 
@@ -621,16 +621,16 @@ class HDPipeBombP : HDUPK {
     }
 }
 
-class HDPipeBombPickup : HDPipeBombP {
+class UZPipeBombPickup : HDPipeBombP {
     override void postbeginplay() {
         super.postbeginplay();
 
-        A_SpawnItemEx("HDPipeBombP",  8, 8, flags: SXF_NOCHECKPOSITION);
-        A_SpawnItemEx("HDPipeBombP",  8, 0, flags: SXF_NOCHECKPOSITION);
-        A_SpawnItemEx("HDPipeBombP",  0, 8, flags: SXF_NOCHECKPOSITION);
-        A_SpawnItemEx("HDPipeBombP", -8, 8, flags: SXF_NOCHECKPOSITION);
-        A_SpawnItemEx("HDPipeBombP", -8, 0, flags: SXF_NOCHECKPOSITION);
+        A_SpawnItemEx("UZPipeBombP",  8, 8, flags: SXF_NOCHECKPOSITION);
+        A_SpawnItemEx("UZPipeBombP",  8, 0, flags: SXF_NOCHECKPOSITION);
+        A_SpawnItemEx("UZPipeBombP",  0, 8, flags: SXF_NOCHECKPOSITION);
+        A_SpawnItemEx("UZPipeBombP", -8, 8, flags: SXF_NOCHECKPOSITION);
+        A_SpawnItemEx("UZPipeBombP", -8, 0, flags: SXF_NOCHECKPOSITION);
 
-        if (random[randpb]()) A_SpawnItemEx("HDPipeBombDetonator", 0, -8, flags: SXF_NOCHECKPOSITION);
+        if (random[randpb]()) A_SpawnItemEx("UZPipeBombDetonator", 0, -8, flags: SXF_NOCHECKPOSITION);
     }
 }

@@ -1,7 +1,4 @@
-
-
-
-Class PlacedClaymore : HDUPK {
+class UZPlacedClaymore : HDUPK {
 
     //$Category Monsters
     //$Title "Placed Claymore Mine (Friendly)"
@@ -19,7 +16,7 @@ Class PlacedClaymore : HDUPK {
         +NOTAUTOAIMED;
         
         hdupk.pickupmessage "$PICKUP_CLAYMORE";
-        hdupk.pickuptype "ClaymoreAmmo";
+        hdupk.pickuptype "UZClaymoreAmmo";
 
         Obituary "$OB_CLAYMORE";
     }
@@ -50,7 +47,7 @@ Class PlacedClaymore : HDUPK {
     }
 }
 
-Class EnemyClaymore : PlacedClaymore {
+class UZEnemyClaymore : PlacedClaymore {
     //$Title "Placed Claymore Mine (Enemy)"
 
     Default {
@@ -66,7 +63,7 @@ Class EnemyClaymore : PlacedClaymore {
     }
 }
 
-Class ClaymoreAmmo : HDPickup {
+class UZClaymoreMine : HDPickup {
     Default {
         +Inventory.invbar
 
@@ -132,5 +129,27 @@ Class ClaymoreAmmo : HDPickup {
         use:
             TNT1 A 0 A_PlantClaymore();
             fail;
+    }
+}
+
+class UZClaymoreMineBox : HDUPK {
+
+    //$Category Monsters
+    //$Title "Box of Claymore Mines"
+
+    Default {
+        Scale 0.4;
+
+        tag "$TAG_CLAYMORE_BOX";
+
+        hdupk.amount 5;
+        hdupk.pickupmessage "$PICKUP_CLAYMORE_BOX";
+        hdupk.pickuptype "UZClaymoreAmmo";
+    }
+
+    States {
+        Spawn:
+            CLAA A -1;    
+            stop;
     }
 }

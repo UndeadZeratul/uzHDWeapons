@@ -14,7 +14,9 @@ _Creative, I know_
 ![claymore-mine](./sprites/claymore-mines/CLAYA0.png)
 
 - Loadout Code: `cly`
-- WIP
+- Similar to Doorbusters in that they're an inventory item you `[USE]` to place on the ground at the spot you're looking at, facing away from you.  If a hostile walks within the cone, it'll detonate.
+- Press `[USE]` near claymore to pick up & deactivate it.
+- Can be shot in a pinch.
 
 ## Pipe Bombs
 ![pipebomb](./sprites/pipe-bombs/PIPPA0.png)

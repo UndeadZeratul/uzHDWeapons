@@ -2,11 +2,13 @@
 
 TAG_BHG                    = "Black Hole Generator";
 TAG_CLAYMORE               = "Claymore Mine";
+TAG_CLAYMORE_BOX           = "Box of Claymore Mines";
 TAG_PIPEBOMB               = "Pipe Bomb";
 TAG_PIPEBOMB_DETONATOR     = "Detonator";
 
 PICKUP_BHG                 = "You got the Black Hole Generator!";
 PICKUP_CLAYMORE            = "Picked up a claymore mine!";
+PICKUP_CLAYMORE_BOX        = "Picked up a box of claymore mines!";
 PICKUP_PIPEBOMB            = "Picked up a pipe bomb!  So cool!";
 PICKUP_PIPEBOMB_DEACTIVATE = "Picked up (and deactivated) a pipe bomb!";
 PICKUP_PIPEBOMB_DETONATOR  = "Picked up a detonator.";
