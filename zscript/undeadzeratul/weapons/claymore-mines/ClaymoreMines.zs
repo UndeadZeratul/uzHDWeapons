@@ -24,7 +24,7 @@ class UZPlacedClaymore : HDUPK {
     States {
         Spawn:
             CLAP A 35;    
-            CLAP A 0 A_StartSound("Claymore/Armed");
+            CLAP A 0 A_StartSound("weapons/ClaymoreMine/Armed");
         Arm:
             CLAP A 1 {
                 // look for a new target in a 90 degree arc to the front of the mine every tic
@@ -39,7 +39,7 @@ class UZPlacedClaymore : HDUPK {
             }
             Loop;
         Trigger:
-            CLAP A 8 A_StartSound("Claymore/Trigger");
+            CLAP A 8 A_StartSound("weapons/ClaymoreMine/Trigger");
             CLAP A 0 A_Die;
         Death:
             TNT1 A 0 {
@@ -61,7 +61,7 @@ class UZEnemyClaymore : UZPlacedClaymore {
     
     States {
         Trigger:
-            CLAP A 16 A_StartSound ("Claymore/Trigger");
+            CLAP A 16 A_StartSound ("weapons/ClaymoreMine/Trigger");
             CLAP A 0 A_Die;
     }
 }

@@ -18,6 +18,16 @@ _Creative, I know_
 - Press `[USE]` near claymore to pick up & deactivate it.
 - Can be shot in a pinch.
 
+## Land Mines
+![land-mine](./sprites/land-mines/MINEA0.png)
+
+- Loadout Code: `min`
+- Hold `[FIRE]` to activate & toss.
+- Press `[RELOAD]` to deactivate and cancel toss.
+- Press `[USE]` near active land mine to **attempt** to kick away.
+- Press `[USE]` **while crouching** near active land mine to pick up & deactivate land mine.
+- Can be shot in a pinch.  Careful, may get cought in the cross-fire!
+
 ## Pipe Bombs
 ![pipebomb](./sprites/pipe-bombs/PIPPA0.png)
 
@@ -50,6 +60,14 @@ _Creative, I know_
 
 - c4armed.ogg by insanity54
 	- https://freesound.org/people/insanity54/sounds/349662/
+
+### Land Mines
+- Code: Gothic
+- GLDefs: Gothic
+- Sounds: LucasArts (Dark Forces), id Software (Quake 2)
+- Sprites: LucasArts (Dark Forces), Gothic
+- Sprite Edit: Gothic
+- Idea Base: Land Mines from Stronghold
 
 ### Pipe Bombs
 - Sounds: 3D Realms, Eurocom (Duke Nukem 64), Sunstorm Interactive (DN Manhattan Project)

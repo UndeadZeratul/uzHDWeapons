@@ -1,39 +1,23 @@
-class UZPipeBombs : HDGrenadethrower {
+class UZLandMines : HDGrenadethrower {
     default {
         weapon.selectionorder 1050;
         weapon.slotpriority 1.5;
         weapon.slotnumber 0;
-        tag "$TAG_PIPEBOMB";
-        hdgrenadethrower.ammotype "UZPipeBombAmmo";
-        hdgrenadethrower.throwtype "UZPipeBomb";
-        hdgrenadethrower.spoontype "UZPipeBombSpoon";
-        hdgrenadethrower.wiretype "UZPipeBombTripwireFrag";
-        hdgrenadethrower.pinsound "weapons/pipebomb/arm";
-        inventory.icon "PIPPA0";
-    }
-
-    override string gethelptext() {
-        LocalizeHelp();
-        return 
-            LWPHELP_FIRE.."  Activate & wind up (release to throw)\n"
-            ..(
-                owner.countinv("UZPipeBombDetonator")
-                    ? LWPHELP_ALTFIRE.."  Detonate all activated pipe bombs\n"
-                    : "\c[DarkGray]"..StringTable.Localize("$WPHALTFIRE")..WEPHELP_RGCOL.."  DETONATOR REQUIRED\n"
-            )
-            ..LWPHELP_RELOAD.."  Deactivate & cancel throw"
-            ;
-    }
-
-    action bool NoPipeBombs() {
-        return NoFrags() && !invoker.owner.countInv("UZPipeBombDetonator");
+        tag "$TAG_LANDMINE";
+        hdgrenadethrower.ammotype "UZLandMineAmmo";
+        hdgrenadethrower.throwtype "UZLandMine";
+        hdgrenadethrower.spoontype "UZLandMineSpoon";
+        hdgrenadethrower.wiretype "UZLandMineTripwireFrag";
+        hdgrenadethrower.pinsound "misc/null";
+        hdgrenadethrower.spoonsound "weapons/landmine/beep";
+        // inventory.icon "LMAMA0";
     }
 
     override void DoEffect() {
         if(weaponstatus[0]&FRAGF_SPOONOFF) {
             weaponstatus[FRAGS_TIMER]++;
 
-            if (owner.health < 1) TossPipeBomb(true);
+            if (owner.health < 1) TossLandMine(true);
         } else if (
             weaponstatus[0]&FRAGF_INHAND
             && weaponstatus[0]&FRAGF_PINOUT
@@ -46,37 +30,29 @@ class UZPipeBombs : HDGrenadethrower {
     }
     
     override string,double getpickupsprite() {
-        return "PIPPA0", 0.6;
+        return "LMAMA0", 0.6;
     }
-    
+
     override string GetStatusIcon(){
-        return "PIPPA0";
+        return (weaponstatus[0]&FRAGF_PINOUT) ? "LMINB0" : "LMINA0";
     }
 
     override void DrawHUDStuff(HDStatusBar sb,HDWeapon hdw,HDPlayerPawn hpl) {
         let statusicon = GetStatusIcon();
-        if (sb.hudlevel == 1) {
-            if (hpl.countInv('UZPipeBombDetonator')) {
-                sb.drawimage(
-                    "PBDPA0",
-                    (-72, -4),
-                    sb.DI_SCREEN_CENTER_BOTTOM|sb.DI_ITEM_CENTER_BOTTOM,
-                    scale: (0.6, 0.6)
-                );
-            }
 
+        if (sb.hudlevel == 1) {
             sb.drawimage(
                 statusicon,
                 (-52, -4),
                 sb.DI_SCREEN_CENTER_BOTTOM,
                 scale: (0.6, 0.6)
             );
-            sb.drawnum(hpl.countinv("UZPipeBombAmmo"), -45, -8, sb.DI_SCREEN_CENTER_BOTTOM);
+            sb.drawnum(hpl.countinv(grenadeammotype), -45, -8, sb.DI_SCREEN_CENTER_BOTTOM);
         }
 
         sb.drawwepnum(
-            hpl.countinv("UZPipeBombAmmo"),
-            (HDCONST_MAXPOCKETSPACE / ENC_PIPEBOMB)
+            hpl.countinv(grenadeammotype),
+            (HDCONST_MAXPOCKETSPACE / ENC_LANDMINE)
         );
         
         sb.drawwepnum(hdw.weaponstatus[FRAGS_FORCE], 50, posy: -10, alwaysprecise: true);
@@ -114,17 +90,25 @@ class UZPipeBombs : HDGrenadethrower {
         }
     }
 
+    override string gethelptext() {
+        LocalizeHelp();
+        return 
+            LWPHELP_FIRE.."  Activate & wind up (release to throw)\n"
+            ..LWPHELP_RELOAD.."  Deactivate & cancel throw"
+            ;
+    }
+
     override void ForceBasicAmmo() {
-        owner.A_SetInventory("UZPipeBombAmmo", 1);
+        owner.A_SetInventory("UZLandMineAmmo", 1);
     }
 
     //we need to start from the inventory itself so it can go into DoEffect
-    action void A_TossPipeBomb(bool oshit = false) {
-        invoker.TossPipeBomb(oshit);
+    action void A_TossLandMine(bool oshit = false) {
+        invoker.TossLandMine(oshit);
         A_SetHelpText();
     }
 
-    void TossPipeBomb(bool oshit = false) {
+    void TossLandMine(bool oshit = false) {
         if (!owner) return;
 
         int garbage;
@@ -132,7 +116,7 @@ class UZPipeBombs : HDGrenadethrower {
         double cpp = cos(owner.pitch);
         double spp = sin(owner.pitch);
 
-        //create the pipe bomb
+        //create the land mine
         [garbage, ggg] = owner.A_SpawnItemEx(
             throwtype,
             0, 0, owner.height * 0.88,
@@ -147,7 +131,7 @@ class UZPipeBombs : HDGrenadethrower {
         if (oshit) gforce = min(gforce, frandom(4, 20));
         if (hdplayerpawn(owner)) gforce *= hdplayerpawn(owner).strength;
 
-        let bomb = UZPipeBomb(ggg);
+        let bomb = UZLandMine(ggg);
         if (!bomb) return;
         
         if (owner.player) bomb.vel += SwingThrow() * gforce;
@@ -168,16 +152,6 @@ class UZPipeBombs : HDGrenadethrower {
         weaponstatus[FRAGS_REALLYPULL] = 0;
     }
 
-    action void A_DetonatePipeBombs() {
-        let it = ThinkerIterator.create("UZPipeBombRoller");
-        UZPipeBombRoller roller;
-        while (roller = UZPipeBombRoller(it.Next())) if (roller.master == invoker.owner) roller.SetStateLabel("Destroy");
-        
-        it = ThinkerIterator.create("UZPipeBomb");
-        UZPipeBomb bomb;
-        while (bomb = UZPipeBomb(it.Next())) if (bomb.master == invoker.owner) bomb.SetStateLabel("Destroy");
-    }
-
     states {
         ready:
             TNT1 A 0 {
@@ -190,7 +164,7 @@ class UZPipeBombs : HDGrenadethrower {
             goto ready3;
 
         deselectinstant:
-            TNT1 A -1 A_TakeInventory("UZPipeBombs", 1);
+            TNT1 A -1 A_TakeInventory("UZLandMines", 1);
             stop;
 
         zoom:
@@ -212,7 +186,6 @@ class UZPipeBombs : HDGrenadethrower {
             goto ready;
 
         fire:
-            TNT1 A 0 A_JumpIf(NoPipeBombs(), "selectinstant");
             TNT1 A 0 A_JumpIf(NoFrags(), "nope");
             TNT1 A 0 A_JumpIf(invoker.weaponstatus[0]&FRAGF_JUSTTHREW, "nope");
             TNT1 A 0 A_JumpIfInventory("PowerStrength", 1, 3);
@@ -223,7 +196,6 @@ class UZPipeBombs : HDGrenadethrower {
             goto ready;
 
         hold:
-            TNT1 A 0 A_JumpIf(NoPipeBombs(), "selectinstant");
             TNT1 A 0 A_JumpIf(NoFrags(), "nope");
             TNT1 A 0 A_JumpIf(invoker.weaponstatus[0]&FRAGF_JUSTTHREW, "nope");
             //TNT1 A 0 A_JumpIf(invoker.weaponstatus[0]&FRAGF_PINOUT,"hold2");
@@ -231,7 +203,6 @@ class UZPipeBombs : HDGrenadethrower {
             TNT1 A 0 A_JumpIfInventory("PowerStrength", 1, 1);
             TNT1 A 3 A_PullPin();
         hold2:
-            TNT1 A 0 A_JumpIf(NoPipeBombs(),"selectinstant");
             TNT1 A 0 A_JumpIf(NoFrags(), "nope");
             TNT1 A 0 A_JumpIf(invoker.weaponstatus[FRAGS_FORCE] >= 40, "hold3a");
             TNT1 A 0 A_JumpIf(invoker.weaponstatus[FRAGS_FORCE] >= 30, "hold3a");
@@ -250,43 +221,15 @@ class UZPipeBombs : HDGrenadethrower {
             }
             TNT1 A 0 A_Refire();
         throw:
-            TNT1 A 0 A_JumpIf(NoPipeBombs(), "selectinstant");
             TNT1 A 0 A_JumpIf(NoFrags(), "nope");
-            TNT1 A 1 offset(0, 34) A_TossPipeBomb();
+            TNT1 A 1 offset(0, 34) A_TossLandMine();
             TNT1 A 1 offset(0, 38);
             TNT1 A 1 offset(0, 48);
             TNT1 A 1 offset(0, 52);
             TNT1 A 0 A_Refire();
             goto ready;
 
-        altfire:
-            #### A 0 A_JumpIf(!invoker.owner.countinv("UZPipeBombDetonator"), "ready");
-        begindetonate:
-            PIPD A 1 offset(0, 96);
-            #### A 1 offset(0, 64);
-            #### A 1 offset(0, 52);
-            #### A 2 offset(0, 48);
-            #### A 2 offset(0, 38);
-            #### A 2 offset(0, 34);
-            #### B 4 offset(0, 34);
-        althold:
-            #### C 0 A_JumpIf(!invoker.owner.countinv("UZPipeBombDetonator"), "ready");
-            #### C 0 A_JumpIf(!PressingAltfire(), "enddetonate");
-            #### C 8 offset(0, 34) A_DetonatePipeBombs();
-            loop;
-        enddetonate:
-            #### B 4 offset(0, 34);
-            #### A 2 offset(0, 34);
-            #### A 2 offset(0, 38);
-            #### A 2 offset(0, 48);
-            #### A 1 offset(0, 52);
-            #### A 1 offset(0, 64);
-            #### A 1 offset(0, 96);
-            goto ready;
-
-
         reload:
-            TNT1 A 0 A_JumpIf(NoPipeBombs(), "selectinstant");
             TNT1 A 0 A_JumpIf(NoFrags(), "nope");
             TNT1 A 0 A_JumpIf(invoker.weaponstatus[FRAGS_FORCE] >= 1, "pinbackin");
             TNT1 A 0 A_JumpIf(invoker.weaponstatus[0]&FRAGF_PINOUT, "altpinbackin");
@@ -308,28 +251,28 @@ class UZPipeBombs : HDGrenadethrower {
 }
 
 // TODO: Remove?
-class UZPipeBombTripwireFrag : Tripwire {
+class UZLandMineTripwireFrag : Tripwire {
     default {
         weapon.selectionorder 1011;
-        tripwire.ammotype "UZPipeBombAmmo";
-        tripwire.throwtype "UZPipeBombTrippingFrag";
-        tripwire.spoontype "UZPipeBombSpoon";
-        tripwire.weptype "UZPipeBombs";
+        tripwire.ammotype "UZLandMineAmmo";
+        tripwire.throwtype "UZLandMineTrippingFrag";
+        tripwire.spoontype "UZLandMineSpoon";
+        tripwire.weptype "UZLandMines";
     }
 
     override void DrawHUDStuff(HDStatusBar sb, HDWeapon hdw, HDPlayerPawn hpl) {
         if (sb.hudlevel == 1) {
             sb.drawimage(
-                "PIPPA0",
+                "LMAMA0",
                 (-52, -4),
                 sb.DI_SCREEN_CENTER_BOTTOM,
                 scale: (0.6, 0.6)
             );
-            sb.drawnum(hpl.countinv("UZPipeBombAmmo"), -45, -8, sb.DI_SCREEN_CENTER_BOTTOM);
+            sb.drawnum(hpl.countinv("UZLandMineAmmo"), -45, -8, sb.DI_SCREEN_CENTER_BOTTOM);
         }
 
         sb.drawwepnum(
-            hpl.countinv("UZPipeBombAmmo"),
+            hpl.countinv("UZLandMineAmmo"),
             (ENC_FRAG / HDCONST_MAXPOCKETSPACE)
         );
 
@@ -347,53 +290,57 @@ class UZPipeBombTripwireFrag : Tripwire {
 }
 
 // TODO: Remove?
-class UZPipeBombTrippingFrag : TrippingGrenade {
+class UZLandMineTrippingFrag : TrippingGrenade {
     default {
         //$Category "Misc/Hideous Destructor/Traps"
         //$Title "Tripwire Grenade"
         //$Sprite "FRAGA0"
 
         scale 0.4;
-        trippinggrenade.rollertype "UZPipeBombRoller";
-        trippinggrenade.spoontype "UZPipeBombSpoon";
-        trippinggrenade.droptype "UZPipeBombAmmo";
-        hdupk.pickuptype "UZPipeBombAmmo";
+        trippinggrenade.rollertype "UZLandMineRoller";
+        trippinggrenade.spoontype "UZLandMineSpoon";
+        trippinggrenade.droptype "UZLandMineAmmo";
+        hdupk.pickuptype "UZLandMineAmmo";
     }
     
     override void postbeginplay() {
         super.postbeginplay();
 
-        pickupmessage = getdefaultbytype("UZPipeBombAmmo").pickupmessage();
+        pickupmessage = getdefaultbytype("UZLandMineAmmo").pickupmessage();
     }
 
     states {
         spawn:
-            PIPP A 1 nodelay A_TrackStuckHeight();
+            LMAM A 1 nodelay A_TrackStuckHeight();
             wait;
     }
 }
 
-class UZPipeBombRoller : HDFragGrenadeRoller {
+class UZLandMineRoller : HDFragGrenadeRoller {
+
+    bool steppedOn;
+    bool primed;
+
     default {
         health 20;
 
         height 8;
         radius 8;
 
-        scale 0.2;
+        scale 0.5;
         radiusdamagefactor 0.04;
         pushfactor 1.4;
         maxstepheight 2;
         mass 500;
         
-        obituary "$OB_PIPEBOMB";
+        obituary "$OB_LANDMINE";
     }
     
     override void tick() {
         if (isfrozen()) return;
 
         if (health < 1) {
-            UZPipeBomb.detonate(self);
+            A_Detonate();
             destroy();
             return;
         }
@@ -403,8 +350,47 @@ class UZPipeBombRoller : HDFragGrenadeRoller {
             return;
         }
 
+        // Update the frame to "animate" it beeping
+        frame = (Level.time % 12) < 6;
+
         // Reset the "Fuze"
         fuze = 0;
+
+        let currentlySteppedOn = false;
+
+        foreach (mo : BlockThingsIterator.Create(self, 128)) {
+
+            // If the thing doesn't exist,
+            // or is the mine itself,
+            // or is another mine,
+            // or isn't a player or another mob,
+            // skip.
+            if (!mo
+                || mo == self
+                || mo.GetClassName() == GetClassName()
+                || !(mo is 'HDPlayerPawn' || mo is 'HDMobBase')
+            ) continue;
+
+            
+            // If that thing is standing on top of the mine, prime for detonation.
+            if (
+                mo.pos.z >= pos.z
+                && mo.pos.z <= pos.z + height
+                && Distance2D(mo) < radius + mo.radius
+            ) {
+                currentlySteppedOn = true;
+                primed = true;
+                break;
+            }
+        }
+
+        // store whether currently being stepped on
+        steppedOn = currentlySteppedOn;
+
+        // If we're not detonating, but we are primed and no longer being stepped on, detonate.
+        if (!steppedOn && primed && !instatesequence(curstate, resolvestate("detonate"))) {
+            SetStateLabel("detonate");
+        }
 
         super.tick();
     }
@@ -412,29 +398,27 @@ class UZPipeBombRoller : HDFragGrenadeRoller {
     override bool used(actor user) {
         let hdp = HDPlayerPawn(user);
         if (hdp && hdp.player && hdp.player.crouchfactor < 0.6) {
-            user.giveInventory('UZPipeBombAmmo', 1);
-            hdp.A_Log(StringTable.localize("$PICKUP_PIPEBOMB_DEACTIVATE"), true);
+            user.giveInventory('UZLandMineAmmo', 1);
+            hdp.A_Log(StringTable.localize("$PICKUP_LANDMINE_DEACTIVATE"), true);
             destroy();
-
-            return true;
+        } else {
+            primed = true;
         }
 
-        return super.used(user);
+        return true;
     }
 
     action void A_Detonate() {
-        UZPipeBomb.detonate(invoker);
+        UZLandMine.detonate(invoker);
     }
 
     states {
         spawn:
-            PIPB A 0 nodelay {
-                HDMobAI.Frighten(self, 512);
-            }
+            LMIN A 1;
         spawn2:
-            #### A 2 {
+            #### # 2 {
                 if (abs(vel.z - keeprolling.z) > 10) {
-                    A_StartSound("weapons/pipebomb/bounce", CHAN_BODY);
+                    A_StartSound("weapons/landmine/bounce", CHAN_BODY);
                 } else if (floorz >= pos.z) {
                     A_StartSound("misc/fragroll");
                 }
@@ -448,16 +432,16 @@ class UZPipeBombRoller : HDFragGrenadeRoller {
             loop;
 
         bounce:
-            ---- A 0 {
+            #### # 0 {
                 bmissile = false;
-                vel *= 0.3;
+                vel *= 0.2;
             }
             goto spawn2;
 
         death:
-            ---- A 2 {
+            #### # 2 {
                 if (abs(vel.z - keeprolling.z) > 3) {
-                    A_StartSound("weapons/pipebomb/bounce", CHAN_BODY);
+                    A_StartSound("weapons/landmine/bounce", CHAN_BODY);
                     keeprolling = vel;
                 }
 
@@ -466,13 +450,14 @@ class UZPipeBombRoller : HDFragGrenadeRoller {
                 }
             }
             wait;
-        destroy:
-            TNT1 A 1 A_Detonate();
+        detonate:
+            #### B 8 A_StartSound("weapons/landmine/beep");
+            TNT1 A 0 A_Detonate();
             stop;
     }
 }
 
-class UZPipeBomb : HDFragGrenade {
+class UZLandMine : HDFragGrenade {
     default {
         +ROLLSPRITE;
         +ROLLCENTER;
@@ -482,24 +467,26 @@ class UZPipeBomb : HDFragGrenade {
         height 8;
         radius 8;
 
-        scale 0.2;
-        obituary "$OB_PIPEBOMB";
-        hdfraggrenade.rollertype "UZPipeBombRoller";
+        scale 0.5;
+        obituary "$OB_LANDMINE";
+        hdfraggrenade.rollertype "UZLandMineRoller";
         Mass 1500;
     }
 
     override void tick() {
         if (health < 1) {
-            UZPipeBomb.detonate(self);
+            UZLandMine.detonate(self);
             destroy();
             return;
         }
+
+        frame = (Level.time % 12) < 6;
 
         super.tick();
     }
 
     action void A_Detonate() {
-        UZPipeBomb.detonate(invoker);
+        UZLandMine.detonate(invoker);
     }
 
     static void detonate(HDActor caller) {
@@ -539,50 +526,27 @@ class UZPipeBomb : HDFragGrenade {
 
     states {
         spawn:
-            PIPB A 2 {
-                roll += 33;
-
-                HDMobAI.Frighten(self, 512);
-            }
+            LMIN A 1;
             loop;
-        destroy:
+        detonate:
+            #### B 12 A_StartSound("weapons/LandMine/beep");
             TNT1 A 1 A_Detonate();
             stop;
     }
 }
 
-class UZPipeBombDetonator : HDPickup {
-    default {
-        inventory.icon "PBDPA0";
-        inventory.amount 1;
-        scale 0.25;
-        inventory.maxamount 1;
-        inventory.pickupmessage "$PICKUP_PIPEBOMB_DETONATOR";
-        inventory.pickupsound "weapons/pocket";
-        tag "$TAG_PIPEBOMB_DETONATOR";
-        hdpickup.refid UZLD_PIPEBOMB_DETONATOR;
-        hdpickup.bulk ENC_PIPEBOMB_DETONATOR;
-    }
-
-    states {
-        spawn:
-            PBDP A -1;
-            stop;
-    }
-}
-
-class UZPipeBombAmmo : HDAmmo {
+class UZLandMineAmmo : HDAmmo {
     default {
         //+forcexybillboard
-        inventory.icon "PIPPA0";
+        inventory.icon "LMAMA0";
         inventory.amount 1;
         scale 0.3;
         inventory.maxamount 50;
-        inventory.pickupmessage "$PICKUP_PIPEBOMB";
+        inventory.pickupmessage "$PICKUP_LANDMINE";
         inventory.pickupsound "weapons/pocket";
-        tag "$TAG_PIPEBOMB";
-        hdpickup.refid UZLD_PIPEBOMB;
-        hdpickup.bulk ENC_PIPEBOMB;
+        tag "$TAG_LANDMINE";
+        hdpickup.refid UZLD_LANDMINE;
+        hdpickup.bulk ENC_LANDMINE;
         +INVENTORY.KEEPDEPLETED
     }
 
@@ -591,14 +555,14 @@ class UZPipeBombAmmo : HDAmmo {
     }
 
     override void AttachToOwner(Actor user) {
-        user.GiveInventory("UZPipeBombs", 1);
+        user.GiveInventory("UZLandMines", 1);
 
         super.AttachToOwner(user);
     }
 
     override void DetachFromOwner() {
-        if(owner && owner.player && !(owner.player.ReadyWeapon is "UZPipeBombs")) {
-            owner.TakeInventory("UZPipeBombs", 1);
+        if(owner && owner.player && !(owner.player.ReadyWeapon is "UZLandMines")) {
+            owner.TakeInventory("UZLandMines", 1);
         }
 
         super.DetachFromOwner();
@@ -606,13 +570,13 @@ class UZPipeBombAmmo : HDAmmo {
 
     states {
         spawn:
-            PIPP A -1;
+            LMAM A -1;
             stop;
     }
 }
 
 // TODO: Remove?
-class UZPipeBombSpoon : HDFragSpoon {
+class UZLandMineSpoon : HDFragSpoon {
     default {
         Scale 0.45;
     }
@@ -628,7 +592,7 @@ class UZPipeBombSpoon : HDFragSpoon {
     }
 }
 
-class UZPipeBombP : HDUPK {
+class UZLandMinePickup : HDUPK {
     default {
         //+forcexybillboard
         scale 0.4;
@@ -636,8 +600,8 @@ class UZPipeBombP : HDUPK {
         radius 6;
 
         hdupk.amount 1;
-        hdupk.pickuptype "UZPipeBombAmmo";
-        hdupk.pickupmessage "$PICKUP_PIPEBOMB";
+        hdupk.pickuptype "UZLandMineAmmo";
+        hdupk.pickupmessage "$PICKUP_LANDMINE";
         hdupk.pickupsound "weapons/rifleclick2";
 
         stamina 1;
@@ -645,20 +609,27 @@ class UZPipeBombP : HDUPK {
 
     states {
         spawn:
-            PIPP A -1;
+            LMAM A -1;
     }
 }
 
-class UZPipeBombPickup : UZPipeBombP {
-    override void postbeginplay() {
-        super.postbeginplay();
+class UZLandMineBoxPickup : HDUPK {
+    default {
+        //+forcexybillboard
+        scale 0.4;
+        height 6;
+        radius 6;
 
-        A_SpawnItemEx("UZPipeBombP",  8, 8, flags: SXF_NOCHECKPOSITION);
-        A_SpawnItemEx("UZPipeBombP",  8, 0, flags: SXF_NOCHECKPOSITION);
-        A_SpawnItemEx("UZPipeBombP",  0, 8, flags: SXF_NOCHECKPOSITION);
-        A_SpawnItemEx("UZPipeBombP", -8, 8, flags: SXF_NOCHECKPOSITION);
-        A_SpawnItemEx("UZPipeBombP", -8, 0, flags: SXF_NOCHECKPOSITION);
+        hdupk.amount 6;
+        hdupk.pickuptype "UZLandMineAmmo";
+        hdupk.pickupmessage "$PICKUP_LANDMINE_BOX";
+        hdupk.pickupsound "weapons/rifleclick2";
 
-        if (random[randpb]()) A_SpawnItemEx("UZPipeBombDetonator", 0, -8, flags: SXF_NOCHECKPOSITION);
+        stamina 1;
+    }
+
+    states {
+        spawn:
+            LMAM B -1;
     }
 }

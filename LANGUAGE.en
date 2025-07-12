@@ -3,18 +3,24 @@
 TAG_BHG                    = "Black Hole Generator";
 TAG_CLAYMORE               = "Claymore Mine";
 TAG_CLAYMORE_BOX           = "Box of Claymore Mines";
+TAG_LANDMINE               = "Land Mine";
+TAG_LANDMINE_BOX           = "Box of Land Mines";
 TAG_PIPEBOMB               = "Pipe Bomb";
 TAG_PIPEBOMB_DETONATOR     = "Detonator";
 
 PICKUP_BHG                 = "You got the Black Hole Generator!";
 PICKUP_CLAYMORE            = "Picked up a claymore mine!";
 PICKUP_CLAYMORE_BOX        = "Picked up a box of claymore mines!";
+PICKUP_LANDMINE            = "Picked up a land mine!";
+PICKUP_LANDMINE_BOX        = "Picked up a box of land mines!";
+PICKUP_LANDMINE_DEACTIVATE = "Picked up (and deactivated) a land mine!";
 PICKUP_PIPEBOMB            = "Picked up a pipe bomb!  So cool!";
 PICKUP_PIPEBOMB_DEACTIVATE = "Picked up (and deactivated) a pipe bomb!";
 PICKUP_PIPEBOMB_DETONATOR  = "Picked up a detonator.";
 
 OB_BHG                     = "%o divided by 0.";
 OB_CLAYMORE                = "%o strayed too close to a claymore.";
+OB_LANDMINE                = "%o didn't watch their step.";
 OB_PIPEBOMB                = "%o should have read the warning label.";
 
 // Options Menu Titles
@@ -60,6 +66,14 @@ UZWEAPONS_RESETALLOPTIONS  = "Reset all options for UZ's Weapons Pack";
 // Black Hole Generator Options Text
 MENU_BHG_SPAWNTEXT         = "Control the spawn rate of Black Hole Generator on BFG-9000s:";
 MENU_BHG_BACKPACKS         = "Control whether Black Hole Generators spawn in Backpacks:";
+
+// Claymore Mines Options Text
+MENU_LANDMINE_SPAWNTEXT    = "Control the spawn rate of Claymore Mines on Frag Grenades:";
+MENU_LANDMINE_BACKPACKS    = "Control whether Claymore Mines spawn in Backpacks:";
+
+// LAnd Mines Options Text
+MENU_LANDMINE_SPAWNTEXT    = "Control the spawn rate of Land Mines on Frag Grenades:";
+MENU_LANDMINE_BACKPACKS    = "Control whether Land Mines spawn in Backpacks:";
 
 // Pipe Bombs Options Text
 MENU_PIPEBOMB_SPAWNTEXT    = "Control the spawn rate of Pipe Bombs on Frag Grenades:";

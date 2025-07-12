@@ -8,6 +8,9 @@ DoomEdNums{
 	23422=UZClaymoreMineBox
 	23423=UZPlacedClaymore
 	23424=UZEnemyClaymore
-	23425=UZPipeBombP
-    26426=UZPipeBombPickup
+	23425=UZLandMine
+	23426=UZLandMinePickup
+	23427=UZLandMineBoxPickup
+	23428=UZPipeBombP
+    26429=UZPipeBombPickup
 }

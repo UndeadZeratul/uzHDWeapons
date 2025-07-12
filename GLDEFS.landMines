@@ -1,0 +1,27 @@
+Pointlight Mine_Light {
+	Color 9.0 0.2 0.2
+	Size 50
+}
+
+Object UZLandMine {
+	Frame LMINB { Light Mine_Light }
+}
+
+Object UZLandMineRoller {
+	Frame LMINB { Light Mine_Light }
+}
+
+Brightmap sprite MINEA0
+{
+	map BMINE01
+}
+
+Brightmap sprite MINEB0
+{
+	map BMINE02
+}
+
+Brightmap sprite LMINB0
+{
+	map BMINE03
+}

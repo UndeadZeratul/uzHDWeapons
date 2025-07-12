@@ -1,9 +1,15 @@
 // Claymore Mines
-Claymore/Place		DSCLAYST
-Claymore/Trigger	DSCLAYBP
-Claymore/Armed		CLAYARMD
+weapons/ClaymoreMine/Place      DSCLAYST
+weapons/ClaymoreMine/Trigger    DSCLAYBP
+weapons/ClaymoreMine/Armed      CLAYARMD
+
+
+// Land Mines
+weapons/LandMine/Beep           MINEBEEP
+weapons/LandMine/Bounce         MINEBOUN
+weapons/LandMine/Throw          MINETHRW
 
 
 // Pipe Bombs
-weapons/pipebomb/arm           DSPIPARM
-weapons/pipebomb/bounce        DSPIPBNC
+weapons/PipeBomb/arm            DSPIPARM
+weapons/PipeBomb/bounce         DSPIPBNC
