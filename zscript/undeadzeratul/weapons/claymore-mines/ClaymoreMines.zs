@@ -45,16 +45,23 @@ class UZPlacedClaymore : HDUPK {
             TNT1 A 0 {
                 let speed = getDefaultByType("HDB_Frag").speed;
                 A_SpawnChunks("HDB_frag", 90, speed * 0.8, speed * 1.2, 45, 45);
-		A_HDBlast(
-			pushradius:256,pushamount:128,fullpushradius:96,anglespread:30
-		);
-				A_SpawnChunks("HDSmoke", 12, speed * 0.012, speed * 0.001, 75, 12);
-				A_SpawnItemEx("HDExplosion",
-			random(-1,1),random(-1,1),2, 0,0,0,
-			0,SXF_ABSOLUTEMOMENTUM|SXF_NOCHECKPOSITION|SXF_TRANSFERPOINTERS
-		);
-		A_AlertMonsters();
-		DistantQuaker.Quake(self,4,35,512,10);
+                A_HDBlast(
+                    pushradius: 256,
+                    pushamount: 128,
+                    fullpushradius: 96,
+                    anglespread: 30
+                );
+                A_SpawnChunks("HDSmoke", 12, speed * 0.012, speed * 0.001, 75, 12);
+                A_SpawnItemEx(
+                    "HDExplosion",
+                    random(-1, 1), random(-1, 1), 2,
+                    0, 0, 0,
+                    0,
+                    SXF_ABSOLUTEMOMENTUM|SXF_NOCHECKPOSITION|SXF_TRANSFERPOINTERS
+                );
+                DistantQuaker.Quake(self, 4, 35, 512, 10);
+                
+                A_AlertMonsters();
             }
             stop;
     }
