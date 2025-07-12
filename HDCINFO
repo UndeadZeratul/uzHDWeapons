@@ -1,5 +1,7 @@
 // Backpack Spawn Pool Filters
 addBPSpawnPoolFilter => { "name": "UZBHGen", "allowed": "#bhg_allowBackpacks" }
+addBPSpawnPoolFilter => { "name": "UZClaymoreMine", "allowed": "#pipebomb_allowBackpacks" }
+addBPSpawnPoolFilter => { "name": "UZLandMineAmmo", "allowed": "#pipebomb_allowBackpacks" }
 addBPSpawnPoolFilter => { "name": "UZPipeBombAmmo", "allowed": "#pipebomb_allowBackpacks" }
 
 // Spawn Tables
@@ -12,6 +14,10 @@ addSpawnTableSingleEntry => { "tableName": "BFG9000Replaces", "name": "UZBHGen",
 // Claymore Mines
 addSpawnTableSingleEntry => { "tableName": "FragP", "name": "UZClaymoreMine", "chance": "#claymore_spawn_bias", "persists": "#claymore_persistent_spawning" }
 addSpawnTableSingleEntry => { "tableName": "UZFragGrenadePickup", "name": "UZClaymoreMineBox", "chance": "#claymore_spawn_bias", "persists": "#claymore_persistent_spawning" }
+
+// Land Mines
+addSpawnTableSingleEntry => { "tableName": "FragP", "name": "UZLandMinePickup", "chance": "#landmine_spawn_bias", "persists": "#landmine_persistent_spawning" }
+addSpawnTableSingleEntry => { "tableName": "UZFragGrenadePickup", "name": "UZLandMineBoxPickup", "chance": "#landmine_spawn_bias", "persists": "#landmine_persistent_spawning" }
 
 // Pipe Bomb Spawn Entries
 addSpawnTableSingleEntry => { "tableName": "FragP", "name": "UZPipeBombP", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
