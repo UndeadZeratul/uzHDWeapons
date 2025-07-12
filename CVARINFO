@@ -6,10 +6,15 @@ server bool  bhg_persistent_spawning      = false;
 
 // Claymore Mines
 server bool  claymore_allowBackpacks      = true;
-server float claymore_spawn_bias          = 0.1;
+server float claymore_spawn_bias          = 0.2;
 server bool  claymore_persistent_spawning = false;
+
+// Land Mines
+server bool  landmine_allowBackpacks      = true;
+server float landmine_spawn_bias          = 0.2;
+server bool  landmine_persistent_spawning = false;
 
 // Pipe Bombs
 server bool  pipebomb_allowBackpacks      = true;
-server float pipebomb_spawn_bias          = 0.1;
+server float pipebomb_spawn_bias          = 0.2;
 server bool  pipebomb_persistent_spawning = false;
