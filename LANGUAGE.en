@@ -68,8 +68,8 @@ MENU_BHG_SPAWNTEXT         = "Control the spawn rate of Black Hole Generator on 
 MENU_BHG_BACKPACKS         = "Control whether Black Hole Generators spawn in Backpacks:";
 
 // Claymore Mines Options Text
-MENU_LANDMINE_SPAWNTEXT    = "Control the spawn rate of Claymore Mines on Frag Grenades:";
-MENU_LANDMINE_BACKPACKS    = "Control whether Claymore Mines spawn in Backpacks:";
+MENU_CLAYMORE_SPAWNTEXT    = "Control the spawn rate of Claymore Mines on Frag Grenades:";
+MENU_CLAYMORE_BACKPACKS    = "Control whether Claymore Mines spawn in Backpacks:";
 
 // LAnd Mines Options Text
 MENU_LANDMINE_SPAWNTEXT    = "Control the spawn rate of Land Mines on Frag Grenades:";

@@ -4,6 +4,10 @@ OptionMenu "UZWeaponsMenu" {
 
 	StaticText "$MENU_EXPLOSIVES_TITLE", "Brown"
 	StaticText ""
+	Submenu "$TAG_CLAYMORE", "claymoreSpawning", 0, 1
+	StaticText ""
+	Submenu "$TAG_LANDMINE", "landmineSpawning", 0, 1
+	StaticText ""
 	Submenu "$TAG_PIPEBOMB", "pipebombSpawning", 0, 1
 	StaticText ""
 
@@ -27,6 +31,64 @@ AddOptionMenu "HDAddonMenu" {
 
 
 // Explosives
+
+OptionMenu "claymoreSpawning" {
+	Title "$TAG_CLAYMORE"
+
+	StaticText "$MENU_NOTICE", "Brown"
+	StaticText "$MENU_SPAWNRATE_TEXT1", "White"
+	StaticText "$MENU_SPAWNRATE_TEXT2", "White"
+	StaticText ""
+
+	StaticText "$MENU_SPAWNOPTIONS", "Brown"
+	StaticText "$MENU_CLAYMORE_SPAWNTEXT", "White"
+	Slider "$MENU_WEPSPAWNRATE", "claymore_spawn_bias", 0.0, 100, .01, 2
+	SafeCommand "$MENU_RESETWEP", "resetcvar claymore_spawn_bias"
+	StaticText ""
+
+	StaticText "$MENU_CLAYMORE_BACKPACKS", "White"
+	Option "$MENU_BACKPACKSALLOWED", "claymore_allowBackpacks", "OnOff"
+	StaticText ""
+
+	StaticText "$MENU_PERSISTENCYOPTIONS", "Brown"
+	StaticText "$MENU_PERSISTENCY_TEXT", "White"
+	Option "$MENU_PERSISTENCY", "claymore_persistent_spawning", "OnOff"
+	SafeCommand "$MENU_RESETPERSISTENCY", "resetcvar claymore_persistent_spawning"
+	StaticText ""
+	StaticText ""
+
+	StaticText "$MENU_RESETOPTIONS", "Brown"
+	SafeCommand "$MENU_RESETALLOPTIONS", "claymore_reset_cvars"
+}
+
+OptionMenu "landmineSpawning" {
+	Title "$TAG_LANDMINE"
+
+	StaticText "$MENU_NOTICE", "Brown"
+	StaticText "$MENU_SPAWNRATE_TEXT1", "White"
+	StaticText "$MENU_SPAWNRATE_TEXT2", "White"
+	StaticText ""
+
+	StaticText "$MENU_SPAWNOPTIONS", "Brown"
+	StaticText "$MENU_LANDMINE_SPAWNTEXT", "White"
+	Slider "$MENU_WEPSPAWNRATE", "landmine_spawn_bias", 0.0, 100, .01, 2
+	SafeCommand "$MENU_RESETWEP", "resetcvar landmine_spawn_bias"
+	StaticText ""
+
+	StaticText "$MENU_LANDMINE_BACKPACKS", "White"
+	Option "$MENU_BACKPACKSALLOWED", "landmine_allowBackpacks", "OnOff"
+	StaticText ""
+
+	StaticText "$MENU_PERSISTENCYOPTIONS", "Brown"
+	StaticText "$MENU_PERSISTENCY_TEXT", "White"
+	Option "$MENU_PERSISTENCY", "landmine_persistent_spawning", "OnOff"
+	SafeCommand "$MENU_RESETPERSISTENCY", "resetcvar landmine_persistent_spawning"
+	StaticText ""
+	StaticText ""
+
+	StaticText "$MENU_RESETOPTIONS", "Brown"
+	SafeCommand "$MENU_RESETALLOPTIONS", "landmine_reset_cvars"
+}
 
 OptionMenu "pipebombSpawning" {
 	Title "$TAG_PIPEBOMB"
