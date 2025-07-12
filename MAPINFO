@@ -1,5 +1,5 @@
 GameInfo {
-    AddEventHandlers = "UZWeaponsEasterEggsHandler", "UZWeaponsHandler"
+    AddEventHandlers = "UZWeaponsEasterEggsHandler"
 }
 
 DoomEdNums{

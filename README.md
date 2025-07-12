@@ -1,6 +1,8 @@
 # UZ's Weapons Pack
 _Creative, I know_
 
+Requires [HDCoreLib](https://github.com/HDest-Community/hdest-core-lib).
+
 ## Black Hole Generator
 ![bhg](./sprites/black-hole-generator/BHGPA0.png)
 
