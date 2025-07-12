@@ -82,3 +82,9 @@ MENU_PIPEBOMB_BACKPACKS    = "Control whether Pipe Bombs spawn in Backpacks:";
 // Help Text
 BHGWH_FIRE                 = "Charge Singularity";
 BHGWH_RELOAD               = "Reload Batteries";
+
+//Claymore Log
+CLAYMORELOG1			   = "Look for ground to place the Claymore on.";
+CLAYMORELOG2			   = "Can't deploy here.";
+CLAYMORELOG3			   = "Claymore planted.";
+CLAYMORELOG4			   = "\cj  Pick it up to defuse. \cd";

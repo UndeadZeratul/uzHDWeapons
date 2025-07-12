@@ -45,6 +45,16 @@ class UZPlacedClaymore : HDUPK {
             TNT1 A 0 {
                 let speed = getDefaultByType("HDB_Frag").speed;
                 A_SpawnChunks("HDB_frag", 90, speed * 0.8, speed * 1.2, 45, 45);
+		A_HDBlast(
+			pushradius:256,pushamount:128,fullpushradius:96,anglespread:30
+		);
+				A_SpawnChunks("HDSmoke", 12, speed * 0.012, speed * 0.001, 75, 12);
+				A_SpawnItemEx("HDExplosion",
+			random(-1,1),random(-1,1),2, 0,0,0,
+			0,SXF_ABSOLUTEMOMENTUM|SXF_NOCHECKPOSITION|SXF_TRANSFERPOINTERS
+		);
+		A_AlertMonsters();
+		DistantQuaker.Quake(self,4,35,512,10);
             }
             stop;
     }
@@ -98,7 +108,7 @@ class UZClaymoreMine : HDPickup {
             !dlt.hitType == TRACE_HitFloor
             || HDF.linetracehitsky(dlt)
         ){
-            A_Log(string.format(StringTable.Localize("$DORBUSTLOG1")), true);
+            A_Log(string.format(StringTable.Localize("$CLAYMORELOG1")), true);
             return;
         }
 
@@ -106,7 +116,7 @@ class UZClaymoreMine : HDPickup {
         let ddd = UZPlacedClaymore(spawn("UZPlacedClaymore", plantspot, ALLOW_REPLACE));
 
         if (!ddd) {
-            A_Log(StringTable.Localize("$DORBUSTLOG2"), true);
+            A_Log(StringTable.Localize("$CLAYMORELOG2"), true);
             return;
         }
 
@@ -115,9 +125,9 @@ class UZClaymoreMine : HDPickup {
         ddd.master = invoker.owner;
         ddd.angle = self.angle;
         
-        string feedback = StringTable.Localize("$DORBUSTLOG3");
+        string feedback = StringTable.Localize("$CLAYMORELOG3");
 
-        if (HDWeapon.CheckDoHelpText(self)) feedback.appendformat(StringTable.Localize("$DORBUSTLOG4"));
+        if (HDWeapon.CheckDoHelpText(self)) feedback.appendformat(StringTable.Localize("$CLAYMORELOG4"));
         
         A_Log(feedback, true);
         
