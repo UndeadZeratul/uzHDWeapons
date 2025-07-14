@@ -3,6 +3,8 @@ class UZPlacedClaymore : HDUPK {
     //$Category Monsters
     //$Title "Placed Claymore Mine (Friendly)"
 
+    int seedist; property seedist:seedist;
+
     Default {
         Health 1;
         Radius 8;
@@ -14,11 +16,35 @@ class UZPlacedClaymore : HDUPK {
         +FRIENDLY;
         +NOTARGET;
         +NOTAUTOAIMED;
+
+        UZPlacedClaymore.seedist 8;
         
         hdupk.pickupmessage "$PICKUP_CLAYMORE";
         hdupk.pickuptype "UZClaymoreMine";
 
         Obituary "$OB_CLAYMORE";
+    }
+
+    void A_Detonate() {
+        let speed = getDefaultByType("HDB_Frag").speed;
+        A_SpawnChunks("HDB_frag", 90, speed * 0.8, speed * 1.2, 45, 45);
+        A_HDBlast(
+            pushradius: 256,
+            pushamount: 128,
+            fullpushradius: 96,
+            anglespread: 30
+        );
+        A_SpawnChunks("HDSmoke", 12, speed * 0.012, speed * 0.001, 75, 12);
+        A_SpawnItemEx(
+            "HDExplosion",
+            random(-1, 1), random(-1, 1), 2,
+            0, 0, 0,
+            0,
+            SXF_ABSOLUTEMOMENTUM|SXF_NOCHECKPOSITION|SXF_TRANSFERPOINTERS
+        );
+        DistantQuaker.Quake(self, 4, 35, 512, 10);
+        
+        A_AlertMonsters();
     }
 
     States {
@@ -29,40 +55,31 @@ class UZPlacedClaymore : HDUPK {
             CLAP A 1 {
                 // look for a new target in a 90 degree arc to the front of the mine every tic
                 // red particles depict the visible arc
-                A_LookEx(LOF_NOSOUNDCHECK, 4, HDCONST_ONEMETRE * 8, 0, 90, "Trigger");
+                A_LookEx(LOF_NOSOUNDCHECK, 4, seedist * HDCONST_ONEMETRE, 0, 90, "Trigger");
                 A_ClearTarget();
 
                 if (hd_debug) {
-                    A_SpawnParticle("Red", SPF_FULLBRIGHT|SPF_RELATIVE|SPF_NOTIMEFREEZE, 18, 2, 45, 0, 0, 9, 2, 0, 0, 0, 0, 0, 1, -1, 0);
-                    A_SpawnParticle("Red", SPF_FULLBRIGHT|SPF_RELATIVE|SPF_NOTIMEFREEZE, 18, 2, -45, 0, 0, 9, 2, 0, 0, 0, 0, 0, 1, -1, 0);
+                    for (let i = 0; i < seedist; i++) {
+                        for (let j = -45; j <= 45; j += (seedist - i)) {
+                            A_SpawnParticle(
+                                "Red",
+                                SPF_FULLBRIGHT|SPF_RELATIVE,
+                                1, 2, j,
+                                HDCONST_ONEMETRE * (i + 1), 0, 9,
+                                0, 0, 0,
+                                0, 0, 0,
+                                1, -1, 0
+                            );
+                        }
+                    }
                 }
             }
             Loop;
         Trigger:
             CLAP A 8 A_StartSound("weapons/ClaymoreMine/Trigger");
-            CLAP A 0 A_Die;
+            CLAP A 0 A_Die();
         Death:
-            TNT1 A 0 {
-                let speed = getDefaultByType("HDB_Frag").speed;
-                A_SpawnChunks("HDB_frag", 90, speed * 0.8, speed * 1.2, 45, 45);
-                A_HDBlast(
-                    pushradius: 256,
-                    pushamount: 128,
-                    fullpushradius: 96,
-                    anglespread: 30
-                );
-                A_SpawnChunks("HDSmoke", 12, speed * 0.012, speed * 0.001, 75, 12);
-                A_SpawnItemEx(
-                    "HDExplosion",
-                    random(-1, 1), random(-1, 1), 2,
-                    0, 0, 0,
-                    0,
-                    SXF_ABSOLUTEMOMENTUM|SXF_NOCHECKPOSITION|SXF_TRANSFERPOINTERS
-                );
-                DistantQuaker.Quake(self, 4, 35, 512, 10);
-                
-                A_AlertMonsters();
-            }
+            TNT1 A 0 A_Detonate();
             stop;
     }
 }
