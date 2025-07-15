@@ -351,7 +351,7 @@ class UZLandMineRoller : HDFragGrenadeRoller {
         }
 
         // Update the frame to "animate" it beeping
-        frame = (Level.time % 12) < 6;
+        if (primed) frame = (Level.time % 12) < 6;
 
         // Reset the "Fuze"
         fuze = 0;
