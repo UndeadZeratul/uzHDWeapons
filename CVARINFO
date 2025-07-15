@@ -14,6 +14,11 @@ server bool  landmine_allowBackpacks      = true;
 server float landmine_spawn_bias          = 0.2;
 server bool  landmine_persistent_spawning = false;
 
+// Laser Tripbombs
+server bool  lasertripbomb_allowBackpacks      = true;
+server float lasertripbomb_spawn_bias          = 0.2;
+server bool  lasertripbomb_persistent_spawning = false;
+
 // Pipe Bombs
 server bool  pipebomb_allowBackpacks      = true;
 server float pipebomb_spawn_bias          = 0.2;

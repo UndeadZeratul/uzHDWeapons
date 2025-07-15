@@ -83,8 +83,14 @@ MENU_PIPEBOMB_BACKPACKS    = "Control whether Pipe Bombs spawn in Backpacks:";
 BHGWH_FIRE                 = "Charge Singularity";
 BHGWH_RELOAD               = "Reload Batteries";
 
-//Claymore Log
-CLAYMORELOG1			   = "Look for ground to place the Claymore on.";
-CLAYMORELOG2			   = "Can't deploy here.";
-CLAYMORELOG3			   = "Claymore planted.";
-CLAYMORELOG4			   = "\cj  Pick it up to defuse. \cd";
+// Claymore Log
+CLAYMORELOG1               = "Look for ground to place the Claymore on.";
+CLAYMORELOG2               = "Can't deploy here.";
+CLAYMORELOG3               = "Claymore planted.";
+CLAYMORELOG4               = "\cj  Pick it up to defuse. \cd";
+
+// Laser Tripbomb Log
+LASERTRIPBOMBLOG1          = "Look for wall to place the Laser Tripbomb on.";
+LASERTRIPBOMBLOG2          = "Can't plant here.";
+LASERTRIPBOMBLOG3          = "Laser Tripbomb planted.";
+LASERTRIPBOMBLOG4          = "\cj  Pick it up to defuse. \cd";

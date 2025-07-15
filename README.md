@@ -30,6 +30,14 @@ Requires [HDCoreLib](https://github.com/HDest-Community/hdest-core-lib).
 - Press `[USE]` **while crouching** near active land mine to pick up & deactivate land mine.
 - Can be shot in a pinch.  Careful, may get cought in the cross-fire!
 
+## Laser Tripbombs
+![laser-tripbomb](./sprites/laser-tripmines/LTBGA0.png)
+
+- Loadout Code: `ltb`
+- Similar to Doorbusters in that they're an inventory item you `[USE]` to place on a wall at the spot you're looking at, facing away from that wall.  If a hostile walks across the laser, it'll detonate.
+- Press `[USE]` near laser tripbomb to pick up & deactivate it.
+- Can be shot in a pinch.
+
 ## Pipe Bombs
 ![pipebomb](./sprites/pipe-bombs/PIPPA0.png)
 
@@ -70,6 +78,12 @@ Requires [HDCoreLib](https://github.com/HDest-Community/hdest-core-lib).
 - Sprites: LucasArts (Dark Forces), Gothic
 - Sprite Edit: Gothic
 - Idea Base: Land Mines from Stronghold
+
+### Laser Tripbombs
+- Code: Matt
+- Sounds: 3D Realms (Duke Nukem 3D)
+- Sprites: 3D Realms (Duke Nukem 3D), id Software (Doom)
+
 
 ### Pipe Bombs
 - Sounds: 3D Realms, Eurocom (Duke Nukem 64), Sunstorm Interactive (DN Manhattan Project)

@@ -10,6 +10,11 @@ weapons/LandMine/Bounce         MINEBOUN
 weapons/LandMine/Throw          MINETHRW
 
 
+// Laser Tripbombs
+weapons/LaserTripbomb/beep      DSLTBBEP
+weapons/LaserTripbomb/plant     DSLTBPLT
+
+
 // Pipe Bombs
 weapons/PipeBomb/arm            DSPIPARM
 weapons/PipeBomb/bounce         DSPIPBNC
