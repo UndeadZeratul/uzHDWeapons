@@ -1,8 +1,9 @@
 Pointlight LTB_Laser_Light {
-    Color 9.0 0.2 0.2
-    Size 8
+    Color 1.0 0.2 0.2
+    Size 1024
+	Spot 0.001 0.01
 }
 
 Object UZLaserTripBombPlanted {
-    Frame LTBA { Light LTB_Laser_Light }
+    Frame LTBAB { Light LTB_Laser_Light }
 }

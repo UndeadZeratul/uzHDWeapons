@@ -103,7 +103,7 @@ class UZLaserTripBombPlanted : HDUPK {
             data: dlt
         );
 
-        for (let i = 0.0; i < clamp(dlt.distance, 0, 1024); i += 0.5) A_SpawnParticle(
+		if (hd_debug) for (let i = 0.0; i < clamp(dlt.distance, 0, 1024); i += 0.5) A_SpawnParticle(
             "Red",
             SPF_FULLBRIGHT|SPF_RELATIVE,
             1, 1, 0,
@@ -160,13 +160,13 @@ class UZLaserTripBombPlanted : HDUPK {
 
     states {
         spawn:
-            LTBA A 12;
+            LTBA A 20;
         laser:
-            #### # 1 A_LTBLook();
+            #### B 1 A_LTBLook();
             loop;
         detonate:
-            #### # 12 A_StartSound("weapons/LaserTripbomb/beep", CHAN_AUTO);
-            #### # 0 A_Die();
+            #### B 12 A_StartSound("weapons/LaserTripbomb/beep", CHAN_AUTO);
+            #### B 0 A_Die();
         Death:
             TNT1 A 0 A_Detonate();
             stop;
