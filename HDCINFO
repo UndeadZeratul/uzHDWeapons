@@ -1,7 +1,8 @@
 // Backpack Spawn Pool Filters
 addBPSpawnPoolFilter => { "name": "UZBHGen", "allowed": "#bhg_allowBackpacks" }
-addBPSpawnPoolFilter => { "name": "UZClaymoreMine", "allowed": "#pipebomb_allowBackpacks" }
-addBPSpawnPoolFilter => { "name": "UZLandMineAmmo", "allowed": "#pipebomb_allowBackpacks" }
+addBPSpawnPoolFilter => { "name": "UZClaymoreMine", "allowed": "#claymore_allowBackpacks" }
+addBPSpawnPoolFilter => { "name": "UZLandMineAmmo", "allowed": "#landmine_allowBackpacks" }
+addBPSpawnPoolFilter => { "name": "UZLaserTripBomb", "allowed": "#lasertripbomb_allowBackpacks" }
 addBPSpawnPoolFilter => { "name": "UZPipeBombAmmo", "allowed": "#pipebomb_allowBackpacks" }
 
 // Spawn Tables
@@ -19,10 +20,17 @@ addSpawnTableSingleEntry => { "tableName": "UZFragGrenadePickup", "name": "UZCla
 addSpawnTableSingleEntry => { "tableName": "FragP", "name": "UZLandMinePickup", "chance": "#landmine_spawn_bias", "persists": "#landmine_persistent_spawning" }
 addSpawnTableSingleEntry => { "tableName": "UZFragGrenadePickup", "name": "UZLandMineBoxPickup", "chance": "#landmine_spawn_bias", "persists": "#landmine_persistent_spawning" }
 
+// Laser Tripbomb Spawn Entries
+addSpawnTableSingleEntry => { "tableName": "FragP", "name": "UZLaserTripBombP", "chance": "#lasertripbomb_spawn_bias", "persists": "#lasertripbomb_persistent_spawning" }
+addSpawnTableSingleEntry => { "tableName": "UZFragGrenadePickup", "name": "UZLaserTripBombPickup", "chance": "#lasertripbomb_spawn_bias", "persists": "#lasertripbomb_persistent_spawning" }
+
 // Pipe Bomb Spawn Entries
 addSpawnTableSingleEntry => { "tableName": "FragP", "name": "UZPipeBombP", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
 addSpawnTableSingleEntry => { "tableName": "UZFragGrenadePickup", "name": "UZPipeBombPickup", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
 
 // AceCorp Weapon Crate Filters
 addWeaponCrateFilter => { "name": "UZBHGen", "allowed": "#bhg_allowBackpacks" }
+addWeaponCrateFilter => { "name": "UZClaymoreMine", "allowed": "#claymore_allowBackpacks" }
+addWeaponCrateFilter => { "name": "UZLandMineAmmo", "allowed": "#landmine_allowBackpacks" }
+addWeaponCrateFilter => { "name": "UZLaserTripBomb", "allowed": "#lasertripbomb_allowBackpacks" }
 addWeaponCrateFilter => { "name": "UZPipeBombAmmo", "allowed": "#pipebomb_allowBackpacks" }
