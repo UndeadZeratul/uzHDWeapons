@@ -7,26 +7,26 @@ addBPSpawnPoolFilter => { "name": "UZPipeBombAmmo", "allowed": "#pipebomb_allowB
 
 // Spawn Tables
 newSpawnTable => { "spawnName": "FragP", "addOriginalThing": "true", "persists": "true" }
-newSpawnTable => { "spawnName": "UZFragGrenadePickup", "addOriginalThing": "true", "persists": "true" }
+newSpawnTable => { "spawnName": "HDFragGrenadePickup", "addOriginalThing": "true", "persists": "true" }
 
 // Black Hole Generator Spawn Entries
 addSpawnTableSingleEntry => { "tableName": "BFG9000Replaces", "name": "UZBHGen", "chance": "#bhg_spawn_bias", "persists": "#bhg_persistent_spawning" }
 
 // Claymore Mines
 addSpawnTableSingleEntry => { "tableName": "FragP", "name": "UZClaymoreMine", "chance": "#claymore_spawn_bias", "persists": "#claymore_persistent_spawning" }
-addSpawnTableSingleEntry => { "tableName": "UZFragGrenadePickup", "name": "UZClaymoreMineBox", "chance": "#claymore_spawn_bias", "persists": "#claymore_persistent_spawning" }
+addSpawnTableSingleEntry => { "tableName": "HDFragGrenadePickup", "name": "UZClaymoreMineBox", "chance": "#claymore_spawn_bias", "persists": "#claymore_persistent_spawning" }
 
 // Land Mines
 addSpawnTableSingleEntry => { "tableName": "FragP", "name": "UZLandMinePickup", "chance": "#landmine_spawn_bias", "persists": "#landmine_persistent_spawning" }
-addSpawnTableSingleEntry => { "tableName": "UZFragGrenadePickup", "name": "UZLandMineBoxPickup", "chance": "#landmine_spawn_bias", "persists": "#landmine_persistent_spawning" }
+addSpawnTableSingleEntry => { "tableName": "HDFragGrenadePickup", "name": "UZLandMineBoxPickup", "chance": "#landmine_spawn_bias", "persists": "#landmine_persistent_spawning" }
 
 // Laser Tripbomb Spawn Entries
 addSpawnTableSingleEntry => { "tableName": "FragP", "name": "UZLaserTripBombP", "chance": "#lasertripbomb_spawn_bias", "persists": "#lasertripbomb_persistent_spawning" }
-addSpawnTableSingleEntry => { "tableName": "UZFragGrenadePickup", "name": "UZLaserTripBombPickup", "chance": "#lasertripbomb_spawn_bias", "persists": "#lasertripbomb_persistent_spawning" }
+addSpawnTableSingleEntry => { "tableName": "HDFragGrenadePickup", "name": "UZLaserTripBombPickup", "chance": "#lasertripbomb_spawn_bias", "persists": "#lasertripbomb_persistent_spawning" }
 
 // Pipe Bomb Spawn Entries
 addSpawnTableSingleEntry => { "tableName": "FragP", "name": "UZPipeBombP", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
-addSpawnTableSingleEntry => { "tableName": "UZFragGrenadePickup", "name": "UZPipeBombPickup", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
+addSpawnTableSingleEntry => { "tableName": "HDFragGrenadePickup", "name": "UZPipeBombPickup", "chance": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
 
 // AceCorp Weapon Crate Filters
 addWeaponCrateFilter => { "name": "UZBHGen", "allowed": "#bhg_allowBackpacks" }
