@@ -5,6 +5,7 @@ weapons/ClaymoreMine/Armed      CLAYARMD
 
 
 // Land Mines
+weapons/LandMine/Arm            DSPIPARM
 weapons/LandMine/Beep           MINEBEEP
 weapons/LandMine/Bounce         MINEBOUN
 weapons/LandMine/Throw          MINETHRW

@@ -378,8 +378,11 @@ class UZLandMineRoller : HDFragGrenadeRoller {
                 && mo.pos.z <= pos.z + height
                 && Distance2D(mo) < radius + mo.radius
             ) {
+                if (!steppedOn) A_StartSound("weapons/LandMine/Arm");
+
                 currentlySteppedOn = true;
                 primed = true;
+
                 break;
             }
         }
