@@ -85,6 +85,8 @@ class UZLaserTripBombPlanted : HDUPK {
         height 4;
         radius 3;
         scale 0.25;
+
+        obituary "$OB_LASER_TRIPBOMB";
     }
 
     override bool OnGrab(actor grabber) {

@@ -1,96 +1,126 @@
 [en default]
 
-TAG_BHG                    = "Black Hole Generator";
-TAG_CLAYMORE               = "Claymore Mine";
-TAG_CLAYMORE_BOX           = "Box of Claymore Mines";
-TAG_LANDMINE               = "Land Mine";
-TAG_LANDMINE_BOX           = "Box of Land Mines";
-TAG_PIPEBOMB               = "Pipe Bomb";
-TAG_PIPEBOMB_DETONATOR     = "Detonator";
+TAG_BHG                        = "Black Hole Generator";
+TAG_CLAYMORE                   = "Claymore Mine";
+TAG_CLAYMORE_BOX               = "Box of Claymore Mines";
+TAG_LANDMINE                   = "Land Mine";
+TAG_LANDMINE_BOX               = "Box of Land Mines";
+TAG_LASER_TRIPBOMB             = "Laser Trip-Bomb";
+TAG_PIPEBOMB                   = "Pipe Bomb";
+TAG_PIPEBOMB_DETONATOR         = "Detonator";
 
-PICKUP_BHG                 = "You got the Black Hole Generator!";
-PICKUP_CLAYMORE            = "Picked up a claymore mine!";
-PICKUP_CLAYMORE_BOX        = "Picked up a box of claymore mines!";
-PICKUP_LANDMINE            = "Picked up a land mine!";
-PICKUP_LANDMINE_BOX        = "Picked up a box of land mines!";
-PICKUP_LANDMINE_DEACTIVATE = "Picked up (and deactivated) a land mine!";
-PICKUP_PIPEBOMB            = "Picked up a pipe bomb!  So cool!";
-PICKUP_PIPEBOMB_DEACTIVATE = "Picked up (and deactivated) a pipe bomb!";
-PICKUP_PIPEBOMB_DETONATOR  = "Picked up a detonator.";
+PICKUP_BHG                     = "You got the Black Hole Generator!";
+PICKUP_CLAYMORE                = "Picked up a claymore mine!";
+PICKUP_CLAYMORE_BOX            = "Picked up a box of claymore mines!";
+PICKUP_LANDMINE                = "Picked up a land mine!";
+PICKUP_LANDMINE_BOX            = "Picked up a box of land mines!";
+PICKUP_LANDMINE_DEACTIVATE     = "Picked up (and deactivated) a land mine!";
+PICKUP_LASER_TRIPBOMB          = "Picked up a laser trip-bomb!";
+PICKUP_PIPEBOMB                = "Picked up a pipe bomb!  So cool!";
+PICKUP_PIPEBOMB_DEACTIVATE     = "Picked up (and deactivated) a pipe bomb!";
+PICKUP_PIPEBOMB_DETONATOR      = "Picked up a detonator.";
 
-OB_BHG                     = "%o divided by 0.";
-OB_CLAYMORE                = "%o strayed too close to a claymore.";
-OB_LANDMINE                = "%o didn't watch their step.";
-OB_PIPEBOMB                = "%o should have read the warning label.";
+OB_BHG                         = "%o divided by 0.";
+OB_CLAYMORE                    = "%o strayed too close to a claymore.";
+OB_LANDMINE                    = "%o didn't watch their step.";
+OB_LASER_TRIPBOMB              = "%o got tripped up.";
+OB_PIPEBOMB                    = "%o should have read the warning label.";
 
 // Options Menu Titles
-UZWEAPONS_MENU             = "\c[UZPurple]Ⓤ\c- UZ's Weapons Pack";
-MENU_EXPLOSIVES_TITLE      = "--- Explosives ---";
-MENU_RESETOPTIONS_TITLE    = "--- Reset Options ---";
+UZWEAPONS_MENU                 = "\c[UZPurple]Ⓤ\c- UZ's Weapons Pack";
+MENU_EXPLOSIVES_TITLE          = "--- Explosives ---";
+MENU_RESETOPTIONS_TITLE        = "--- Reset Options ---";
 
 // Menu Section Headers
-MENU_SPAWNOPTIONS          = "Spawn Options";
-MENU_WEPSPAWNOPTIONS       = "Weapon Spawn Options";
-MENU_MAGSPAWNOPTIONS       = "Magazine Spawn Options";
-MENU_PERSISTENCYOPTIONS    = "Spawn Persistence Options";
-MENU_RESETOPTIONS          = "Reset Options";
-MENU_RESETALLOPTIONS       = "Reset all Options";
+MENU_SPAWNOPTIONS              = "Spawn Options";
+MENU_WEPSPAWNOPTIONS           = "Weapon Spawn Options";
+MENU_MAGSPAWNOPTIONS           = "Magazine Spawn Options";
+MENU_PERSISTENCYOPTIONS        = "Spawn Persistence Options";
+MENU_RESETOPTIONS              = "Reset Options";
+MENU_RESETALLOPTIONS           = "Reset all Options";
 
 // Menu Static Text
-MENU_SPAWNRATE_TEXT1       = "Setting 'spawn rate' to Replace All will suppress";
-MENU_SPAWNRATE_TEXT2       = "spawns of that given type.";
-MENU_PERSISTENCY_TEXT      = "Control whether replacements happen after a mapload:";
+MENU_SPAWNRATE_TEXT1           = "Setting 'spawn rate' to Replace All will suppress";
+MENU_SPAWNRATE_TEXT2           = "spawns of that given type.";
+MENU_PERSISTENCY_TEXT          = "Control whether replacements happen after a mapload:";
 
 // Menu Option Labels
-MENU_NOTICE                = "Notice:";
-MENU_BACKPACKSALLOWED      = "Allowed in Ammo Boxes and/or Backpacks: ";
-MENU_SPAWNRATE             = "Spawn Rate: ";
-MENU_WEPSPAWNRATE          = "Weapon Spawn Rate: ";
-MENU_MAGSPAWNRATE          = "Magazine Spawn Rate: ";
-MENU_PERSISTENCY           = "Persistent Spawns: ";
-MENU_WEPPERSISTENCY        = "Persistent Weapon Spawns: ";
-MENU_MAGPERSISTENCY        = "Persistent Magazine Spawns: ";
+MENU_NOTICE                    = "Notice:";
+MENU_BACKPACKSALLOWED          = "Allowed in Ammo Boxes and/or Backpacks: ";
+MENU_SPAWNRATE                 = "Spawn Rate: ";
+MENU_WEPSPAWNRATE              = "Weapon Spawn Rate: ";
+MENU_MAGSPAWNRATE              = "Magazine Spawn Rate: ";
+MENU_PERSISTENCY               = "Persistent Spawns: ";
+MENU_WEPPERSISTENCY            = "Persistent Weapon Spawns: ";
+MENU_MAGPERSISTENCY            = "Persistent Magazine Spawns: ";
 
 // Menu Option Values
-MENU_ENABLED               = "Enabled";
-MENU_DISABLED              = "Disabled";
-MENU_REPLACEALL            = "Replace All";
-MENU_WITHALL               = "With All";
+MENU_ENABLED                   = "Enabled";
+MENU_DISABLED                  = "Disabled";
+MENU_REPLACEALL                = "Replace All";
+MENU_WITHALL                   = "With All";
 
 // Menu Command Text
-MENU_RESETWEP              = "Reset Weapon Options";
-MENU_RESETMAG              = "Reset Magazine Options";
-MENU_RESETPERSISTENCY      = "Reset Persistence Options";
-UZWEAPONS_RESETALLOPTIONS  = "Reset all options for UZ's Weapons Pack";
+MENU_RESETWEP                  = "Reset Weapon Options";
+MENU_RESETMAG                  = "Reset Magazine Options";
+MENU_RESETPERSISTENCY          = "Reset Persistence Options";
+UZWEAPONS_RESETALLOPTIONS      = "Reset all options for UZ's Weapons Pack";
 
 // Black Hole Generator Options Text
-MENU_BHG_SPAWNTEXT         = "Control the spawn rate of Black Hole Generator on BFG-9000s:";
-MENU_BHG_BACKPACKS         = "Control whether Black Hole Generators spawn in Backpacks:";
+MENU_BHG_SPAWNTEXT             = "Control the spawn rate of Black Hole Generator on BFG-9000s:";
+MENU_BHG_BACKPACKS             = "Control whether Black Hole Generators spawn in Backpacks:";
 
 // Claymore Mines Options Text
-MENU_CLAYMORE_SPAWNTEXT    = "Control the spawn rate of Claymore Mines on Frag Grenades:";
-MENU_CLAYMORE_BACKPACKS    = "Control whether Claymore Mines spawn in Backpacks:";
+MENU_CLAYMORE_SPAWNTEXT        = "Control the spawn rate of Claymore Mines on Frag Grenades:";
+MENU_CLAYMORE_BACKPACKS        = "Control whether Claymore Mines spawn in Backpacks:";
 
 // LAnd Mines Options Text
-MENU_LANDMINE_SPAWNTEXT    = "Control the spawn rate of Land Mines on Frag Grenades:";
-MENU_LANDMINE_BACKPACKS    = "Control whether Land Mines spawn in Backpacks:";
+MENU_LANDMINE_SPAWNTEXT        = "Control the spawn rate of Land Mines on Frag Grenades:";
+MENU_LANDMINE_BACKPACKS        = "Control whether Land Mines spawn in Backpacks:";
 
 // Pipe Bombs Options Text
-MENU_PIPEBOMB_SPAWNTEXT    = "Control the spawn rate of Pipe Bombs on Frag Grenades:";
-MENU_PIPEBOMB_BACKPACKS    = "Control whether Pipe Bombs spawn in Backpacks:";
+MENU_PIPEBOMB_SPAWNTEXT        = "Control the spawn rate of Pipe Bombs on Frag Grenades:";
+MENU_PIPEBOMB_BACKPACKS        = "Control whether Pipe Bombs spawn in Backpacks:";
 
 // Help Text
-BHGWH_FIRE                 = "Charge Singularity";
-BHGWH_RELOAD               = "Reload Batteries";
+BHGWH_FIRE                     = "Charge Singularity";
+BHGWH_RELOAD                   = "Reload Batteries";
 
 // Claymore Log
-CLAYMORELOG1               = "Look for ground to place the Claymore on.";
-CLAYMORELOG2               = "Can't deploy here.";
-CLAYMORELOG3               = "Claymore planted.";
-CLAYMORELOG4               = "\cj  Pick it up to defuse. \cd";
+CLAYMORELOG1                   = "Look for ground to place the Claymore on.";
+CLAYMORELOG2                   = "Can't deploy here.";
+CLAYMORELOG3                   = "Claymore planted.";
+CLAYMORELOG4                   = "\cj  Pick it up to defuse. \cd";
 
 // Laser Tripbomb Log
-LASERTRIPBOMBLOG1          = "Look for wall to place the Laser Tripbomb on.";
-LASERTRIPBOMBLOG2          = "Can't plant here.";
-LASERTRIPBOMBLOG3          = "Laser Tripbomb planted.";
-LASERTRIPBOMBLOG4          = "\cj  Pick it up to defuse. \cd";
+LASERTRIPBOMBLOG1              = "Look for wall to place the Laser Trip-Bomb on.";
+LASERTRIPBOMBLOG2              = "Can't plant here.";
+LASERTRIPBOMBLOG3              = "Laser Trip-Bomb planted.";
+LASERTRIPBOMBLOG4              = "\cj  Pick it up to defuse. \cd";
+
+
+// Merchant Store Filters
+
+MERCH_CAT_BHG                  = "UZ";
+MERCH_TAG_BHG                  = "Black Hole Generator";
+MERCH_FLAVOR_BHG               = "You'll shoot your existence out, kid.";
+
+MERCH_CAT_CLAYMORE             = "UZ";
+MERCH_TAG_CLAYMORE             = "Claymore Mine";
+MERCH_FLAVOR_CLAYMORE          = "Point it towards the enemy.";
+
+MERCH_CAT_LANDMINE             = "UZ";
+MERCH_TAG_LANDMINE             = "Landmine";
+MERCH_FLAVOR_LANDMINE          = "Watch your step.";
+
+MERCH_CAT_LASERTRIPBOMB        = "UZ";
+MERCH_TAG_LASERTRIPBOMB        = "Laser Trip-bomb";
+MERCH_FLAVOR_LASERTRIPBOMB     = "The arming code is the same as my luggage.";
+
+MERCH_CAT_PIPEBOMB             = "UZ";
+MERCH_TAG_PIPEBOMB             = "Pipebomb";
+MERCH_FLAVOR_PIPEBOMB          = "So Cool!  NOTE: Detonator not included.";
+
+MERCH_CAT_PIPEBOMBDETONATOR    = "UZ";
+MERCH_TAG_PIPEBOMBDETONATOR    = "Pipe Bomb Detonator";
+MERCH_FLAVOR_PIPEBOMBDETONATOR = "Make sure to disarm the ones on you first.";

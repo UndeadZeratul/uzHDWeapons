@@ -23,3 +23,11 @@ server bool  lasertripbomb_persistent_spawning = false;
 server bool  pipebomb_allowBackpacks      = true;
 server float pipebomb_spawn_bias          = 0.2;
 server bool  pipebomb_persistent_spawning = false;
+
+// Merchant Store Entries
+server bool hdm_enable_uzbhg               = true;
+server bool hdm_enable_uzclaymore          = true;
+server bool hdm_enable_uzlandmine          = true;
+server bool hdm_enable_uzlasertripbomb     = true;
+server bool hdm_enable_uzpipebomb          = true;
+server bool hdm_enable_uzpipebombdetonator = true;

@@ -34,3 +34,10 @@ addWeaponCrateFilter => { "name": "UZClaymoreMine", "allowed": "#claymore_allowB
 addWeaponCrateFilter => { "name": "UZLandMineAmmo", "allowed": "#landmine_allowBackpacks" }
 addWeaponCrateFilter => { "name": "UZLaserTripBomb", "allowed": "#lasertripbomb_allowBackpacks" }
 addWeaponCrateFilter => { "name": "UZPipeBombAmmo", "allowed": "#pipebomb_allowBackpacks" }
+
+newMerchantStoreItem => { "enabled": "#hdm_enable_uzbhg", "type": "weapon", "category": "$MERCH_CAT_BHG", "item": "UZBHGen", "icon": "BHGPA0", "displayName": "$MERCH_TAG_BHG", "basePrice": "1500", "flavorText": "$MERCH_FLAVOR_BHG" }
+newMerchantStoreItem => { "enabled": "#hdm_enable_uzclaymore", "type": "ammo", "category": "$MERCH_CAT_CLAYMORE", "item": "UZClaymoreMine", "icon": "CLAPA0", "displayName": "$MERCH_TAG_CLAYMORE", "basePrice": "30", "flavorText": "$MERCH_FLAVOR_CLAYMORE" }
+newMerchantStoreItem => { "enabled": "#hdm_enable_uzlandmine", "type": "ammo", "category": "$MERCH_CAT_LANDMINE", "item": "UZLandMineAmmo", "icon": "LMAMA0", "displayName": "$MERCH_TAG_LANDMINE", "basePrice": "25", "flavorText": "$MERCH_FLAVOR_LANDMINE" }
+newMerchantStoreItem => { "enabled": "#hdm_enable_uzlasertripbomb", "type": "ammo", "category": "$MERCH_CAT_LASERTRIPBOMB", "item": "UZLaserTripBomb", "icon": "LTBPA0", "displayName": "$MERCH_TAG_LASERTRIPBOMB", "basePrice": "35", "flavorText": "$MERCH_FLAVOR_LASERTRIPBOMB" }
+newMerchantStoreItem => { "enabled": "#hdm_enable_uzpipebomb", "type": "ammo", "category": "$MERCH_CAT_PIPEBOMB", "item": "UZPipeBombAmmo", "icon": "PIPPA0", "displayName": "$MERCH_TAG_PIPEBOMB", "basePrice": "20", "flavorText": "$MERCH_FLAVOR_PIPEBOMB" }
+newMerchantStoreItem => { "enabled": "#hdm_enable_uzpipebombdetonator", "type": "item", "category": "$MERCH_CAT_PIPEBOMBDETONATOR", "item": "UZPipeBombDetonator", "icon": "PBDPA0", "displayName": "$MERCH_TAG_PIPEBOMBDETONATOR", "basePrice": "10", "flavorText": "$MERCH_FLAVOR_PIPEBOMBDETONATOR" }
