@@ -9,15 +9,3 @@ Model UZPlacedClaymore
 	
 	Frame CLAP A 0 0
 }
-
-Model UZEnemyClaymore
-{
-	Path "models/undeadzeratul/weapons/claymore-mines"
-	Model 0 "Claymore.obj"
-	Skin 0 "ClaymoreTex.png"
-
-	AngleOffset -90
-	Offset 0 0 1
-	
-	Frame CLAP A 0 0
-}

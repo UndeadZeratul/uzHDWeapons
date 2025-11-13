@@ -1,7 +1,7 @@
 class UZPlacedClaymore : HDUPK {
 
     //$Category Monsters
-    //$Title "Placed Claymore Mine (Friendly)"
+    //$Title "Placed Claymore Mine"
 
     int seedist; property seedist:seedist;
 
@@ -13,9 +13,9 @@ class UZPlacedClaymore : HDUPK {
 
         +SHOOTABLE;
         +NOBLOOD;
-        +FRIENDLY;
         +NOTARGET;
         +NOTAUTOAIMED;
+        +DONTTHRUST;
 
         UZPlacedClaymore.seedist 8;
         
@@ -23,6 +23,50 @@ class UZPlacedClaymore : HDUPK {
         hdupk.pickuptype "UZClaymoreMine";
 
         Obituary "$OB_CLAYMORE";
+    }
+
+    void A_ClaymoreLook() {
+        // look for a new target in a 90 degree arc to the front of the mine every tic
+        // red particles depict the visible arc
+
+        // thing is within range if
+        //  - distance < (seedist * HDCONST_ONEMETRE)
+        //  - cos(claymoreAngle - angleToThing) >= cos(45)
+        BlockThingsIterator it = BlockThingsIterator.Create(self, seedist * HDCONST_ONEMETRE);
+        while (it.Next()) {
+            if (
+                it.thing
+                && self != it.thing
+                && it.thing.bSHOOTABLE
+                && !it.thing.bNOTARGET
+                && !it.thing.bNEVERTARGET
+                && Distance3D(it.thing) <= seeDist * HDCONST_ONEMETRE
+                && acos(clamp((cos(angle), sin(angle), 0).unit() dot vec3To(it.thing).unit(), -1, 1)) <= 45
+            ) {
+                SetStateLabel("Trigger");
+                return;
+            }
+        }
+
+        // If we didn't find a valid thing within range & FOV, clear the current target
+        A_ClearTarget();
+
+        // Draw FOV Particles for debugging.
+        if (hd_debug) {
+            for (let i = 0; i < seedist; i++) {
+                for (let j = -45; j <= 45; j += (seedist - i)) {
+                    A_SpawnParticle(
+                        "Red",
+                        SPF_FULLBRIGHT|SPF_RELATIVE,
+                        1, 2, j,
+                        HDCONST_ONEMETRE * (i + 1), 0, 9,
+                        0, 0, 0,
+                        0, 0, 0,
+                        1, -1, 0
+                    );
+                }
+            }
+        }
     }
 
     void A_Detonate() {
@@ -52,28 +96,7 @@ class UZPlacedClaymore : HDUPK {
             CLAP A 35;    
             CLAP A 0 A_StartSound("weapons/ClaymoreMine/Armed");
         Arm:
-            CLAP A 1 {
-                // look for a new target in a 90 degree arc to the front of the mine every tic
-                // red particles depict the visible arc
-                A_LookEx(LOF_NOSOUNDCHECK, 4, seedist * HDCONST_ONEMETRE, 0, 90, "Trigger");
-                A_ClearTarget();
-
-                if (hd_debug) {
-                    for (let i = 0; i < seedist; i++) {
-                        for (let j = -45; j <= 45; j += (seedist - i)) {
-                            A_SpawnParticle(
-                                "Red",
-                                SPF_FULLBRIGHT|SPF_RELATIVE,
-                                1, 2, j,
-                                HDCONST_ONEMETRE * (i + 1), 0, 9,
-                                0, 0, 0,
-                                0, 0, 0,
-                                1, -1, 0
-                            );
-                        }
-                    }
-                }
-            }
+            CLAP A 1 A_ClaymoreLook();
             Loop;
         Trigger:
             CLAP A 8 A_StartSound("weapons/ClaymoreMine/Trigger");
@@ -81,22 +104,6 @@ class UZPlacedClaymore : HDUPK {
         Death:
             TNT1 A 0 A_Detonate();
             stop;
-    }
-}
-
-class UZEnemyClaymore : UZPlacedClaymore {
-    //$Title "Placed Claymore Mine (Enemy)"
-
-    Default {
-        -FRIENDLY;
-
-        Translation "0:255=%[0.00,0.00,0.00]:[1.64,1.13,0.57]";
-    }
-    
-    States {
-        Trigger:
-            CLAP A 16 A_StartSound ("weapons/ClaymoreMine/Trigger");
-            CLAP A 0 A_Die;
     }
 }
 
