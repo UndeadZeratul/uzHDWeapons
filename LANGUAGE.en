@@ -47,6 +47,8 @@ MENU_PERSISTENCY_TEXT          = "Control whether replacements happen after a ma
 // Menu Option Labels
 MENU_NOTICE                    = "Notice:";
 MENU_BACKPACKSALLOWED          = "Allowed in Ammo Boxes and/or Backpacks: ";
+MENU_FLOORTRAPS                = "Spawn live Claymores/Landmines: ";
+MENU_WALLTRAPS                 = "Spawn live Laser Tripbombs: ";
 MENU_SPAWNRATE                 = "Spawn Rate: ";
 MENU_WEPSPAWNRATE              = "Weapon Spawn Rate: ";
 MENU_MAGSPAWNRATE              = "Magazine Spawn Rate: ";

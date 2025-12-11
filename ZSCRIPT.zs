@@ -24,3 +24,4 @@ const ENC_PIPEBOMB_DETONATOR  = 10;
 
 // Event Handlers
 #include "zscript/undeadzeratul/weapons/handlers/EasterEggHandler.zs"
+#include "zscript/undeadzeratul/weapons/handlers/SpawnHandler.zs"

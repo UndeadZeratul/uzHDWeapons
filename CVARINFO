@@ -24,6 +24,10 @@ server bool  pipebomb_allowBackpacks      = true;
 server float pipebomb_spawn_bias          = 0.2;
 server bool  pipebomb_persistent_spawning = false;
 
+// Trap Spawners
+server bool  uz_floortrap_spawners        = true;
+server bool  uz_walltrap_spawners         = true;
+
 // Merchant Store Entries
 server bool hdm_enable_uzbhg               = true;
 server bool hdm_enable_uzclaymore          = true;

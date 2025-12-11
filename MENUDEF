@@ -2,6 +2,11 @@ OptionMenu "UZWeaponsMenu" {
 
 	Title "$UZWEAPONS_MENU"
 
+	Option "$MENU_FLOORTRAPS", "uz_floortrap_spawners", "OnOff"
+	Option "$MENU_WALLTRAPS", "uz_walltrap_spawners", "OnOff"
+	StaticText ""
+	StaticText ""
+
 	StaticText "$MENU_EXPLOSIVES_TITLE", "Brown"
 	StaticText ""
 	Submenu "$TAG_CLAYMORE", "claymoreSpawning", 0, 1
