@@ -77,9 +77,13 @@ class UZLaserTripBomb : HDPickup {
 class UZLaserTripBombPlanted : HDUPK {
 
     default {
-        +NOGRAVITY
-        +SHOOTABLE
-        +WALLSPRITE
+        +NOGRAVITY;
+        +WALLSPRITE;
+        +SHOOTABLE;
+        +NOBLOOD;
+        +NOTARGET;
+        +NOTAUTOAIMED;
+        +DONTTHRUST;
 
         health 10;
         height 4;
