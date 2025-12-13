@@ -30,9 +30,9 @@ class UZWeaponsSpawnHandler : EventHandler {
         name trapClasses[] = { 'UZPlacedClaymore', 'UZLandMine' };
         let trapClass      = trapClasses[HDCore.getRandomInt(0, trapClasses.size() - 1)];
 
-        // Somewhere between 0 and 1/512th the sector size in square meters should be good for a sector
+        // Somewhere between 0 and 1/1024th the sector size in square meters should be good for a sector
         // TODO: Allow reduction rate to be configurable
-        int max = int(HDCore.getRandomInt(0, area, hdc_random_mode) / HDCONST_ONEMETRE) >> 9;
+        int max = int(HDCore.getRandomInt(0, area, hdc_random_mode) / HDCONST_ONEMETRE) >> 10;
         for (let i = 0; i < max; i++) {
             let angle = HDCore.getRandomInt(1, 360, hdc_random_mode);
             let dist  = HDCore.getRandomDouble(0, radius, hdc_random_mode);
