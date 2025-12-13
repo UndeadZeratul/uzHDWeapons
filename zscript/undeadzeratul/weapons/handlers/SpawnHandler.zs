@@ -43,7 +43,7 @@ class UZWeaponsSpawnHandler : EventHandler {
             for (let i = 0; i < MAXPLAYERS; i++) if (players[i].mo && (players[i].mo.pos - pos).length() < (10 * HDCONST_ONEMETRE)) continue;
 
             if (Level.PointInSector(xy) == s) {
-                let a = HDCore.SpawnStuff(trapClass, pos);
+                let a = HDCore.SpawnStuff(trapClass, pos, randomVel: false, allowInvalidPos: true);
 
                 if (a) {
                     a.angle = angle;
