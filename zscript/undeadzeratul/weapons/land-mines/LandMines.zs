@@ -464,6 +464,11 @@ class UZLandMine : HDFragGrenade {
     default {
         +ROLLSPRITE;
         +ROLLCENTER;
+        +SHOOTABLE;
+        +NOBLOOD;
+        +NOTARGET;
+        +NOTAUTOAIMED;
+        +DONTTHRUST;
 
         health 20;
 
