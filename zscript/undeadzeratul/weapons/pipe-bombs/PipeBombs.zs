@@ -144,7 +144,7 @@ class UZPipeBombs : HDGrenadethrower {
 
         //force calculation
         double gforce = clamp(weaponstatus[FRAGS_FORCE] * 0.5, 1, 40 + owner.health * 0.1);
-        if (oshit) gforce = min(gforce, frandom(4, 20));
+        if (oshit) gforce = min(gforce, frandom[uzwepsrand](4, 20));
         if (hdplayerpawn(owner)) gforce *= hdplayerpawn(owner).strength;
 
         let bomb = UZPipeBomb(ggg);

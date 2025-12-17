@@ -81,7 +81,7 @@ class UZPlacedClaymore : HDUPK {
         A_SpawnChunks("HDSmoke", 12, speed * 0.012, speed * 0.001, 75, 12);
         A_SpawnItemEx(
             "HDExplosion",
-            random(-1, 1), random(-1, 1), 2,
+            random[uzwepsrand](-1, 1), random[uzwepsrand](-1, 1), 2,
             0, 0, 0,
             0,
             SXF_ABSOLUTEMOMENTUM|SXF_NOCHECKPOSITION|SXF_TRANSFERPOINTERS

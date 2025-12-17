@@ -36,9 +36,9 @@ class UZBHGen : HDWeapon {
         double spp;
         double spa;
         for(int i = 0; i < sparks; i++) {
-            spp = caller.pitch + FRandom(-20, 20);
-            spa = caller.angle + FRandom(-20, 20);
-            spot = random(24, 32) * (cos(spp) * cos(spa), cos(spp) * sin(spa), -sin(spp));
+            spp = caller.pitch + FRandom[uzwepsrand](-20, 20);
+            spa = caller.angle + FRandom[uzwepsrand](-20, 20);
+            spot = random[uzwepsrand](24, 32) * (cos(spp) * cos(spa), cos(spp) * sin(spa), -sin(spp));
             a = caller.spawn("BHGSpark", origin + spot, ALLOW_REPLACE);
             a.vel += caller.vel * 0.9 - spot * 0.03;
         }
@@ -130,7 +130,7 @@ class UZBHGen : HDWeapon {
             // droop downwards
             if (hdp.pitch < 10) {
                 hdp.A_MuzzleClimb(
-                    (FRandom(-0.06, 0.06), FRandom(0.1, clamp(1 - pitch, 0.08 / hdp.strength, 0.12))),
+                    (FRandom[uzwepsrand](-0.06, 0.06), FRandom[uzwepsrand](0.1, clamp(1 - pitch, 0.08 / hdp.strength, 0.12))),
                     (0, 0),
                     (0, 0),
                     (0, 0)
@@ -141,10 +141,10 @@ class UZBHGen : HDWeapon {
             let max = weaponStatus[BHGS_TIMER] * (0.0625 / max(1, hdp.strength));
             if (PressingFire() && max > 0) {
                 hdp.A_MuzzleClimb(
-                    (FRandom(-max, max), FRandom(-max, max)) * 0.25,
-                    (FRandom(-max, max), FRandom(-max, max)) * 0.2,
-                    (FRandom(-max, max), FRandom(-max, max)) * 0.15,
-                    (FRandom(-max, max), FRandom(-max, max)) * 0.1
+                    (FRandom[uzwepsrand](-max, max), FRandom[uzwepsrand](-max, max)) * 0.25,
+                    (FRandom[uzwepsrand](-max, max), FRandom[uzwepsrand](-max, max)) * 0.2,
+                    (FRandom[uzwepsrand](-max, max), FRandom[uzwepsrand](-max, max)) * 0.15,
+                    (FRandom[uzwepsrand](-max, max), FRandom[uzwepsrand](-max, max)) * 0.1
                 );
             }
         }
@@ -366,7 +366,7 @@ class UZBHGen : HDWeapon {
                 HDMobAI.frighten(self, 512);
             }
             #### # 3 {
-                A_StartSound("weapons/bfgcharge", random(9005, 9007));
+                A_StartSound("weapons/bfgcharge", random[uzwepsrand](9005, 9007));
 
                 UZBHGen.Spark(self, clamp((invoker.weaponStatus[BHGS_TIMER] / 10) + 1, 1, 4), gunheight() - 2);
             }
@@ -396,8 +396,8 @@ class UZBHGen : HDWeapon {
             #### # 6 {
                 A_MuzzleClimb(
                     1, 3,
-                    -FRandom(0.8, 1.2), -FRandom(2.4, 4.6),
-                    -FRandom(1.8, 2.8), -FRandom(6.4, 9.6),
+                    -FRandom[uzwepsrand](0.8, 1.2), -FRandom[uzwepsrand](2.4, 4.6),
+                    -FRandom[uzwepsrand](1.8, 2.8), -FRandom[uzwepsrand](6.4, 9.6),
                     1, 2
                 );
             }
@@ -550,7 +550,7 @@ class BHGSpark : HDActor {
         spawn:
             BHXP ONMLKJIHGFEDCBA 1 Bright Light("BHSPARK") NoDelay {
                 A_FadeIn(0.1);
-                A_SetRoll(roll + (getAge() * rollDir * FRandom(0.1, 1.0)), SPF_INTERPOLATE);
+                A_SetRoll(roll + (getAge() * rollDir * FRandom[uzwepsrand](0.1, 1.0)), SPF_INTERPOLATE);
                 scale -= (0.01, 0.01);
             }
             BHXP A 1 A_FadeOut(0.3);
@@ -691,7 +691,7 @@ class BlackHole : HDActor {
         }
 
         // Emit a bit of Hawking Radiation
-        UpdateMass(mass * FRandom(0.995, 1 - double.epsilon));
+        UpdateMass(mass * FRandom[uzwepsrand](0.995, 1 - double.epsilon));
 
         // If our new size overlaps, stop moving/growing
         if (!TestMobjLocation()) {
@@ -762,13 +762,13 @@ class BlackHole : HDActor {
 
         for (int i = 0; i < 360; i++) {
 
-            if (random() > schwarzschild) continue;
+            if (random[uzwepsrand]() > schwarzschild) continue;
 
-            let dist = schwarzschild * FRandom(0, HDCONST_ONEMETRE);
+            let dist = schwarzschild * FRandom[uzwepsrand](0, HDCONST_ONEMETRE);
 
             let floor = curSector.LowestFloorAt(curSector.centerspot);
             let ceil = curSector.HighestCeilingAt(curSector.centerspot);
-            let zOff = FRandom(floor, ceil);
+            let zOff = FRandom[uzwepsrand](floor, ceil);
 
             let spawnOff = (cos(i) * dist, sin(i) * dist, (abs(floor - zOff) > abs(ceil - zOff) ? ceil : floor) - pos.z);
 
@@ -778,17 +778,17 @@ class BlackHole : HDActor {
                     TexMan.CheckForTexture("RSMKA0"),
                     STYLE_SHADED,
                     SPF_RELVEL|SPF_RELACCEL|SPF_ROLL|SPF_REPLACE,
-                    size: size * FRandom(100, 200),
+                    size: size * FRandom[uzwepsrand](100, 200),
                     angle: i,
                     xOff: spawnOff.x,
                     yOff: spawnOff.y,
                     zOff: spawnOff.z,
-                    velX: FRandom(-10, 0),
-                    accelX: FRandom(-0.9, -0.1),
-                    accelY: FRandom(-0.1, 0.1),
-                    startRoll: FRandom(0, 360),
-                    rollVel: FRandom(-1, 1),
-                    rollAcc: FRandom(-0.1, 0.1)
+                    velX: FRandom[uzwepsrand](-10, 0),
+                    accelX: FRandom[uzwepsrand](-0.9, -0.1),
+                    accelY: FRandom[uzwepsrand](-0.1, 0.1),
+                    startRoll: FRandom[uzwepsrand](0, 360),
+                    rollVel: FRandom[uzwepsrand](-1, 1),
+                    rollAcc: FRandom[uzwepsrand](-0.1, 0.1)
                 );
             }
         }
@@ -800,25 +800,25 @@ class BlackHole : HDActor {
 
         for (int i = 0; i < 360; i++) {
 
-            if (random() > schwarzschild) continue;
+            if (random[uzwepsrand]() > schwarzschild) continue;
 
             let dist = schwarzschild * 2;
-            let spawnOff = (cos(i) * dist, sin(i) * dist, FRandom(-10, 10) * size);
+            let spawnOff = (cos(i) * dist, sin(i) * dist, FRandom[uzwepsrand](-10, 10) * size);
 
             if (Level.IsPointInLevel(pos + spawnOff)) {
                 A_SpawnParticle(
                     "white",
                     SPF_RELVEL|SPF_RELACCEL|SPF_FULLBRIGHT|SPF_REPLACE,
-                    size: size * FRandom(16, 32),
+                    size: size * FRandom[uzwepsrand](16, 32),
                     angle: i,
                     xOff: spawnOff.x,
                     yOff: spawnOff.y,
                     zOff: spawnOff.z,
-                    velX: FRandom(0, 2),
-                    velY: FRandom(0, 1),
-                    accelX: FRandom(-0.1, 0.5),
-                    accelY: FRandom(-0.1, 0.1),
-                    accelZ: FRandom(-0.01, 0.01),
+                    velX: FRandom[uzwepsrand](0, 2),
+                    velY: FRandom[uzwepsrand](0, 1),
+                    accelX: FRandom[uzwepsrand](-0.1, 0.5),
+                    accelY: FRandom[uzwepsrand](-0.1, 0.1),
+                    accelZ: FRandom[uzwepsrand](-0.01, 0.01),
                     sizeStep: -1
                 );
             }
