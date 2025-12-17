@@ -5,7 +5,7 @@ class UZWeaponsSpawnHandler : EventHandler {
         forEach (s : Level.sectors) {
 
             // Prefer larger sectors
-            if (HDCore.getRandomInt(0, 1024, hdc_random_mode) > HDCore.getSectorArea(s)) continue;
+            if (HDCore.getRandomInt(0, 1024, hdc_random_mode) < HDCore.getSectorArea(s)) continue;
 
             // Prefer darker sectors
             if (HDCore.getRandomInt(0, 256, hdc_random_mode) < s.lightLevel) continue;
