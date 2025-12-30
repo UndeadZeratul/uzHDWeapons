@@ -24,7 +24,7 @@ class UZWeaponsSpawnHandler : EventHandler {
             if (s.lightLevel < 256 && HDCore.getRandomInt(0, 256, hdc_random_mode) < s.lightLevel) continue;
 
             // If sector contains a PlayerPawn, skip.
-            for (let i = 0; i < MAXPLAYERS; i++) if (playerInGame[i] && players[i].mo && players[i].mo.curSector == s) continue;
+            if (HDCore.anyPlayersInSector(s)) continue;
 
             spawnFloorTraps(s);
 
