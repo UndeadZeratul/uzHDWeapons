@@ -7,27 +7,35 @@ class UZWeaponsSpawnHandler : EventHandler {
 
         forEach (s : Level.sectors) {
 
+            // If sector is null, skip.
+            if (!s) continue;
+
+            let height = HDCore.getSectorHeight(s);
+
+            // If sector is not tall enough, skip.
+            if (height < (2 * HDCONST_ONEMETRE)) continue;
+
+            let area = HDCore.getSectorArea(s) / HDCONST_ONEMETRE;
+
             // Prefer larger sectors
-            if (HDCore.getRandomInt(0, 1024, hdc_random_mode) < HDCore.getSectorArea(s)) continue;
+            if (area < 1024 && HDCore.getRandomInt(0, 1024, hdc_random_mode) < area) continue;
 
             // Prefer darker sectors
-            if (HDCore.getRandomInt(0, 256, hdc_random_mode) < s.lightLevel) continue;
+            if (s.lightLevel < 256 && HDCore.getRandomInt(0, 256, hdc_random_mode) < s.lightLevel) continue;
 
             // If sector contains a PlayerPawn, skip.
             for (let i = 0; i < MAXPLAYERS; i++) if (playerInGame[i] && players[i].mo && players[i].mo.curSector == s) continue;
 
             spawnFloorTraps(s);
 
-            spawnWallTraps(s);
+            if (uz_floortrap_spawners) spawnFloorTraps(s, area);
+
+            if (uz_walltrap_spawners) spawnWallTraps(s, height);
         }
     }
 
-    private void spawnFloorTraps(Sector s) {
+    private void spawnFloorTraps(Sector s, double area) {
 
-        // If Claymore Spawners are disabled, quit.
-        if (!uz_floortrap_spawners) return;
-
-        let area   = HDCore.getSectorArea(s);
         let radius = HDCore.getSectorRadius(s);
 
         name trapClasses[] = { 'UZPlacedClaymore', 'UZLandMine' };
@@ -35,7 +43,7 @@ class UZWeaponsSpawnHandler : EventHandler {
 
         // Somewhere between 0 and 1/1024th the sector size in square meters should be good for a sector
         // TODO: Allow reduction rate to be configurable
-        int max = int(HDCore.getRandomInt(0, area, hdc_random_mode) / HDCONST_ONEMETRE) >> 10;
+        int max = HDCore.getRandomInt(0, area, hdc_random_mode) >> 10;
         for (let i = 0; i < max; i++) {
             let angle = HDCore.getRandomInt(1, 360, hdc_random_mode);
             let dist  = HDCore.getRandomDouble(0, radius, hdc_random_mode);
@@ -55,28 +63,22 @@ class UZWeaponsSpawnHandler : EventHandler {
         }
     }
 
-    private void spawnWallTraps(Sector s) {
+    private void spawnWallTraps(Sector s, double height) {
 
-        // If Laser TripBomb Spawners are disabled, quit.
-        if (!uz_walltrap_spawners) return;
-
-        name trapClasses[]  = { 'UZLaserTripBombPlanted' };
-        let trapClass       = trapClasses[HDCore.getRandomInt(0, trapClasses.size() - 1)];
+        name trapClasses[] = { 'UZLaserTripBombPlanted' };
+        let trapClass      = trapClasses[HDCore.getRandomInt(0, trapClasses.size() - 1)];
 
         forEach(l : s.lines) {
 
             // If line is too short, skip.
             if (l.delta.length() < 256) continue;
             
-            // Spawn more in darker
-            if (HDCore.getRandomInt(0, 256, hdc_random_mode) < s.lightLevel) continue;
-
             let twoSided = l.flags&Line.ML_TWOSIDED;
             let facingBack = twoSided && l.sideDef[Line.BACK] && l.sideDef[Line.BACK].sector == s;
 
             let inSide = l.sideDef[facingBack ? Line.BACK : Line.FRONT];
             let outSide = l.sideDef[facingBack ? Line.FRONT : Line.BACK];
-            let floorDelta = twoSided ? inSide.sector.centerFloor() - outSide.sector.centerFloor() : -HDCore.getSectorHeight(s);
+            let floorDelta = twoSided ? inSide.sector.centerFloor() - outSide.sector.centerFloor() : -height;
 
             // If line is two-sided & outside floor is under a meter above the inside floor, skip.
             if (floorDelta > -HDCONST_ONEMETRE) continue;
