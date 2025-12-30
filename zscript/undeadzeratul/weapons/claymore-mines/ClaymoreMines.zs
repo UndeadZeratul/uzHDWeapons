@@ -36,8 +36,10 @@ class UZPlacedClaymore : HDUPK {
         while (it.Next()) {
             if (
                 it.thing
-                && self != it.thing
+                && it.thing != self
                 && it.thing.bSHOOTABLE
+                && !it.thing.bNOBLOCKMAP
+                && !it.thing.bNOINTERACTION
                 && !it.thing.bNOTARGET
                 && !it.thing.bNEVERTARGET
                 && Distance3D(it.thing) <= seeDist * HDCONST_ONEMETRE

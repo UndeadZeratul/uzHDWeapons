@@ -103,26 +103,26 @@ class UZLaserTripBombPlanted : HDUPK {
     }
 
     action void A_LTBLook() {
-        flinetracedata dlt;
-        linetrace(
+        FLineTraceData dlt;
+        lineTrace(
             angle, 1024, pitch,
             data: dlt
         );
 
-		if (hd_debug) for (let i = 0.0; i < clamp(dlt.distance, 0, 1024); i += 0.5) A_SpawnParticle(
-            "Red",
-            SPF_FULLBRIGHT|SPF_RELATIVE,
-            1, 1, 0,
-            i, 0, 0,
-            0, 0, 0,
-            0, 0, 0,
-            1, -1, 0
-        );
-
-        if (dlt.hitactor) {
-            SetStateLabel("detonate");
+        // If we hit an actor that's shootable, and isn't marked to be ignored, detonate.
+        if (
+            dlt.hitActor
+            && dlt.hitActor.bSHOOTABLE
+            && !dlt.hitActor.bNOBLOCKMAP
+            && !dlt.hitActor.bNOINTERACTION
+            && !dlt.hitActor.bNOTARGET
+            && !dlt.hitactor.bNEVERTARGET
+        ) {
+            setStateLabel("detonate");
             return;
         }
+
+        HDCore.emitLaserParticles(self, alpha: 0.01);
     }
 
     action void A_Detonate() {
