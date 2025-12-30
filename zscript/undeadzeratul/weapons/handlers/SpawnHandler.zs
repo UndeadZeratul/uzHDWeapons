@@ -2,6 +2,9 @@ class UZWeaponsSpawnHandler : EventHandler {
 
     override void worldLoaded(WorldEvent e) {
 
+        // If neither floor/wall traps are enabled, quit.
+        if (!(uz_floortrap_spawners || uz_walltrap_spawners)) return;
+
         forEach (s : Level.sectors) {
 
             // Prefer larger sectors
