@@ -26,8 +26,6 @@ class UZWeaponsSpawnHandler : EventHandler {
             // If sector contains a PlayerPawn, skip.
             if (HDCore.anyPlayersInSector(s)) continue;
 
-            spawnFloorTraps(s);
-
             if (uz_floortrap_spawners) spawnFloorTraps(s, area);
 
             if (uz_walltrap_spawners) spawnWallTraps(s, height);
