@@ -684,7 +684,7 @@ class BlackHole : HDActor {
             UpdateMass(mass + GetOtherMass(thing));
 
             if (thing is 'PlayerPawn') {
-                DamageMobj(thing, master, double.MAX, 'falling');
+                DamageMobj(thing, master, Int.MAX, 'falling');
             } else {
                 thing.Destroy();
             }
