@@ -1,9 +1,37 @@
 class UZWeaponsSpawnHandler : EventHandler {
 
+    Array<Sector> trappedSectors;
+
     override void worldLoaded(WorldEvent e) {
 
         // If neither floor/wall traps are enabled, quit.
         if (!(uz_floortrap_spawners || uz_walltrap_spawners)) return;
+
+        BuildSectors();
+    }
+
+    override void worldTick() {
+
+        if (HDCore.isPreSpawn() && (uz_floortrap_spawners || uz_walltrap_spawners)) {
+
+            let max = trappedSectors.size();
+            let incr = max(hdc_prespawn_threshold, 1);
+            for (let i = Level.mapTime; i < max; i += incr) {
+
+                let s = trappedSectors[i];
+
+                if (uz_floortrap_spawners) spawnFloorTraps(s, HDCore.getSectorArea(s) / HDCONST_ONEMETRE);
+
+                if (uz_walltrap_spawners) spawnWallTraps(s, HDCore.getSectorHeight(s));
+            }
+        } else if (!bDESTROYED) {
+            destroy();
+        }
+
+    }
+
+    private void BuildSectors() {
+        trappedSectors.clear();
 
         forEach (s : Level.sectors) {
 
@@ -26,9 +54,7 @@ class UZWeaponsSpawnHandler : EventHandler {
             // If sector contains a PlayerPawn, skip.
             if (HDCore.anyPlayersInSector(s)) continue;
 
-            if (uz_floortrap_spawners) spawnFloorTraps(s, area);
-
-            if (uz_walltrap_spawners) spawnWallTraps(s, height);
+            trappedSectors.push(s);
         }
     }
 
