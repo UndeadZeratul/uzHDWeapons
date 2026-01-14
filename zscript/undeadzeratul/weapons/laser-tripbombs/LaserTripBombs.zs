@@ -122,7 +122,7 @@ class UZLaserTripBombPlanted : HDUPK {
             return;
         }
 
-        HDCore.emitLaserParticles(self, alpha: 0.01);
+        HDCore.emitLaserParticles(self, scale: 0.5, alpha: 0.01);
     }
 
     action void A_Detonate() {
