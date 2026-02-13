@@ -3,15 +3,15 @@ GameInfo {
 }
 
 DoomEdNums{
-	23420=UZBHGen
-	23421=UZClaymoreMine
-	23422=UZClaymoreMineBox
-	23423=UZPlacedClaymore
-	23424=UZLandMine
-	23425=UZLandMinePickup
-	23426=UZLandMineBoxPickup
-	23427=UZLaserTripBombP
-	23428=UZLaserTripBombPickup
-	23429=UZPipeBombP
-    26430=UZPipeBombPickup
+	23460=UZBHGen
+	23461=UZClaymoreMine
+	23462=UZClaymoreMineBox
+	23463=UZPlacedClaymore
+	23464=UZLandMine
+	23465=UZLandMinePickup
+	23466=UZLandMineBoxPickup
+	23467=UZLaserTripBombP
+	23468=UZLaserTripBombPickup
+	23469=UZPipeBombP
+    26470=UZPipeBombPickup
 }
