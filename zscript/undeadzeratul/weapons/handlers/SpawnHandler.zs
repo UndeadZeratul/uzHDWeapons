@@ -75,7 +75,15 @@ class UZWeaponsSpawnHandler : EventHandler {
             let pos   = (xy.x, xy.y, s.centerFloor());
 
             // Don't spawn traps too close to players
-            for (let i = 0; i < MAXPLAYERS; i++) if (players[i].mo && (players[i].mo.pos - pos).length() < (10 * HDCONST_ONEMETRE)) continue;
+            let tooClose = false;
+            for (let i = 0; i < MAXPLAYERS; i++) {
+                if (players[i].mo && (players[i].mo.pos - pos).length() < (10 * HDCONST_ONEMETRE)) {
+                    tooClose = true;
+                    break;
+                }
+            }
+
+            if (tooClose) continue;
 
             if (Level.PointInSector(xy) == s) {
                 let a = HDCore.SpawnStuff(trapClass, pos, randomVel: false, allowInvalidPos: true);
