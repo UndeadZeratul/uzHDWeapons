@@ -1,0 +1,18 @@
+
+weapons/demontech/rifle/pickup  DSDTRPIK
+weapons/demontech/rifle/idle    DSDTRIDL
+weapons/demontech/rifle/steam   DSDTRSTM
+weapons/demontech/rifle/magin   DSDTRMGI
+weapons/demontech/rifle/magout  DSDTRMGO
+weapons/demontech/rifle/click   DSDTRCLK
+weapons/demontech/rifle/ready   DSDTRRDY
+weapons/demontech/rifle/explode DSDTREXP
+weapons/demontech/rifle/fire1   DSDTRFI1
+weapons/demontech/rifle/fire2   DSDTRFI2
+weapons/demontech/rifle/fire3   DSDTRFI3
+
+$random weapons/demontech/rifle/fire {
+    weapons/demontech/rifle/fire1,
+    weapons/demontech/rifle/fire2,
+    weapons/demontech/rifle/fire3
+}
