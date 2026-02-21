@@ -28,12 +28,16 @@ addSpawnTableSingleEntry => { "tableName": "HDFragGrenadePickup", "name": "UZLas
 addSpawnTableSingleEntry => { "tableName": "FragP", "name": "UZPipeBombP", "weight": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
 addSpawnTableSingleEntry => { "tableName": "HDFragGrenadePickup", "name": "UZPipeBombPickup", "weight": "#pipebomb_spawn_bias", "persists": "#pipebomb_persistent_spawning" }
 
+// Ripper Chaingun Spawn Entries
+addSpawnTableSingleEntry => { "tableName": "ChaingunReplaces", "name": "UZRipper", "weight": "#ripper_spawn_bias", "persists": "#ripper_persistent_spawning" }
+
 // AceCorp Weapon Crate Filters
 addWeaponCrateFilter => { "name": "UZBHGen", "allowed": "#bhg_allowBackpacks" }
 addWeaponCrateFilter => { "name": "UZClaymoreMine", "allowed": "#claymore_allowBackpacks" }
 addWeaponCrateFilter => { "name": "UZLandMineAmmo", "allowed": "#landmine_allowBackpacks" }
 addWeaponCrateFilter => { "name": "UZLaserTripBomb", "allowed": "#lasertripbomb_allowBackpacks" }
 addWeaponCrateFilter => { "name": "UZPipeBombAmmo", "allowed": "#pipebomb_allowBackpacks" }
+addWeaponCrateFilter => { "name": "UZRipper", "allowed": "#ripper_allowBackpacks" }
 
 newMerchantStoreItem => { "enabled": "#hdm_enable_uzbhg", "type": "weapon", "category": "$MERCH_CAT_BHG", "item": "UZBHGen", "icon": "BHGPA0", "displayName": "$MERCH_TAG_BHG", "basePrice": "1500", "flavorText": "$MERCH_FLAVOR_BHG" }
 newMerchantStoreItem => { "enabled": "#hdm_enable_uzclaymore", "type": "ammo", "category": "$MERCH_CAT_CLAYMORE", "item": "UZClaymoreMine", "icon": "CLAPA0", "displayName": "$MERCH_TAG_CLAYMORE", "basePrice": "30", "flavorText": "$MERCH_FLAVOR_CLAYMORE" }
@@ -41,3 +45,4 @@ newMerchantStoreItem => { "enabled": "#hdm_enable_uzlandmine", "type": "ammo", "
 newMerchantStoreItem => { "enabled": "#hdm_enable_uzlasertripbomb", "type": "ammo", "category": "$MERCH_CAT_LASERTRIPBOMB", "item": "UZLaserTripBomb", "icon": "LTBPA0", "displayName": "$MERCH_TAG_LASERTRIPBOMB", "basePrice": "35", "flavorText": "$MERCH_FLAVOR_LASERTRIPBOMB" }
 newMerchantStoreItem => { "enabled": "#hdm_enable_uzpipebomb", "type": "ammo", "category": "$MERCH_CAT_PIPEBOMB", "item": "UZPipeBombAmmo", "icon": "PIPPA0", "displayName": "$MERCH_TAG_PIPEBOMB", "basePrice": "20", "flavorText": "$MERCH_FLAVOR_PIPEBOMB" }
 newMerchantStoreItem => { "enabled": "#hdm_enable_uzpipebombdetonator", "type": "item", "category": "$MERCH_CAT_PIPEBOMBDETONATOR", "item": "UZPipeBombDetonator", "icon": "PBDPA0", "displayName": "$MERCH_TAG_PIPEBOMBDETONATOR", "basePrice": "10", "flavorText": "$MERCH_FLAVOR_PIPEBOMBDETONATOR" }
+newMerchantStoreItem => { "enabled": "#hdm_enable_uzripper", "type": "weapon", "category": "$MERCH_CAT_RIPPER", "item": "UZRipper", "icon": "RIPPA0", "displayName": "$MERCH_TAG_RIPPER", "basePrice": "500", "flavorText": "$MERCH_FLAVOR_RIPPER" }

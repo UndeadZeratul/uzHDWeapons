@@ -7,6 +7,7 @@ const UZLD_LANDMINE           = "min";
 const UZLD_LASERTRIPBOMB      = "ltb";
 const UZLD_PIPEBOMB           = "pbg";
 const UZLD_PIPEBOMB_DETONATOR = "pbd";
+const UZLD_RIPPER             = "rip";
 
 // Encumbrance/Bulk Constants
 const ENC_CLAYMORE            = ENC_FRAG;
@@ -21,6 +22,7 @@ const ENC_PIPEBOMB_DETONATOR  = 10;
 #include "zscript/undeadzeratul/weapons/land-mines/LandMines.zs"
 #include "zscript/undeadzeratul/weapons/laser-tripbombs/LaserTripBombs.zs"
 #include "zscript/undeadzeratul/weapons/pipe-bombs/PipeBombs.zs"
+#include "zscript/undeadzeratul/weapons/ripper/Ripper.zs"
 
 // Event Handlers
 #include "zscript/undeadzeratul/weapons/handlers/EasterEggHandler.zs"

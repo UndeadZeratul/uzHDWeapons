@@ -8,6 +8,7 @@ TAG_LANDMINE_BOX               = "Box of Land Mines";
 TAG_LASER_TRIPBOMB             = "Laser Trip-Bomb";
 TAG_PIPEBOMB                   = "Pipe Bomb";
 TAG_PIPEBOMB_DETONATOR         = "Detonator";
+TAG_RIPPER                     = "Ripper Chaingun";
 
 PICKUP_BHG                     = "You got the Black Hole Generator!";
 PICKUP_CLAYMORE                = "Picked up a claymore mine!";
@@ -19,6 +20,7 @@ PICKUP_LASER_TRIPBOMB          = "Picked up a laser trip-bomb!";
 PICKUP_PIPEBOMB                = "Picked up a pipe bomb!  So cool!";
 PICKUP_PIPEBOMB_DEACTIVATE     = "Picked up (and deactivated) a pipe bomb!";
 PICKUP_PIPEBOMB_DETONATOR      = "Picked up a detonator.";
+PICKUP_RIPPER                  = "You got the Ripper Chaingun!  Make those demon bastards pay!";
 
 OB_BHG                         = "%o divided by 0.";
 OB_CLAYMORE                    = "%o strayed too close to a claymore.";
@@ -126,3 +128,7 @@ MERCH_FLAVOR_PIPEBOMB          = "So Cool!  NOTE: Detonator not included.";
 MERCH_CAT_PIPEBOMBDETONATOR    = "UZ";
 MERCH_TAG_PIPEBOMBDETONATOR    = "Pipe Bomb Detonator";
 MERCH_FLAVOR_PIPEBOMBDETONATOR = "Make sure to disarm the ones on you first.";
+
+MERCH_CAT_RIPPER               = "UZ";
+MERCH_TAG_RIPPER               = "Ripper Chaingun";
+MERCH_FLAVOR_RIPPER            = "Make those demon bastards pay.";

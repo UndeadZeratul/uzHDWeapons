@@ -50,6 +50,18 @@ Requires [HDCoreLib](https://github.com/HDest-Community/hdest-core-lib).
 - Press `[USE]` while crouching to pick up & deactivate pipe bomb.
 - Can be shot in a pinch.  Careful, may get caught in the cross-fire!
 
+## Ripper Chaingun
+![ripper](./sprites/RIPPA0.png)
+
+- Loadout Code: `rip`
+- Fires 4.26mm caseless rounds along three sequential barrels.
+- WIP HEAT MECHANIC
+- Hold `[FIRE]` to fire.
+- Press `[RELOAD]` to reload a magazine.
+- Press `[ALTFIRE]` to reload battery.
+- Press `[UNLOAD]` to unload a magazine.
+- Press `[USE + ALTRELOAD]` or `[USE + UNLOAD]` to unload a battery.
+
 ## Credits
 
 ### Black Hole Generator
@@ -88,3 +100,7 @@ Requires [HDCoreLib](https://github.com/HDest-Community/hdest-core-lib).
 ### Pipe Bombs
 - Sounds: 3D Realms, Eurocom (Duke Nukem 64), Sunstorm Interactive (DN Manhattan Project)
 - Sprites: 3D Realms, Scuba Steve, Gothic
+
+### Ripper Chaingun
+- Sounds: 3D Realms
+- Sprites: 3D Realms, Sonik.O

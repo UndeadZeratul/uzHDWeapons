@@ -1,18 +1,18 @@
 
 // Black Hole Generators
-server bool  bhg_allowBackpacks           = false;
-server float bhg_spawn_bias               = 0.02;
-server bool  bhg_persistent_spawning      = false;
+server bool  bhg_allowBackpacks                = false;
+server float bhg_spawn_bias                    = 0.02;
+server bool  bhg_persistent_spawning           = false;
 
 // Claymore Mines
-server bool  claymore_allowBackpacks      = true;
-server float claymore_spawn_bias          = 0.2;
-server bool  claymore_persistent_spawning = false;
+server bool  claymore_allowBackpacks           = true;
+server float claymore_spawn_bias               = 0.2;
+server bool  claymore_persistent_spawning      = false;
 
 // Land Mines
-server bool  landmine_allowBackpacks      = true;
-server float landmine_spawn_bias          = 0.2;
-server bool  landmine_persistent_spawning = false;
+server bool  landmine_allowBackpacks           = true;
+server float landmine_spawn_bias               = 0.2;
+server bool  landmine_persistent_spawning      = false;
 
 // Laser Tripbombs
 server bool  lasertripbomb_allowBackpacks      = true;
@@ -20,18 +20,24 @@ server float lasertripbomb_spawn_bias          = 0.2;
 server bool  lasertripbomb_persistent_spawning = false;
 
 // Pipe Bombs
-server bool  pipebomb_allowBackpacks      = true;
-server float pipebomb_spawn_bias          = 0.2;
-server bool  pipebomb_persistent_spawning = false;
+server bool  pipebomb_allowBackpacks           = true;
+server float pipebomb_spawn_bias               = 0.2;
+server bool  pipebomb_persistent_spawning      = false;
+
+// Ripper Chainguns
+server bool  ripper_allowBackpacks             = true;
+server float ripper_spawn_bias                 = 1.25;
+server bool  ripper_persistent_spawning        = false;
 
 // Trap Spawners
-server bool  uz_floortrap_spawners        = true;
-server bool  uz_walltrap_spawners         = true;
+server bool  uz_floortrap_spawners             = true;
+server bool  uz_walltrap_spawners              = true;
 
 // Merchant Store Entries
-server bool hdm_enable_uzbhg               = true;
-server bool hdm_enable_uzclaymore          = true;
-server bool hdm_enable_uzlandmine          = true;
-server bool hdm_enable_uzlasertripbomb     = true;
-server bool hdm_enable_uzpipebomb          = true;
-server bool hdm_enable_uzpipebombdetonator = true;
+server bool hdm_enable_uzbhg                   = true;
+server bool hdm_enable_uzclaymore              = true;
+server bool hdm_enable_uzlandmine              = true;
+server bool hdm_enable_uzlasertripbomb         = true;
+server bool hdm_enable_uzpipebomb              = true;
+server bool hdm_enable_uzpipebombdetonator     = true;
+server bool hdm_enable_uzripper                = true;
