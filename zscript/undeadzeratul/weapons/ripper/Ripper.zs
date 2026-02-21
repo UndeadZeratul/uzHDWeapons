@@ -17,7 +17,6 @@ enum ripperstatus {
     RIPRS_CURRENTCHAMBER = 7,
 
     RIPRS_BATTERY        = 8,
-    // RIPRS_ZOOM           = 9,
     RIPRS_HEAT           = 10,
 
     RIPRS_DOT            = 11,
