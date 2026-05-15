@@ -318,13 +318,16 @@ class UZLandMineTrippingFrag : TrippingGrenade {
 
 class UZLandMineRoller : HDFragGrenadeRoller {
 
-    bool steppedOn;
+    Actor steppedOn;
     bool primed;
 
     default {
+
+        +SOLID
+
         health 20;
 
-        height 8;
+        height 4;
         radius 8;
 
         scale 0.5;
@@ -345,7 +348,7 @@ class UZLandMineRoller : HDFragGrenadeRoller {
             return;
         }
 
-        if (bnointeraction) {
+        if (bNOINTERACTION) {
             NextTic();
             return;
         }
@@ -356,46 +359,53 @@ class UZLandMineRoller : HDFragGrenadeRoller {
         // Reset the "Fuze"
         fuze = 0;
 
-        let currentlySteppedOn = false;
-
-        foreach (mo : BlockThingsIterator.Create(self, 128)) {
-
-            // If the thing doesn't exist,
-            // or is the mine itself,
-            // or is another mine,
-            // or isn't a player or another mob,
-            // skip.
-            if (!mo
-                || mo == self
-                || mo.GetClassName() == GetClassName()
-                || !(mo is 'HDPlayerPawn' || mo is 'HDMobBase')
-            ) continue;
-
-            
-            // If that thing is standing on top of the mine, prime for detonation.
-            if (
-                mo.pos.z >= pos.z
-                && mo.pos.z <= pos.z + height
-                && Distance2D(mo) < radius + mo.radius
-            ) {
-                if (!steppedOn) A_StartSound("weapons/LandMine/Arm");
-
-                currentlySteppedOn = true;
-                primed = true;
-
-                break;
-            }
+        // If we're not currently being stepped on by thing that collided with us, 
+        // clear status.
+        if (
+            steppedOn
+            && !(
+                steppedOn.pos.z >= pos.z
+                && steppedOn.pos.z <= pos.z + height
+                && Distance2DSquared(steppedOn) < (radius + steppedOn.radius) ** 2
+            )
+        ) {
+            steppedOn = null;
         }
-
-        // store whether currently being stepped on
-        steppedOn = currentlySteppedOn;
 
         // If we're not detonating, but we are primed and no longer being stepped on, detonate.
-        if (!steppedOn && primed && !instatesequence(curstate, resolvestate("detonate"))) {
-            SetStateLabel("detonate");
-        }
+        // if (!steppedOn && primed && !HDCore.isInStateSequence(self, "detonate"))
+        if (!steppedOn && primed && !inStateSequence(curstate, resolveState("detonate"))) setStateLabel("detonate");
 
         super.tick();
+    }
+
+    override void collidedWith(Actor other, bool passive) {
+        super.collidedWith(other, passive);
+
+        // If we collide with something else, quit.
+        if (!passive) return;
+
+        // If we're already being stepped on, quit.
+        if (steppedOn) return;
+
+        // If the thing doesn't exist,
+        // or is the mine itself,
+        // or is another mine,
+        // or isn't a player or another mob,
+        // quit.
+        if (!other
+            || other == self
+            || other.GetClassName() == GetClassName()
+            || !(other is 'HDPlayerPawn' || other is 'HDMobBase')
+        ) return;
+        
+        // If that thing is standing on top of the mine, prime for detonation.
+        if (other.pos.z >= pos.z && other.pos.z <= pos.z + height) {
+            A_StartSound("weapons/LandMine/Arm");
+
+            steppedOn = other;
+            primed = true;
+        }
     }
 
     override bool used(actor user) {
@@ -436,7 +446,7 @@ class UZLandMineRoller : HDFragGrenadeRoller {
 
         bounce:
             #### # 0 {
-                bmissile = false;
+                bMISSILE = false;
                 vel *= 0.2;
             }
             goto spawn2;
