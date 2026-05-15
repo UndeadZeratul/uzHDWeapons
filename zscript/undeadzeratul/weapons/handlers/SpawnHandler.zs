@@ -7,6 +7,11 @@ class UZWeaponsSpawnHandler : EventHandler {
         // If neither floor/wall traps are enabled, quit.
         if (!(uz_floortrap_spawners || uz_walltrap_spawners)) return;
 
+        let hdcSpawnHandler = HDCoreSpawnHandler(StaticEventHandler.find('HDCoreSpawnHandler'));
+
+        // If current map is blacklisted, quit.
+        forEach (bl : hdcSpawnHandler.mapBlacklist) if (Level.MapName == bl) return;
+
         BuildSectors();
     }
 
