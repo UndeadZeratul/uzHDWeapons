@@ -19,6 +19,8 @@ class UZWeaponsSpawnHandler : EventHandler {
 
         if (HDCore.isPreSpawn() && (uz_floortrap_spawners || uz_walltrap_spawners)) {
 
+            HDCore.log('UZWeps.SpawnHandler', LOGGING_DEBUG, "Sector is large, dark, and empty enough, placing traps.");
+
             let max = trappedSectors.size();
             let incr = max(hdc_prespawn_threshold, 1);
             for (let i = Level.mapTime; i < max; i += incr) {
@@ -78,6 +80,8 @@ class UZWeaponsSpawnHandler : EventHandler {
             let dist  = HDCore.getRandomDouble(0, radius, hdc_random_mode);
             let xy    = s.centerspot + (dist * cos(angle), dist * sin(angle));
             let pos   = (xy.x, xy.y, s.centerFloor());
+
+            HDCore.log('UZWeps.SpawnHandler', LOGGING_DEBUG, "Attempting to spawn '"..trapClass.."' floor trap in s="..s.." @ "..pos..", angle="..angle..", dist="..dist);
 
             // Don't spawn traps too close to players
             let tooClose = false;
