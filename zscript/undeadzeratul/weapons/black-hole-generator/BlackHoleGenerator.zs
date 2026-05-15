@@ -614,7 +614,7 @@ class BlackHole : HDActor {
             // Special Handling for other Singularities
             if (
                 thing is 'BlackHole'
-                && Distance3D(thing) < ((pos + vel) - (thing.pos + thing.vel)).length()
+                && Distance3DSquared(thing) < ((pos + vel) - (thing.pos + thing.vel)).length() ** 2
             ) {
                 let newBH = BlackHole(Spawn('BlackHole', (pos + thing.pos) * 0.5));
                 newBH.mass = mass + thing.mass;
@@ -638,17 +638,17 @@ class BlackHole : HDActor {
                 || thing.bDESTROYED
             ) continue;
 
-            let dist = Distance3D(thing);
+            let dist = Distance3DSquared(thing);
 
             // If distance is NaN, quit.
             if (dist != dist) continue;
             
-            let gravity = ((dist * dist) > double.epsilon)
-                ? ((HDCONST_GRAVITY * mass * HDCONST_ONEMETRE) / (dist * dist))
-                : double.max;
+            let gravity = (dist > Double.EPSILON)
+                ? ((HDCONST_GRAVITY * mass * HDCONST_ONEMETRE) / dist)
+                : Double.MAX;
 
             // If the thing is too far away, quit.
-            if (gravity < double.epsilon) continue;
+            if (gravity < Double.EPSILON) continue;
 
             // Apply gravitational pull
             thing.vel += (pos - thing.pos).unit() * gravity;
@@ -658,7 +658,7 @@ class BlackHole : HDActor {
         let bit = BlockThingsIterator.Create(self);
         while (bit.next()) {
             let thing = bit.thing;
-            let dist = max(Distance3D(thing) - thing.radius, double.epsilon);
+            let dist = max(Distance3DSquared(thing) - (thing.radius ** 2), Double.EPSILON);
 
             // Account for Voodoo Dolls
             if (
@@ -676,9 +676,9 @@ class BlackHole : HDActor {
                 !(thing is 'Actor')
                 || thing.bNOINTERACTION
                 || thing.bDESTROYED
-                || (dist > schwarzschild && (dist + (thing.radius * 2)) > (HDCONST_PI * schwarzschild))
+                || (dist > schwarzschild && (dist + (thing.radius * 2)) > (M_PI * schwarzschild))
                 // Schwarzschild Radius? (2GM / c^2)
-                // || Distance3D(thing) > max(2 * HDCONST_GRAVITY * mass / (HDCONST_SPEEDOFLIGHT * HDCONST_SPEEDOFLIGHT), 1.0)
+                // || Distance3DSquared(thing) > max(2 * HDCONST_GRAVITY * mass / (HDCONST_SPEEDOFLIGHT * HDCONST_SPEEDOFLIGHT), 1.0) ** 2
             ) continue;
 
             UpdateMass(mass + GetOtherMass(thing));
