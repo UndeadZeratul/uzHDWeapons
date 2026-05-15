@@ -30,6 +30,7 @@ class UZPlacedClaymore : HDUPK {
         // red particles depict the visible arc
 
         // thing is within range if
+        //  - thing is interactive, shootable, alive, and moving
         //  - distance < (seedist * HDCONST_ONEMETRE)
         //  - cos(claymoreAngle - angleToThing) >= cos(45)
         BlockThingsIterator it = BlockThingsIterator.Create(self, seedist * HDCONST_ONEMETRE);
@@ -42,7 +43,9 @@ class UZPlacedClaymore : HDUPK {
                 && !it.thing.bNOINTERACTION
                 && !it.thing.bNOTARGET
                 && !it.thing.bNEVERTARGET
-                && Distance3D(it.thing) <= seeDist * HDCONST_ONEMETRE
+                && !HDMath.isDead(it.thing)
+                && it.thing.vel.length() > HDCONST_MPSTODUPT
+                && Distance3DSquared(it.thing) <= seeDist * HDCONST_ONEMETRE ** 2
                 && acos(clamp((cos(angle), sin(angle), 0).unit() dot vec3To(it.thing).unit(), -1, 1)) <= 45
             ) {
                 SetStateLabel("Trigger");
