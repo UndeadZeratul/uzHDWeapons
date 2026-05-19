@@ -1,9 +1,9 @@
 // Backpack Spawn Pool Filters
-addBPSpawnPoolFilter => { "name": "UZBHGen", "allowed": "#bhg_allowBackpacks" }
-addBPSpawnPoolFilter => { "name": "UZClaymoreMine", "allowed": "#claymore_allowBackpacks" }
-addBPSpawnPoolFilter => { "name": "UZLandMineAmmo", "allowed": "#landmine_allowBackpacks" }
-addBPSpawnPoolFilter => { "name": "UZLaserTripBomb", "allowed": "#lasertripbomb_allowBackpacks" }
-addBPSpawnPoolFilter => { "name": "UZPipeBombAmmo", "allowed": "#pipebomb_allowBackpacks" }
+addStorageItemListFilter => { "name": "UZBHGen", "allowed": "#bhg_allowBackpacks" }
+addStorageItemListFilter => { "name": "UZClaymoreMine", "allowed": "#claymore_allowBackpacks" }
+addStorageItemListFilter => { "name": "UZLandMineAmmo", "allowed": "#landmine_allowBackpacks" }
+addStorageItemListFilter => { "name": "UZLaserTripBomb", "allowed": "#lasertripbomb_allowBackpacks" }
+addStorageItemListFilter => { "name": "UZPipeBombAmmo", "allowed": "#pipebomb_allowBackpacks" }
 
 // Spawn Tables
 newSpawnTable => { "spawnName": "FragP", "addOriginalThing": "true", "persists": "true" }
