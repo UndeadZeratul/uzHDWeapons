@@ -2,7 +2,7 @@ GameInfo {
     AddEventHandlers = "UZWeaponsEasterEggsHandler", "UZWeaponsSpawnHandler"
 }
 
-DoomEdNums{
+DoomEdNums {
     23460 = UZBHGen
     23461 = UZClaymoreMine
     23462 = UZClaymoreMineBox
@@ -10,9 +10,4 @@ DoomEdNums{
     23464 = UZLandMine
     23465 = UZLandMinePickup
     23466 = UZLandMineBoxPickup
-    23467 = UZLaserTripBombP
-    23468 = UZLaserTripBombPickup
-    23469 = UZPipeBombP
-    26470 = UZPipeBombPickup
-    26471 = UZRipper
 }

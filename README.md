@@ -30,77 +30,22 @@ Requires [HDCoreLib](https://github.com/HDest-Community/hdest-core-lib).
 - Press `[USE]` **while crouching** near active land mine to pick up & deactivate land mine.
 - Can be shot in a pinch.  Careful, may get cought in the cross-fire!
 
-## Laser Tripbombs
-![laser-tripbomb](./sprites/laser-tripmines/LTBGA0.png)
-
-- Loadout Code: `ltb`
-- Similar to Doorbusters in that they're an inventory item you `[USE]` to place on a wall at the spot you're looking at, facing away from that wall.  If a hostile walks across the laser, it'll detonate.
-- Press `[USE]` near laser tripbomb to pick up & deactivate it.
-- Can be shot in a pinch.
-
-## Pipe Bombs
-![pipebomb](./sprites/pipe-bombs/PIPPA0.png)
-
-- Pipe Bomb Loadout Code: `pbg`
-- Detonator Loadout Code: `pbd`
-- Hold `[FIRE]` to activate & toss.
-- Press `[RELOAD]` to deactivate and cancel toss.
-- Press `[ALTFIRE]` to detonate all active pipe bombs. **Requires Detonator** ![detonator](./sprites/pipe-bombs/PBDPA0.png)
-- Press `[USE]` near active pipe bomb to kick away.
-- Press `[USE]` while crouching to pick up & deactivate pipe bomb.
-- Can be shot in a pinch.  Careful, may get caught in the cross-fire!
-
-## Ripper Chaingun
-![ripper](./sprites/RIPPA0.png)
-
-- Loadout Code: `rip`
-- Fires 4.26mm caseless rounds along three sequential barrels.
-- WIP HEAT MECHANIC
-- Hold `[FIRE]` to fire.
-- Press `[RELOAD]` to reload a magazine.
-- Press `[ALTFIRE]` to reload battery.
-- Press `[UNLOAD]` to unload a magazine.
-- Press `[USE + ALTRELOAD]` or `[USE + UNLOAD]` to unload a battery.
-
 ## Credits
 
 ### Black Hole Generator
-
+- Code: Matt, Undead_Zeratul
 - Sounds: Raven Software (Quake 4), Epic Games (UT 2004)
   - BH_LOOP: NASA
-- Sprites: NMN, Zero Prophet, Reactor, Kronos, Midway
-- Sprite Edit: Gothic
+- Sprites: NMN, Zero Prophet, Reactor, Kronos, Midway, Gothic
 
 ### Claymore Mines
-- Code: Captain Toenail
-- GLDefs: GZDoom (lights.pk3)
-- Sounds: 3D Realms, insanity54
-- Sprites: Id Software, TNTTeam
-- Sprite Edit: Captain Toenail
-- Idea Base: Call of Duty and NAM
-
-
-- c4armed.ogg by insanity54
-	- https://freesound.org/people/insanity54/sounds/349662/
+- Code: Captain Toenail, Undead_Zeratul
+- MODELDEF: Potetobloke
+- Sounds: 3D Realms,
+  - CLAYARMD: [insanity54](https://freesound.org/people/insanity54/sounds/349662/)
+- Sprites: Id Software, TNTTeam, Captain Toenail
 
 ### Land Mines
-- Code: Gothic
-- GLDefs: Gothic
+- Code: Gothic, Undead_Zeratul
 - Sounds: LucasArts (Dark Forces), id Software (Quake 2)
 - Sprites: LucasArts (Dark Forces), Gothic
-- Sprite Edit: Gothic
-- Idea Base: Land Mines from Stronghold
-
-### Laser Tripbombs
-- Code: Matt
-- Sounds: 3D Realms (Duke Nukem 3D)
-- Sprites: 3D Realms (Duke Nukem 3D), id Software (Doom)
-
-
-### Pipe Bombs
-- Sounds: 3D Realms, Eurocom (Duke Nukem 64), Sunstorm Interactive (DN Manhattan Project)
-- Sprites: 3D Realms, Scuba Steve, Gothic
-
-### Ripper Chaingun
-- Sounds: 3D Realms
-- Sprites: 3D Realms, Sonik.O
