@@ -75,7 +75,7 @@ class UZLandMines : HDGrenadethrower {
                 statusicon,
                 (0, 30 + (hdw.weaponstatus[FRAGS_HOLDINGFIRE] << 2)) + hpl.wepbob,
                 sb.DI_SCREEN_CENTER|sb.DI_ITEM_CENTER,
-                alpha: (hdw.weaponstatus[0]&FRAGF_INHAND) || hpl.countinv("UZPipeBombAmmo") ? 1.0 : 0.3,
+                alpha: (hdw.weaponstatus[0]&FRAGF_INHAND) || hpl.countinv("UZLandMineAmmo") ? 1.0 : 0.3,
                 scale: (1.2,1.2)
             );
         }
