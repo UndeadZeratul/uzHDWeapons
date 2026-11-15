@@ -14,6 +14,7 @@ const ENC_LANDMINE            = 16;
 #include "zscript/undeadzeratul/weapons/black-hole-generator/BlackHoleGenerator.zs"
 #include "zscript/undeadzeratul/weapons/claymore-mines/ClaymoreMines.zs"
 #include "zscript/undeadzeratul/weapons/land-mines/LandMines.zs"
+#include "zscript/undeadzeratul/weapons/spas-12/SPAS-12.zs"
 
 // Event Handlers
 #include "zscript/undeadzeratul/weapons/handlers/EasterEggHandler.zs"

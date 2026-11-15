@@ -5,6 +5,7 @@ TAG_CLAYMORE                   = "Claymore Mine";
 TAG_CLAYMORE_BOX               = "Box of Claymore Mines";
 TAG_LANDMINE                   = "Land Mine";
 TAG_LANDMINE_BOX               = "Box of Land Mines";
+TAG_SPAS12                     = "SPAS-12";
 
 PICKUP_BHG                     = "You got the Black Hole Generator!";
 PICKUP_CLAYMORE                = "Picked up a claymore mine!";
@@ -12,10 +13,12 @@ PICKUP_CLAYMORE_BOX            = "Picked up a box of claymore mines!";
 PICKUP_LANDMINE                = "Picked up a land mine!";
 PICKUP_LANDMINE_BOX            = "Picked up a box of land mines!";
 PICKUP_LANDMINE_DEACTIVATE     = "Picked up (and deactivated) a land mine!";
+PICKUP_SPAS12                  = "You got the SPAS-12 Shotgun!";
 
 OB_BHG                         = "%o divided by 0.";
 OB_CLAYMORE                    = "%o strayed too close to a claymore.";
 OB_LANDMINE                    = "%o didn't watch their step.";
+OB_SPAS12                      = "%o SPAS'ed out.";
 
 // Options Menu Titles
 UZWEAPONS_MENU                 = "\c[UZPurple]Ⓤ\c- UZ's Weapons Pack";
@@ -71,8 +74,14 @@ MENU_LANDMINE_SPAWNTEXT        = "Control the spawn rate of Land Mines on Frag G
 MENU_LANDMINE_BACKPACKS        = "Control whether Land Mines spawn in Backpacks:";
 
 // Help Text
-BHGWH_FIRE                     = "Charge Singularity";
-BHGWH_RELOAD                   = "Reload Batteries";
+BHGWH_FIRE                     = "  Charge Singularity\n";
+BHGWH_RELOAD                   = "  Reload Batteries\n";
+
+SPASWH_RELOAD                  = "  Reload using curretly selected shells\n";
+SPASWH_PREVSHELL               = "  Select the previous shell type\n";
+SPASWH_NEXTSHELL               = "  Select the next shell type\n";
+SPASWH_TOGGLESTOCK             = "  Adjust the stock\n";
+SPASWH_TOGGLETUBELOCK          = "  Toggle tube disconnect\n";
 
 // Claymore Log
 CLAYMORELOG1                   = "Look for ground to place the Claymore on.";

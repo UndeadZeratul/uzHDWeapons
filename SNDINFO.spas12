@@ -1,0 +1,12 @@
+$alias weapons/spas              weapons/hunter
+$alias weapons/spasClick         weapons/rifleclick2
+$alias weapons/spasFar           world/shotgunFar
+$alias weapons/spasOpen          weapons/huntOpen
+$alias weapons/spasRackBak       weapons/huntRackBak
+$alias weapons/spasRackFwd       weapons/huntRackFwd
+$alias weapons/spasReload        weapons/huntReload
+$alias weapons/spasLoadChamber   weapons/huntReloadChamber
+$alias weapons/spasUnloadChamber weapons/huntUnloadChamber
+
+weapons/spasStockIn  DSSGLOAD
+weapons/spasStockOut DSSGLOAD
