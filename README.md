@@ -1,6 +1,8 @@
 # UZ's Weapons Pack
 _Creative, I know_
 
+[![CI Build](https://github.com/UndeadZeratul/uzHDWeapons/actions/workflows/ci-build.yml/badge.svg)](https://github.com/UndeadZeratul/uzHDWeapons/actions/workflows/ci-build.yml)
+
 Requires [HDCoreLib](https://github.com/HDest-Community/hdest-core-lib).
 
 ## Black Hole Generator
