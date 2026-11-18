@@ -22,11 +22,12 @@ class UZSPAS : HDCoreShotgun {
         Weapon.slotNumber 3;
         Weapon.slotPriority 1;
         Weapon.bobRangeX 0.21;
-        Weapon.bobRangeY 0.86;
+        Weapon.bobRangeY 0.9;
 
         HDWeapon.barrelSize 30, 0.5, 2;
         HDWeapon.refID "sps";
         HDWeapon.loadoutCodes "
+            \cufiremode - 0/1, whether to start in semi or not
             \curounds - 1-6, whether to load with specific Shotshells:
                 - 1 -> Buckshot
                 - 2 -> Slug
@@ -52,9 +53,9 @@ class UZSPAS : HDCoreShotgun {
 
     override string,double getpickupsprite(bool usespare) { return "SPSP"..(getSpareWeaponValue(0, usespare)&SPASF_STOCK ? "B" : "A").."0", 1.0; }
 
-    int getStrengthTics(int baseTics) { return max(1, ceil(baseTics * getStrengthMult())); }
+    int getStrengthTics(int baseTics) { return max(1, round(baseTics * getStrengthMult())); }
 
-    double getStrengthMult() { return 2.0 - (HDPlayerPawn(owner) ? HDPlayerPawn(owner).strength : 1.0); }
+    double getStrengthMult() { return HDPlayerPawn(owner) ? HDGMGlobalMaths.lerpDouble(1.5, 0.667, HDPlayerPawn(owner).strength) : 1.0; }
 
     override void DrawHUDStuff(HDStatusBar sb, HDWeapon hdw, HDPlayerPawn hpl) {
 
@@ -73,6 +74,9 @@ class UZSPAS : HDCoreShotgun {
                 sb.drawnum(hpl.countinv(sg.getShellAmmo(ammo)), pos.x - 48, pos.y + 3, sb.DI_SCREEN_CENTER_BOTTOM);
             }
         }
+
+        // Draw Fire Mode
+        if (getWepStatusFlag(SPASF_FIREMODE)) sb.drawimage("STSEMAUT", pos + (-12, -1), sb.DI_SCREEN_CENTER_BOTTOM);
         
         // Draw Chambered Round
         if (sg.isRoundChambered()) {
@@ -105,17 +109,20 @@ class UZSPAS : HDCoreShotgun {
 
     override string gethelptext() {
         LocalizeHelp();
-        return
-        LWPHELP_FIRESHOOT
-        ..LWPHELP_ALTFIRE..StringTable.Localize("$PUMP")
-        ..WEPHELP_RELOAD..StringTable.Localize("$SPASWH_RELOAD")
-        ..WEPHELP_ALTRELOAD.." + "..WEPHELP_FIRE..StringTable.Localize("$SPASWH_PREVSHELL")
-        ..WEPHELP_ALTRELOAD.." + "..WEPHELP_ALTFIRE..StringTable.Localize("$SPASWH_NEXTSHELL")
-        ..WEPHELP_ALTRELOAD.." + "..WEPHELP_RELOAD..StringTable.Localize("$SPASWH_TOGGLETUBELOCK")
-        ..WEPHELP_ALTRELOAD.." + "..WEPHELP_FIREMODE..StringTable.Localize("$SPASWH_TOGGLESTOCK")
-        ..LWPHELP_MAGMANAGER
-        ..LWPHELP_UNLOADUNLOAD
-        ;
+        return pressingFireMode() ? (
+                LWPHELP_FIRE..StringTable.Localize("$SPASWH_TOGGLESEMI")
+                ..LWPHELP_ALTFIRE..StringTable.Localize("$SPASWH_TOGGLESTOCK")
+                ..LWPHELP_RELOAD..StringTable.Localize("$SPASWH_PREVSHELL")
+                ..LWPHELP_FIREMODE..StringTable.Localize("$SPASWH_NEXTSHELL")
+            ) : (
+                LWPHELP_FIRESHOOT
+                ..LWPHELP_ALTFIRE..StringTable.Localize("$PUMP")
+                ..LWPHELP_RELOAD..StringTable.Localize("$SPASWH_RELOAD")
+                ..LWPHELP_ALTRELOAD..StringTable.Localize("$SPASWH_ALTRELOADHOLD")
+                ..LWPHELP_UNLOADUNLOAD
+                ..LWPHELP_FIREMODE..StringTable.Localize("$SPASWH_FIREMODEHOLD")
+                ..LWPHELP_MAGMANAGER
+            );
     }
 
     override void DrawSightPicture(
@@ -126,7 +133,7 @@ class UZSPAS : HDCoreShotgun {
         [cx,cy,cw,ch]=screen.GetClipRect();
 
         sb.SetClipRect(
-            -16 + bob.x, -4 + bob.y, 32, 40,
+            -16 + bob.x, -32 + bob.y, 32, 40,
             sb.DI_SCREEN_CENTER
         );
 
@@ -160,6 +167,11 @@ class UZSPAS : HDCoreShotgun {
         }
     }
 
+    void setFireMode(bool value) {
+        A_SetWepStatusFlags(SPASF_FIREMODE, value);
+        owner.A_StartSound("weapons/spasClick", CHAN_6);
+    }
+
     void setStock(bool value) {
         A_SetWepStatusFlags(SPASF_STOCK, value);
         barrelLength = value ? default.barrelLength : 20;
@@ -168,7 +180,7 @@ class UZSPAS : HDCoreShotgun {
 
     void setTubeLock(bool value) {
         A_SetWepStatusFlags(SPASF_TUBELOCK, value);
-        owner.A_StartSound("weapons/spasClick", CHAN_6);
+        // owner.A_StartSound("weapons/spasClick", CHAN_6);
     }
 
     states {
@@ -199,7 +211,10 @@ class UZSPAS : HDCoreShotgun {
 
                     A_SetWepStatusFlags(HDC_SHOTF_ALTHOLDING, false);
                 }
+
+                A_SetWepStatusFlags(SPASF_TUBELOCK, pressingAltReload());
             }
+            #### A 0 A_SetHelpText();
             #### A 1 A_WeaponReady(WRF_ALL);
             goto readyend;
 
@@ -221,16 +236,27 @@ class UZSPAS : HDCoreShotgun {
             #### A 0 A_Refire();
             goto ready;
 
-        // TODO: Implement Firemodes
         firemode:
-            // #### A 10 ;
-            // goto ready;
-            goto nope;
+            #### A 0 A_JumpIf(!pressingFireMode(), "nope");
+            #### A 0 A_WeaponBusy(true);
+            #### A 1 {
+                if (justPressed(BT_ATTACK)) {
+                    invoker.setFireMode(!invoker.getWepStatusFlag(SPASF_FIREMODE));
+                } else if (justPressed(BT_ALTATTACK)) {
+                    invoker.setStock(!invoker.getWepStatusFlag(SPASF_STOCK));
+                } else if (justPressed(BT_RELOAD)) {
+                    invoker.selectNextShellType();
+                } else if (justPressed(BT_ALTRELOAD)) {
+                    invoker.selectPrevShellType();
+                }
+            }
+            loop;
 
         shoot:
             #### A 2;
             #### A 1 offset(0, 36) A_FireShotgun(recoilMult: invoker.getStrengthMult() * (invoker.getWepStatusFlag(SPASF_STOCK) ? 1.0 : 1.5));
-            #### C 1;
+            #### C 1 A_WeaponReady(WRF_NOFIRE);
+            #### C 0 A_JumpIf(invoker.getWepStatusFlag(SPASF_FIREMODE), "chambersemi");
             goto ready;
 
         altfire:
@@ -246,6 +272,11 @@ class UZSPAS : HDCoreShotgun {
             #### Q 0 A_JumpIf(pressingAltFire(), "longstroke");
             #### Q 2 A_SetTics(invoker.getStrengthTics(2));
             goto unrack;
+
+        chambersemi:
+            #### A 1 A_Chamber();
+            #### A 0 A_Refire();
+            goto ready;
 
         longstroke:
             #### S 2 A_MuzzleClimb(frandom[uzwepsrand](1.0, 2.0), wepdot: false);
@@ -374,20 +405,10 @@ class UZSPAS : HDCoreShotgun {
             goto ready;
 
         altreload:
-            #### A 0 A_JumpIf(!pressingAltReload(), "nope");
-            #### A 0 A_WeaponBusy(true);
-            #### A 1 {
-                if (justPressed(BT_ATTACK)) {
-                    invoker.selectNextShellType();
-                } else if (justPressed(BT_ALTATTACK)) {
-                    invoker.selectPrevShellType();
-                } else if (justPressed(BT_RELOAD)) {
-                    invoker.setTubeLock(!invoker.getWepStatusFlag(SPASF_TUBELOCK));
-                } else if (justPressed(BT_FIREMODE)) {
-                    invoker.setStock(!invoker.getWepStatusFlag(SPASF_STOCK));
-                }
-            }
-            loop;
+            // Simply return to ready,
+            // the flag will be set there,
+            // as well as allow pumping
+            goto ready;
 
         unload:
             #### A 1 A_JumpIf(!(invoker.isRoundChambered() || invoker.getNumTubeRounds()), "nope");
@@ -487,15 +508,28 @@ class UZSPAS : HDCoreShotgun {
         super.loadoutConfigure(input);
 
         // Start with specific Shell Type
-        int shellType = min(HDC_SHELLTYPE_TOTAL, getloadoutvar(input, "rounds", 1), HDC_SHELLTYPE_TOTAL);
+        int shellType = getloadoutvar(input, "rounds", 1);
         if (shellType >= 0) {
-            weaponStatus[HDC_SHOTS_SHELLTYPE] = shellType;
 
-            setChamberedRound(shellType);
-
+            // Clear the current Chamber/Tube
+            clearChamberedRound();
             weaponStatus[HDC_SHOTS_TUBE] = 0;
-            while (!isTubeFull()) pushTubeRound(shellType);
+            
+            // If set to a non-zero value,
+            // clamp, set the selected round,
+            // and fill the chamber/rube
+            if (shellType) {
+                shellType = clamp(shellType, 1, HDC_SHELLTYPE_TOTAL);
+                
+                weaponStatus[HDC_SHOTS_SHELLTYPE] = shellType;
+                setChamberedRound(shellType);
+                while (!isTubeFull()) pushTubeRound(shellType);
+            }
         }
+
+        // Select the starting firemode
+        bool firemode = getloadoutvar(input, "firemode", 1);
+        if (firemode >= 0) A_SetWepStatusFlags(SPASF_FIREMODE, firemode);
     }
 }
 
@@ -514,7 +548,8 @@ enum spasstatus {
     // HDC_SHOTCHAMBF_LIVE  = 1 << 31,
     
     SPASF_STOCK             = 2,    // Flag for whether the stock is extended
-    SPASF_TUBELOCK          = 4     // Flag for whether the tube chambers a round when pumped
+    SPASF_TUBELOCK          = 4,    // Flag for whether the tube chambers a round when pumped
+    SPASF_FIREMODE          = 8     // Flag for whether the gun is in semi-auto mode
 };
 
 class UZSPASRandom : IdleDummy {

@@ -6,6 +6,11 @@ OptionMenu "UZWeaponsMenu" {
 	StaticText ""
 	StaticText ""
 
+	StaticText "$MENU_SHOTGUNS_TITLE", "Red"
+	StaticText ""
+	Submenu "$TAG_SPAS12", "spas12Spawning", 0, 1
+	StaticText ""
+
 	StaticText "$MENU_EXPLOSIVES_TITLE", "Brown"
 	StaticText ""
 	Submenu "$TAG_CLAYMORE", "claymoreSpawning", 0, 1
@@ -29,6 +34,38 @@ AddOptionMenu "OptionsMenu" {
 
 AddOptionMenu "HDAddonMenu" {
 	Submenu "$UZWEAPONS_MENU", "UZWeaponsMenu"
+}
+
+
+// Shotguns
+
+OptionMenu "spas12Spawning" {
+	Title "$TAG_SPAS12"
+
+	StaticText "$MENU_NOTICE", "Red"
+	StaticText "$MENU_SPAWNRATE_TEXT1", "White"
+	StaticText "$MENU_SPAWNRATE_TEXT2", "White"
+	StaticText ""
+
+	StaticText "$MENU_SPAWNOPTIONS", "Red"
+	StaticText "$MENU_SPAS12_SPAWNTEXT", "White"
+	Slider "$MENU_WEPSPAWNRATE", "spas12_spawn_bias", 0.0, 100, .01, 2
+	SafeCommand "$MENU_RESETWEP", "resetcvar spas12_spawn_bias"
+	StaticText ""
+
+	StaticText "$MENU_SPAS12_BACKPACKS", "White"
+	Option "$MENU_BACKPACKSALLOWED", "spas12_allowBackpacks", "OnOff"
+	StaticText ""
+
+	StaticText "$MENU_PERSISTENCYOPTIONS", "Red"
+	StaticText "$MENU_PERSISTENCY_TEXT", "White"
+	Option "$MENU_PERSISTENCY", "spas12_persistent_spawning", "OnOff"
+	SafeCommand "$MENU_RESETPERSISTENCY", "resetcvar spas12_persistent_spawning"
+	StaticText ""
+	StaticText ""
+
+	StaticText "$MENU_RESETOPTIONS", "Red"
+	SafeCommand "$MENU_RESETALLOPTIONS", "spas12_reset_cvars"
 }
 
 

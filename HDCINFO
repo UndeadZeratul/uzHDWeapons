@@ -1,5 +1,6 @@
 // Backpack Spawn Pool Filters
 addStorageItemListFilter => { "name": "UZBHGen", "allowed": "#bhg_allowBackpacks" }
+addStorageItemListFilter => { "name": "UZSPAS", "allowed": "#spas12_allowBackpacks" }
 addStorageItemListFilter => { "name": "UZClaymoreMine", "allowed": "#claymore_allowBackpacks" }
 addStorageItemListFilter => { "name": "UZLandMineAmmo", "allowed": "#landmine_allowBackpacks" }
 
@@ -10,19 +11,24 @@ newSpawnTable => { "spawnName": "HDFragGrenadePickup", "addOriginalThing": "true
 // Black Hole Generator Spawn Entries
 addSpawnTableSingleEntry => { "tableName": "BFG9000Replaces", "name": "UZBHGen", "weight": "#bhg_spawn_bias", "persists": "#bhg_persistent_spawning" }
 
-// Claymore Mines
+// Claymore Mine Spawn Entries
 addSpawnTableSingleEntry => { "tableName": "FragP", "name": "UZClaymoreMine", "weight": "#claymore_spawn_bias", "persists": "#claymore_persistent_spawning" }
 addSpawnTableSingleEntry => { "tableName": "HDFragGrenadePickup", "name": "UZClaymoreMineBox", "weight": "#claymore_spawn_bias", "persists": "#claymore_persistent_spawning" }
 
-// Land Mines
+// Land Mine Spawn Entries
 addSpawnTableSingleEntry => { "tableName": "FragP", "name": "UZLandMinePickup", "weight": "#landmine_spawn_bias", "persists": "#landmine_persistent_spawning" }
 addSpawnTableSingleEntry => { "tableName": "HDFragGrenadePickup", "name": "UZLandMineBoxPickup", "weight": "#landmine_spawn_bias", "persists": "#landmine_persistent_spawning" }
+
+// SPAS-12 Spawn Entries
+addSpawnTableSingleEntry => { "tableName": "ShotgunReplaces", "name": "UZSPAS", "weight": "#spas12_spawn_bias", "persists": "#spas12_persistent_spawning" }
 
 // AceCorp Weapon Crate Filters
 addWeaponCrateFilter => { "name": "UZBHGen", "allowed": "#bhg_allowBackpacks" }
 addWeaponCrateFilter => { "name": "UZClaymoreMine", "allowed": "#claymore_allowBackpacks" }
 addWeaponCrateFilter => { "name": "UZLandMineAmmo", "allowed": "#landmine_allowBackpacks" }
+addWeaponCrateFilter => { "name": "UZSPAS", "allowed": "#spas12_allowBackpacks" }
 
 newMerchantStoreItem => { "enabled": "#hdm_enable_uzbhg", "type": "weapon", "category": "$MERCH_CAT_BHG", "item": "UZBHGen", "icon": "BHGPA0", "displayName": "$MERCH_TAG_BHG", "basePrice": "1500", "flavorText": "$MERCH_FLAVOR_BHG" }
 newMerchantStoreItem => { "enabled": "#hdm_enable_uzclaymore", "type": "ammo", "category": "$MERCH_CAT_CLAYMORE", "item": "UZClaymoreMine", "icon": "CLAPA0", "displayName": "$MERCH_TAG_CLAYMORE", "basePrice": "30", "flavorText": "$MERCH_FLAVOR_CLAYMORE" }
 newMerchantStoreItem => { "enabled": "#hdm_enable_uzlandmine", "type": "ammo", "category": "$MERCH_CAT_LANDMINE", "item": "UZLandMineAmmo", "icon": "LMAMA0", "displayName": "$MERCH_TAG_LANDMINE", "basePrice": "25", "flavorText": "$MERCH_FLAVOR_LANDMINE" }
+newMerchantStoreItem => { "enabled": "#hdm_enable_uzspas12", "type": "weapon", "category": "$MERCH_CAT_SPAS12", "item": "UZSPAS", "icon": "SPSPA0", "displayName": "$MERCH_TAG_SPAS12", "basePrice": "250", "flavorText": "$MERCH_FLAVOR_SPAS12" }

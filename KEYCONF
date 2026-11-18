@@ -1,0 +1,6 @@
+alias bhg_reset_cvars       "resetcvar bhg_allowBackpacks;      resetcvar bhg_spawn_bias;      resetcvar bhg_persistent_spawning"
+alias claymore_reset_cvars  "resetcvar claymore_allowBackpacks; resetcvar claymore_spawn_bias; resetcvar claymore_persistent_spawning"
+alias landmine_reset_cvars  "resetcvar landmine_allowBackpacks; resetcvar landmine_spawn_bias; resetcvar landmine_persistent_spawning"
+alias spas12_reset_cvars    "resetcvar spas12_allowBackpacks;   resetcvar spas12_spawn_bias;   resetcvar spas12_persistent_spawning"
+
+alias UZWeapons_Reset_Cvars "bhg_reset_cvars; claymore_reset_cvars; landmine_reset_cvars; spas12_reset_cvars"

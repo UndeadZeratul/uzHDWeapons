@@ -14,6 +14,11 @@ server bool  landmine_allowBackpacks      = true;
 server float landmine_spawn_bias          = 0.2;
 server bool  landmine_persistent_spawning = false;
 
+// SPAS-12 Shotguns
+server bool  spas12_allowBackpacks        = false;
+server float spas12_spawn_bias            = 1.0;
+server bool  spas12_persistent_spawning   = false;
+
 // Trap Spawners
 server bool  uz_floortrap_spawners        = true;
 
@@ -21,3 +26,4 @@ server bool  uz_floortrap_spawners        = true;
 server bool hdm_enable_uzbhg              = true;
 server bool hdm_enable_uzclaymore         = true;
 server bool hdm_enable_uzlandmine         = true;
+server bool hdm_enable_uzspas12           = true;

@@ -22,7 +22,9 @@ OB_SPAS12                      = "%o SPAS'ed out.";
 
 // Options Menu Titles
 UZWEAPONS_MENU                 = "\c[UZPurple]Ⓤ\c- UZ's Weapons Pack";
+MENU_ENERGYWEAPONS_TITLE       = "--- Energy Weapons ---";
 MENU_EXPLOSIVES_TITLE          = "--- Explosives ---";
+MENU_SHOTGUNS_TITLE            = "--- Shotguns ---";
 MENU_RESETOPTIONS_TITLE        = "--- Reset Options ---";
 
 // Menu Section Headers
@@ -73,15 +75,21 @@ MENU_CLAYMORE_BACKPACKS        = "Control whether Claymore Mines spawn in Backpa
 MENU_LANDMINE_SPAWNTEXT        = "Control the spawn rate of Land Mines on Frag Grenades:";
 MENU_LANDMINE_BACKPACKS        = "Control whether Land Mines spawn in Backpacks:";
 
+// SPAS-12 Options Text
+MENU_SPAS12_SPAWNTEXT          = "Control the spawn rate of SPAS-12s on Shotguns:";
+MENU_SPAS12_BACKPACKS          = "Control whether SPAS-12s spawn in Backpacks:";
+
 // Help Text
 BHGWH_FIRE                     = "  Charge Singularity\n";
 BHGWH_RELOAD                   = "  Reload Batteries\n";
 
-SPASWH_RELOAD                  = "  Reload using curretly selected shells\n";
-SPASWH_PREVSHELL               = "  Select the previous shell type\n";
+SPASWH_ALTRELOADHOLD           = "  Hold to disconnect tube mag\n";
+SPASWH_FIREMODEHOLD            = "  Hold to perform auxillary actions\n";
 SPASWH_NEXTSHELL               = "  Select the next shell type\n";
+SPASWH_PREVSHELL               = "  Select the previous shell type\n";
+SPASWH_RELOAD                  = "  Reload using curretly selected shells\n";
+SPASWH_TOGGLESEMI              = "  Toggle between manual/semi-auto\n";
 SPASWH_TOGGLESTOCK             = "  Adjust the stock\n";
-SPASWH_TOGGLETUBELOCK          = "  Toggle tube disconnect\n";
 
 // Claymore Log
 CLAYMORELOG1                   = "Look for ground to place the Claymore on.";
@@ -103,3 +111,7 @@ MERCH_FLAVOR_CLAYMORE          = "Point it towards the enemy.";
 MERCH_CAT_LANDMINE             = "UZ";
 MERCH_TAG_LANDMINE             = "Landmine";
 MERCH_FLAVOR_LANDMINE          = "Watch your step.";
+
+MERCH_CAT_SPAS12               = "UZ";
+MERCH_TAG_SPAS12               = "SPAS-12";
+MERCH_FLAVOR_SPAS12            = "Kill 6 birds with one, err, shot.";
