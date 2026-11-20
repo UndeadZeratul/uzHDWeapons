@@ -382,9 +382,25 @@ class UZSPAS : HDCoreShotgun {
             TNT1 A 0 A_AlertMonsters();
             // TNT1 A 0 A_SPASRecoil();
             goto lightdone;
+        
+        semireload:
+            #### A 1 offset(-1, 35) A_WeaponBusy(true);
+            #### A 2 offset(-2, 37);
+            #### A 4 offset(-3, 40);
+            #### A 1 offset(-4, 42);
+            #### A 6 offset(-5, 43) A_GrabShells(1, true, true);
+            #### A 6 offset(-4, 41);
+        semiloadone:
+            #### A 1 offset(-4, 42);
+            #### A 2 offset(-4, 41);
+            #### A 3 offset(-4, 40) A_LoadChamberFromHand();
+            #### A 5 offset(-4, 41);
+            #### A 4 offset(-4, 40); A_WeaponBusy(false);
+            goto ready;
 
         reload:
         startreload:
+            #### A 0 A_JumpIf(!invoker.isRoundChambered() && invoker.getWepStatusFlag(SPASF_TUBELOCK), "semireload");
             #### A 1 A_JumpIf(invoker.isTubeFull() || !countinv(invoker.getShellAmmo(invoker.getSelectedShellType())), "nope");
             #### EGIK 2 A_MuzzleClimb(frandom[uzwepsrand](0.6, 0.7), -frandom[uzwepsrand](0.6, 0.7), wepdot: false);
         reloadstarthand:
@@ -443,6 +459,8 @@ class UZSPAS : HDCoreShotgun {
 
                 if (!invoker.isRoundChambered()) {
                     setWeaponState("unloadtube");
+                } else if (invoker.getWepStatusFlag(SPASF_TUBELOCK)) {
+                    setWeaponState("pumplocked");
                 } else {
                     A_StartSound(invoker.rackBakSound, 8, CHANF_OVERLAP);
                     A_SetTics(invoker.getStrengthTics(8));
@@ -582,6 +600,8 @@ class UZSPASRandom : IdleDummy {
                 if (!g) return;
 
                 HDF.TransferSpecials(self, g, HDF.TS_ALL);
+
+                if (random[uzwepsrand](0, 2)) g.A_SetWepStatusFlags(SPASF_FIREMODE);
 
                 let box = g.getShellBox(g.weaponStatus[HDC_SHOTS_SHELLTYPE]);
 
