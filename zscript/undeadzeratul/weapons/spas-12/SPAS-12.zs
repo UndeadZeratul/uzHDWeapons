@@ -168,19 +168,31 @@ class UZSPAS : HDCoreShotgun {
     }
 
     void setFireMode(bool value) {
-        A_SetWepStatusFlags(SPASF_FIREMODE, value);
-        owner.A_StartSound("weapons/spasClick", CHAN_6);
+        let val = getWepStatusFlag(SPASF_FIREMODE);
+        
+        if (val != value) {
+            A_SetWepStatusFlags(SPASF_FIREMODE, value);
+            owner.A_StartSound("weapons/spasClick", CHAN_6);
+        }
     }
 
     void setStock(bool value) {
-        A_SetWepStatusFlags(SPASF_STOCK, value);
-        barrelLength = value ? default.barrelLength : 20;
-        owner.A_StartSound((value ? "weapons/spasStockOut" : "weapons/spasStockIn"), CHAN_6);
+        let val = getWepStatusFlag(SPASF_STOCK);
+        
+        if (val != value) {
+            A_SetWepStatusFlags(SPASF_STOCK, value);
+            barrelLength = value ? default.barrelLength : 20;
+            owner.A_StartSound((value ? "weapons/spasStockOut" : "weapons/spasStockIn"), CHAN_6);
+        }
     }
 
     void setTubeLock(bool value) {
-        A_SetWepStatusFlags(SPASF_TUBELOCK, value);
-        // owner.A_StartSound("weapons/spasClick", CHAN_6);
+        let val = getWepStatusFlag(SPASF_TUBELOCK);
+        
+        if (val != value) {
+            A_SetWepStatusFlags(SPASF_TUBELOCK, value);
+            owner.A_StartSound("weapons/spasClick", CHAN_6);
+        }
     }
 
     states {
@@ -212,7 +224,7 @@ class UZSPAS : HDCoreShotgun {
                     A_SetWepStatusFlags(HDC_SHOTF_ALTHOLDING, false);
                 }
 
-                A_SetWepStatusFlags(SPASF_TUBELOCK, pressingAltReload());
+                invoker.setTubeLock(pressingAltReload());
             }
             #### A 0 A_SetHelpText();
             #### A 1 A_WeaponReady(WRF_ALL);
@@ -259,8 +271,22 @@ class UZSPAS : HDCoreShotgun {
             #### C 0 A_JumpIf(invoker.getWepStatusFlag(SPASF_FIREMODE), "chambersemi");
             goto ready;
 
+        pumplocked:
+            #### A 0 A_JumpIf(invoker.getWepStatusFlag(HDC_SHOTF_ALTHOLDING), "nope");
+            #### A 0 A_SetWepStatusFlags(HDC_SHOTF_ALTHOLDING, true);
+            #### A 0 A_StartSound("weapons/spasClick", CHAN_6);
+            #### AAAA 1 A_MuzzleClimb(frandom[uzwepsrand](-0.5, 0.5), wepdot: false);
+            #### A 0 A_JumpIf(!pressingAltFire(), "nope");
+            loop;
+
+        chambersemi:
+            #### A 1 A_Chamber();
+            #### A 0 A_Refire();
+            goto ready;
+
         altfire:
         chamber:
+            #### A 0 A_JumpIf(invoker.getWepStatusFlag(SPASF_FIREMODE), "pumplocked");
             #### A 0 A_JumpIf(invoker.getWepStatusFlag(HDC_SHOTF_ALTHOLDING), "nope");
             #### A 0 A_SetWepStatusFlags(HDC_SHOTF_ALTHOLDING, true);
             #### A 0 A_StartSound(invoker.rackBakSound,8);
@@ -272,11 +298,6 @@ class UZSPAS : HDCoreShotgun {
             #### Q 0 A_JumpIf(pressingAltFire(), "longstroke");
             #### Q 2 A_SetTics(invoker.getStrengthTics(2));
             goto unrack;
-
-        chambersemi:
-            #### A 1 A_Chamber();
-            #### A 0 A_Refire();
-            goto ready;
 
         longstroke:
             #### S 2 A_MuzzleClimb(frandom[uzwepsrand](1.0, 2.0), wepdot: false);
