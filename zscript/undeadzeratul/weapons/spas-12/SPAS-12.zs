@@ -448,7 +448,7 @@ class UZSPAS : HDCoreShotgun {
             goto ready;
 
         unload:
-            #### A 1 A_JumpIf(!(invoker.isRoundChambered() || invoker.getNumTubeRounds()), "nope");
+            #### A 0 A_JumpIf(!((invoker.isRoundChambered() && !invoker.getWepStatusFlag(SPASF_FIREMODE)) || invoker.getNumTubeRounds()), "nope");
             #### EGIK 2 A_MuzzleClimb(frandom[uzwepsrand](1.2, 2.4), -frandom[uzwepsrand](1.2, 2.4), wepdot: false);
             #### M 1 offset(0, 34);
             #### M 1 offset(0, 36) A_StartSound(invoker.openSound, 8);
@@ -457,10 +457,8 @@ class UZSPAS : HDCoreShotgun {
                 let mult = invoker.getStrengthMult();
                 A_MuzzleClimb(-frandom[uzwepsrand](1.2, 2.4) * mult, frandom[uzwepsrand](1.2, 2.4) * mult, wepdot: false);
 
-                if (!invoker.isRoundChambered()) {
+                if (!invoker.isRoundChambered() || invoker.getWepStatusFlag(SPASF_FIREMODE)) {
                     setWeaponState("unloadtube");
-                } else if (invoker.getWepStatusFlag(SPASF_TUBELOCK)) {
-                    setWeaponState("pumplocked");
                 } else {
                     A_StartSound(invoker.rackBakSound, 8, CHANF_OVERLAP);
                     A_SetTics(invoker.getStrengthTics(8));
