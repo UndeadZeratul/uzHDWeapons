@@ -395,7 +395,7 @@ class UZSPAS : HDCoreShotgun {
             #### A 2 offset(-4, 41);
             #### A 3 offset(-4, 40) A_LoadChamberFromHand();
             #### A 5 offset(-4, 41);
-            #### A 4 offset(-4, 40); A_WeaponBusy(false);
+            #### A 4 offset(-4, 40) A_WeaponBusy(false);
             goto ready;
 
         reload:
