@@ -476,15 +476,11 @@ class UZSPAS : HDCoreShotgun {
 
                     if (A_JumpIfInventory(invoker.getShellAmmo(round), 0, "null")) {
 
-                        // FIXME: use A_EjectCasing() instead
-                        A_SpawnItemEx(
+                        A_EjectCasing(
                             invoker.getFumblingShell(round),
-                            cos(pitch) * 8, 0, height - 7 - sin(pitch) * 8,
-                            vel.x + cos(pitch) * cos(angle - random[uzwepsrand](86, 90)) * 5,
-                            vel.y + cos(pitch) * sin(angle - random[uzwepsrand](86, 90)) * 5,
-                            vel.z + sin(pitch) * random[uzwepsrand](4, 6),
-                            0,
-                            SXF_ABSOLUTEMOMENTUM|SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH
+                            frandom(-1, 2),
+                            live ? (frandom(0.2, 0.25), -frandom(5, 5.2), frandom(0, 0.15)) : (frandom(0.25, 0.3), -frandom(6, 6.5), frandom(0, 0.2)),
+                            (0, 0, -2)
                         );
                     } else {
                         HDF.Give(self, invoker.getShellAmmo(round), 1);
@@ -493,15 +489,11 @@ class UZSPAS : HDCoreShotgun {
                     }
                 } else if (round) {
 
-                    // FIXME: use A_EjectCasing() instead
-                    A_SpawnItemEx(
+                    A_EjectCasing(
                         invoker.getSpentShell(round),
-                        cos(pitch) * 8, 0, height - 7 - sin(pitch) * 8,
-                        vel.x + cos(pitch) * cos(angle - random[uzwepsrand](86, 90)) * 5,
-                        vel.y + cos(pitch) * sin(angle - random[uzwepsrand](86, 90)) * 5,
-                        vel.z + sin(pitch) * random[uzwepsrand](4, 6),
-                        0,
-                        SXF_ABSOLUTEMOMENTUM|SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH
+                        frandom(-1, 2),
+                        live ? (frandom(0.2, 0.25), -frandom(5, 5.2), frandom(0, 0.15)) : (frandom(0.25, 0.3), -frandom(6, 6.5), frandom(0, 0.2)),
+                        (0, 0, -2)
                     );
                 }
             }
