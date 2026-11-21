@@ -601,7 +601,7 @@ class UZSPASRandom : IdleDummy {
 
                 HDF.TransferSpecials(self, g, HDF.TS_ALL);
 
-                if (random[uzwepsrand](0, 2)) g.A_SetWepStatusFlags(SPASF_FIREMODE);
+                g.A_SetWepStatusFlags(SPASF_FIREMODE, !!random[uzwepsrand](0, 2));
 
                 let box = g.getShellBox(g.weaponStatus[HDC_SHOTS_SHELLTYPE]);
 
