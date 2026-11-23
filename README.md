@@ -36,10 +36,12 @@ Requires [HDCoreLib](https://github.com/HDest-Community/hdest-core-lib).
 ![spas-12](./sprites/spas-12/SPSPA0.png)
 
 - Loadout Code: `sps`
-  - Loadout Config: `rounds #` Specify Shells to load SPAS-12 with:
-    - 1 -> Buckshot
-    - 2 -> Slugs
-    - 3 -> Flechettes
+  - Loadout Config:
+    - `firemode 0/1` Whether to start in semi-auto mode.
+    - `rounds #` Specify Shells to load SPAS-12 with:
+      - 1 -> Buckshot
+      - 2 -> Slugs
+      - 3 -> Flechettes
     - 4 -> Explosive Slugs
     - 5 -> Less-Lethal Buckshot
     - 6 -> Flares

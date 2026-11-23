@@ -28,14 +28,7 @@ class UZSPAS : HDCoreShotgun {
         HDWeapon.refID "sps";
         HDWeapon.loadoutCodes "
             \cufiremode - 0/1, whether to start in semi or not
-            \curounds - 1-6, whether to load with specific Shotshells:
-                - 1 -> Buckshot
-                - 2 -> Slug
-                - 3 -> Flechette
-                - 4 -> Explosive Slug
-                - 5 -> Less-Lethal
-                - 6 -> Flare
-            ";
+            \curounds - 1-6, start with specific a shell type";
 
         HDCoreShotgun.distantSound       "world/spasFar";
         HDCoreShotgun.openSound          "weapons/spasOpen";
